@@ -1,9 +1,11 @@
 package array
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestPro(t *testing.T) {
-	t.Run("121. Best Time to Buy and Sell Stock", func(t *testing.T) {
+	t.Run("746. Min Cost Climbing Stairs", func(t *testing.T) {
 		input := []int{10, 15, 20}
 		want := 15
 		got := solution(input)
@@ -12,7 +14,7 @@ func TestPro(t *testing.T) {
 		}
 	})
 
-	t.Run("121. Best Time to Buy and Sell Stock2", func(t *testing.T) {
+	t.Run("746. Min Cost Climbing Stairs2", func(t *testing.T) {
 		input := []int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1}
 		want := 6
 		got := solution(input)
@@ -20,34 +22,60 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run("746. Min Cost Climbing Stairs3", func(t *testing.T) {
+		input := []int{1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 7, 4, 5, 6, 7}
+		want := 36
+		got := solution(input)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+
+}
+
+func solution(input []int) int {
+	inputLen := len(input)
+	for i := 2; i < inputLen; i++ {
+		if input[i-1] > input[i-2] {
+			input[i] += input[i-2]
+		} else {
+			input[i] += input[i-1]
+		}
+	}
+	if input[inputLen-1] > input[inputLen-2] {
+		return input[inputLen-2]
+	} else {
+		return input[inputLen-1]
+	}
 }
 
 /*
-	贪心算法？
-	优先选择第二个，当第二个比第一个大则选择第一个
+	递归，超时的情况
 */
 
-func solution(input []int) int {
-	sumStep := 0
-	inputLen := len(input)
-	if inputLen == 1 {
-		return 0
-	}
-	if inputLen == 2 {
-		if input[0] > input[1] {
-			return input[1]
-		} else {
-			return input[0]
-		}
-	}
-	// 这里总结一下，只是比较三个元素中，中间元素和其他相邻两个元素之和的大小
-	// 但这里有个问题是，类似 a b c d e f，取了 b 之后，下一组必须取 d 了
-	for i := 0; i < inputLen-2; i += 2 {
-		if input[i+2]+input[i] > input[i+1] {
-			sumStep += input[i+1]
-		} else {
-			sumStep += input[i] + input[i+2]
-		}
-	}
-	return sumStep
-}
+//func solution(input []int) int {
+//	inputLen := len(input)
+//	sumArr := make([]int, inputLen)
+//	calcSum(input, inputLen-1, sumArr)
+//	if sumArr[inputLen-1] > sumArr[inputLen-2 ] {
+//		return sumArr[inputLen-2]
+//	} else {
+//		return sumArr[inputLen-1]
+//	}
+//}
+//
+//// 将小的加上去
+//func calcSum(input []int, i int, sumArr []int) int {
+//	// 开始返回情况
+//	if i < 2 {
+//		sumArr[i] = input[i]
+//		return sumArr[i]
+//	}
+//	if calcSum(input, i-2, sumArr) > calcSum(input, i-1, sumArr) {
+//		sumArr[i] = input[i] + calcSum(input, i-1, sumArr)
+//	} else {
+//		sumArr[i] = input[i] + calcSum(input, i-2, sumArr)
+//	}
+//	return sumArr[i]
+//}

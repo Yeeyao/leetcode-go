@@ -15,7 +15,7 @@ func TestPro(t *testing.T) {
 }
 
 /*
-	用 map 保存另一个数
+	用 map 保存另一个数，双指针的处理，类似二分查找，因为这里是排序的
 */
 func solution(input []int, target int) []int {
 	inputLen := len(input)
