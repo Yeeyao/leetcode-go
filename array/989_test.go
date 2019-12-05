@@ -1,7 +1,6 @@
 package array
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -55,8 +54,32 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run("989. Add to Array-Form of Integer6", func(t *testing.T) {
+		input := []int{0}
+		k := 10000
+		want := []int{1, 0, 0, 0, 0}
+		got := solution(input, k)
+		if !IntSliceEqual(got, want) {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+
+	t.Run("989. Add to Array-Form of Integer7", func(t *testing.T) {
+		input := []int{}
+		k := 0
+		want := []int{0}
+		got := solution(input, k)
+		if !IntSliceEqual(got, want) {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
 }
 
+/*
+	这里是先构建结果数组，然后按顺序处理
+	这里的 brute force 快一点
+*/
 func solution(input []int, k int) []int {
 	inputLen := len(input)
 	kLen := calcLen(k)
@@ -66,7 +89,6 @@ func solution(input []int, k int) []int {
 	} else {
 		maxLen = kLen + 1
 	}
-
 	retArr := make([]int, maxLen)
 	carry := 0
 	for i := 0; i < maxLen; i++ {
@@ -74,22 +96,14 @@ func solution(input []int, k int) []int {
 		k /= 10
 		ri := maxLen - i - 1
 		j := inputLen - i - 1
+		// maxLen 可能会大于 inputLen
 		if j >= 0 {
-			if carry == 1 {
-				retArr[ri] = input[j] + kAdd + 1
-			} else {
-				retArr[ri] = input[j] + kAdd
-			}
+			retArr[ri] = input[j] + kAdd + carry
 		} else {
 			retArr[ri] = kAdd + carry
 		}
-
-		if retArr[ri] >= 10 {
-			carry = 1
-			retArr[ri] -= 10
-		} else {
-			carry = 0
-		}
+		carry = retArr[ri] / 10
+		retArr[ri] = retArr[ri] % 10
 	}
 
 	if retArr[0] == 0 {
@@ -100,11 +114,43 @@ func solution(input []int, k int) []int {
 
 func calcLen(k int) int {
 	kLen := 1
-	if k/10 > 0 {
+	for k/10 > 0 {
 		kLen++
 		k /= 10
 	}
 	return kLen
+}
+
+/*
+	优化 不需要计算长度 只需要 append
+	更加简洁，比我的慢一些。。。
+*/
+func solution(input []int, K int) []int {
+	res := make([]int, 0)
+	// 进位
+	c := 0
+	// 两部分一起判断
+	for i := len(input) - 1; i >= 0 || K > 0; i-- {
+		s := 0
+		// 数组部分还有
+		if i >= 0 {
+			s = s + input[i]
+		}
+		s = s + K%10 + c
+		c = s / 10
+		K = K / 10
+		res = append(res, s%10)
+	}
+	// 最后一个进位
+	if c != 0 {
+		res = append(res, c)
+	}
+	// 反转
+	resLen := len(res)
+	for i := 0; i < resLen/2; i++ {
+		res[i], res[resLen-i-1] = res[resLen-i-1], res[i]
+	}
+	return res
 }
 
 func IntSliceEqual(a, b []int) bool {
