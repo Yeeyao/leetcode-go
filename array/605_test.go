@@ -57,10 +57,10 @@ func TestPro(t *testing.T) {
 */
 
 /*
-	这里直接计算 0 的个数来处理
+	这里直接计算 0 的个数来处理 只增加计数
 	遇到 0 直接递增当前的 0 计数
 	遇到 1 直接判断增加的空位，并将计数置 0
- */
+*/
 func solution(input []int, n int) bool {
 	inputLen := len(input)
 	// 开头处理
