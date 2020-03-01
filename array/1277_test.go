@@ -53,6 +53,9 @@ func solution(matrix [][]int) int {
 		copy[0][j] = matrix[0][j]
 	}
 
+	// 这里的原理是从第二行和第二列开始遍历
+	// 如果这个位置是 1 则需要判断周围三个的值，如果三个是 1
+	// 则这个位置的值为 2，否则为 1
 	for i := 1; i < m; i++ {
 		for j := 1; j < n; j++ {
 			if matrix[i][j] == 1 {
@@ -62,6 +65,7 @@ func solution(matrix [][]int) int {
 		}
 	}
 
+	// 遍历并直接将所有非 0 相加
 	for i := 0; i < m; i++ {
 		for j := 0; j < n; j++ {
 			num += copy[i][j]
