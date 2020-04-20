@@ -1,7 +1,6 @@
 package array
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -10,7 +9,6 @@ func TestPro(t *testing.T) {
 		input := []int{1, 2, 3}
 		want := [][]int{{}, {1}, {2}, {3}, {1, 2}, {1, 3}, {2, 3}, {1, 2, 3}}
 		got := solution(input)
-		fmt.Println(got)
 		if IntSliceEqual(got, want) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
