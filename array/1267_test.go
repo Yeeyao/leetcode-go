@@ -42,6 +42,32 @@ func TestPro(t *testing.T) {
 	})
 }
 
+// 更快的版本
+func solutionFaster(grid [][]int) int {
+	ret := 0
+	// 这里使用两个数组记录每个行以及列的 1 的元素数量
+	rows := make([]int, len(grid))
+	cols := make([]int, len(grid[0]))
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[i]); j++ {
+			if grid[i][j] == 1 {
+				rows[i]++
+				cols[j]++
+			}
+		}
+	}
+
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[i]); j++ {
+			// 当前元素是 1 同时同行或者列元素数量大于 1
+			if grid[i][j] == 1 && (rows[i] > 1 || cols[j] > 1) {
+				ret++
+			}
+		}
+	}
+	return ret
+}
+
 /*
 	不需要两个节点相邻，只需要在一条直线
 	遍历一列，然后找非 0 节点数量，如果等于 1，将所有节点都置 2 并计数
@@ -55,6 +81,7 @@ func solution(grid [][]int) int {
 	for i := 0; i < m; i++ {
 		colCount := 0
 		fc, fr := -1, -1
+		// 每一行的处理
 		for j := 0; j < n; j++ {
 			if grid[i][j] == 1 {
 				if fc < 0 || fr < 0 {
@@ -73,6 +100,7 @@ func solution(grid [][]int) int {
 			count += colCount
 		}
 	}
+	// 列的处理 行中已经计数的节点数值已经是 2 了，没有计数的才是 1
 	for i := 0; i < n; i++ {
 		rowCount := 0
 		dupCount := 0
@@ -87,6 +115,7 @@ func solution(grid [][]int) int {
 		if rowCount > 1 {
 			count += rowCount
 		}
+		// [[1, 0], [1, 1]] 情况
 		if rowCount == 1 && dupCount > 0 {
 			count++
 		}
