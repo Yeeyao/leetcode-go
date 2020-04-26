@@ -14,6 +14,16 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run(" 1031. Maximum Sum of Two Non-Overlapping Subarrays 2", func(t *testing.T) {
+		A := []int{0, 6, 5, 2, 2, 5, 1, 9, 4}
+		L, M := 1, 2
+		want := 20
+		got := solution(A, L, M)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
 }
 
 /*
@@ -32,12 +42,18 @@ func TestPro(t *testing.T) {
 	从右到左，找最大的 M 长度的和
 	上述过程需要重复一次，因为 L 和 M 都要从两个方向执行一次
 
+*/
+
+/*
+
 	从两边遍历，并且需要遍历完。先加上当前元素。
 	如果当前的元素比前面的元素总和都大的话，当前总和需要更新为当前元素
 	如果当前的遍历数量已经超过了给定的长度，则需要减去最早加入的元素值。
 	注意，这里使用两个额外的数组，保存每个子数组到当前位置的和。
 	最后，比较所有左右两边的总和得到最大总和
 	左右两边都需要计算来取较大者
+
+	需要理解从两边计算，leftSumArr 和 rightSumArr 相同位置的元素是不会有重叠的
 
 */
 
@@ -50,6 +66,7 @@ func solution2(A []int, L, M int) int {
 	return second
 }
 
+// O(1) space O(n) time
 func solution2_2(A []int, L, M int) int {
 	aLen := len(A)
 	// 使用两个辅助数组保存当前元素下的累加和
@@ -81,6 +98,57 @@ func solution2_2(A []int, L, M int) int {
 	maxSum := 0
 	for i := range A {
 		tempSum := leftSumArr[i] + rightSumArr[i]
+		if tempSum > maxSum {
+			maxSum = tempSum
+		}
+	}
+	return maxSum
+}
+
+/*
+	不使用辅助数组处理 O(1) space O(n) time
+	猜测这里元素数值运算次数更多，所以更加消耗时间
+*/
+func solution(A []int, L, M int) int {
+	maxSum, LSum, LMax, MSum, MMax := 0, 0, 0, 0, 0
+	aLen := len(A)
+	// 这趟先处理 MSum
+	for i := 0; i < aLen; i++ {
+		MSum += A[i]
+		// 超过给定长度，需要两边对边界元素处理
+		if i >= M {
+			MSum -= A[i-M]
+			LSum += A[i-M]
+		}
+		if i >= M+L {
+			LSum -= A[i-M-L]
+		}
+		if LSum > LMax {
+			LMax = LSum
+		}
+		// MSum 一直变化，所以需要取 LMax
+		tempSum := LMax + MSum
+		if tempSum > maxSum {
+			maxSum = tempSum
+		}
+	}
+	LSum, MSum, LMax, MMax = 0, 0, 0, 0
+	// 这趟处理 LSum
+	for i := 0; i < aLen; i++ {
+		LSum += A[i]
+		// 超过给定长度，需要两边对边界元素处理
+		if i >= L {
+			LSum -= A[i-L]
+			MSum += A[i-L]
+		}
+		if i >= M+L {
+			MSum -= A[i-M-L]
+		}
+		if MSum > MMax {
+			MMax = MSum
+		}
+		// LSum 一直变化，所以需要取 MMax
+		tempSum := MMax + LSum
 		if tempSum > maxSum {
 			maxSum = tempSum
 		}
