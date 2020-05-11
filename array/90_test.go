@@ -24,6 +24,7 @@ func TestPro(t *testing.T) {
 */
 func solution(nums []int) [][]int {
 	retArr := make([][]int, 0)
+	// 注意这里的排序处理
 	sort.Ints(nums)
 	numsLen := len(nums)
 	solutionHelper(nums, &retArr, []int{}, numsLen)

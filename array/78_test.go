@@ -88,21 +88,17 @@ func solution2(nums []int) [][]int {
 	retArr := make([][]int, 0)
 	sort.Ints(nums)
 	numsLen := len(nums)
-	solution2_helper(nums, &retArr, []int{}, 0, numsLen)
+	solution2Helper(nums, &retArr, []int{}, 0, numsLen)
 	return retArr
 }
 
-func solution2_helper(nums []int, retArr *[][]int, solArr []int, start, numsLen int) {
+func solution2Helper(nums []int, retArr *[][]int, solArr []int, start, numsLen int) {
 	// 什么时候保存结果 这里每次都直接保存
 	*retArr = append(*retArr, append([]int{}, solArr...))
 	saLen := len(solArr)
 	// 循环递归处理
 	for i := start; i < numsLen; i++ {
 		solArr = append(solArr, nums[i])
-		solution2_helper(nums, retArr, solArr, i+1, numsLen)
-		solArr = solArr[:saLen]
-	}
-}
 		solution2_helper(nums, retArr, solArr, i+1, numsLen)
 		solArr = solArr[:saLen]
 	}
