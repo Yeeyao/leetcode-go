@@ -14,6 +14,16 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run("216. Combination Sum III2", func(t *testing.T) {
+		k := 3
+		n := 7
+		want := [][]int{{1, 2, 4}}
+		got := solution2(k, n)
+		if !IntSliceEqual(got, want) {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
 }
 
 /*
@@ -48,6 +58,7 @@ func solution2(retArr *[][]int, solArr []int, k, start, n int) {
 		return
 	}
 	// 解的元素数量还不足
+	// 循环将每个元素加入中间结果数组中
 	for i := start; n-i >= 0 && i <= 9; i++ {
 		solArr = append(solArr, i)
 		solution2(retArr, solArr, k, i+1, n-i)
@@ -73,4 +84,23 @@ func IntSliceEqual(a, b [][]int) bool {
 		}
 	}
 	return true
+}
+
+func solution2(nums []int) [][]int{
+	retArr = make([][]int, 0)
+	numsLen := len(nums)
+	solution2_helper(nums, retArr, []int{}, 0, numsLen)
+	return retArr
+}
+
+func solution2_helper(nums []int, retArr [][]int, solArr []int, start, numsLen int) {
+	// 什么时候保存结果 这里每次都直接保存
+	*retArr = append(*retArr, append([]int{}, solArr...))
+	saLen := len(solArr)
+	// 循环递归处理
+	for i := start; i < numsLen; i++ {
+		solArr = append(solArr, nums[i])
+		solution2_helper(nums, retArr, solArr, start + 1, numsLen)
+		solArr = solArr[:saLen]
+	}
 }

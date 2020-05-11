@@ -13,6 +13,15 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run(" 78. Subsets2 ", func(t *testing.T) {
+		input := []int{1, 2, 3}
+		want := [][]int{{}, {1}, {2}, {3}, {1, 2}, {1, 3}, {2, 3}, {1, 2, 3}}
+		got := solution2(input)
+		if IntSliceEqual(got, want) {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
 }
 
 /*
@@ -71,4 +80,23 @@ func PowTwo(num int) int {
 		Res *= 2
 	}
 	return Res
+}
+
+func solution2(nums []int) [][]int {
+	retArr = make([][]int, 0)
+	numsLen := len(nums)
+	solution2_helper(nums, retArr, []int{}, 0, numsLen)
+	return retArr
+}
+
+func solution2_helper(nums []int, retArr [][]int, solArr []int, start, numsLen int) {
+	// 什么时候保存结果 这里每次都直接保存
+	*retArr = append(*retArr, append([]int{}, solArr...))
+	saLen := len(solArr)
+	// 循环递归处理
+	for i := start; i < numsLen; i++ {
+		solArr = append(solArr, nums[i])
+		solution2_helper(nums, retArr, solArr, start+1, numsLen)
+		solArr = solArr[:saLen]
+	}
 }

@@ -195,6 +195,18 @@
 
 - 216
 
+- 39
+
+- 40
+
+- [回溯法小结](https://leetcode.com/problems/combination-sum/discuss/16502/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partitioning))
+
+    - 使用递归的方法，使用结果数组以及一个中间数组保存每次递归的中间结果来处理
+
+#### 数组元素访问遍历
+
+- 565
+
 ### 辅助数组
 
 #### 数组的重新构建使用到辅助数组，同时，注意元素的添加处理，先把元素保存，如果是 0 则需要再次保存一个 0
