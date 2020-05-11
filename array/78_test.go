@@ -2,6 +2,7 @@ package array
 
 import (
 	"testing"
+	"sort"
 )
 
 func TestPro(t *testing.T) {
@@ -84,6 +85,7 @@ func PowTwo(num int) int {
 
 func solution2(nums []int) [][]int {
 	retArr := make([][]int, 0)
+	sort.Ints(nums)
 	numsLen := len(nums)
 	solution2_helper(nums, &retArr, []int{}, 0, numsLen)
 	return retArr
@@ -96,7 +98,7 @@ func solution2_helper(nums []int, retArr *[][]int, solArr []int, start, numsLen 
 	// 循环递归处理
 	for i := start; i < numsLen; i++ {
 		solArr = append(solArr, nums[i])
-		solution2_helper(nums, retArr, solArr, start+1, numsLen)
+		solution2_helper(nums, retArr, solArr, i+1, numsLen)
 		solArr = solArr[:saLen]
 	}
 }
