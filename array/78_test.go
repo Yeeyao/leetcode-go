@@ -1,8 +1,9 @@
 package array
 
 import (
-	"testing"
+	"fmt"
 	"sort"
+	"testing"
 )
 
 func TestPro(t *testing.T) {
@@ -98,6 +99,10 @@ func solution2_helper(nums []int, retArr *[][]int, solArr []int, start, numsLen 
 	// 循环递归处理
 	for i := start; i < numsLen; i++ {
 		solArr = append(solArr, nums[i])
+		solution2_helper(nums, retArr, solArr, i+1, numsLen)
+		solArr = solArr[:saLen]
+	}
+}
 		solution2_helper(nums, retArr, solArr, i+1, numsLen)
 		solArr = solArr[:saLen]
 	}

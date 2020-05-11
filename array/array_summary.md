@@ -193,11 +193,9 @@
 
 #### 回溯法以及 Golang 的 slice 指针应用
 
-- 216
+- 216 39 40
 
-- 39
-
-- 40
+- 78 90 46
 
 - [回溯法小结](https://leetcode.com/problems/combination-sum/discuss/16502/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partitioning))
 
