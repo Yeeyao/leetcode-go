@@ -211,6 +211,8 @@
 
 - 90 给定含有重复元素的数组，求他的所有子集
 
+- 131 字符串回文划分 这里稍微需要理解一下
+
 - 46 47 78 90
 
 - [回溯法小结](https://leetcode.com/problems/combination-sum/discuss/16502/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partitioning))
