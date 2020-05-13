@@ -14,6 +14,16 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run("714. Best Time to Buy and Sell Stock with Transaction Fee2", func(t *testing.T) {
+		prices := []int{1, 3, 2, 8, 4, 9}
+		fee := 2
+		want := 8
+		got := solution2(prices, fee)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
 }
 
 /*
@@ -49,4 +59,28 @@ func solution(prices []int, fee int) int {
 		}
 	}
 	return empty
+}
+
+/*
+	k = +INF fee 只需要在购买或者出售的时候减去 fee
+	T[i][k][1] = T[i-1][k-1][1]
+	T[i][k][0] = T[i-1][k-1][0]
+
+	T[i][k][0] = max(T[i-1][k][0], T[i-1][k][1] + prices[i])
+	T[i][k][1] = max(T[i-1][k][1], T[i-1][k][0] - prices[i] - fee)
+	同样不需要保存上一个 T[i-1][k][0] 所以更新 tik1 的时候直接使用更新完的 tik0
+*/
+func solution2(prices []int, fee int) int {
+	const intMax = int(^uint(0) >> 1)
+	const intMin = ^intMax
+	tik0, tik1 := 0, intMin
+	for _, p := range prices {
+		if tik0 < tik1 + p {
+			tik0 = tik1 + p
+		}
+		if tik1 < tik0 - p - fee{
+			tik1 = tik0 - p - fee
+		}
+	}
+	return tik0
 }

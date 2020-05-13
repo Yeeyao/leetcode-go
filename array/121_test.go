@@ -65,9 +65,12 @@ func solution(input []int) int {
 	每天只有两个变量 T[i][1][0] 以及 T[i][1][1]
 	T[i][1][0] = max(T[i-1][1][0], T[i-1][1][1] + prices[i])
 	T[i][1][1] = max(T[i-1][1][1], T[i-1][0][0] - prices[i])
+	这里 T[i-1][0][0] 是 0 
 */
 func solution2(prices []int) int {
-	ti10, ti11 := 0, -99999
+	const intMax = int(^uint(0) >> 1)
+	const intMin = ^intMax
+	ti10, ti11 := 0, intMin
 	for _, p := range prices {
 		if ti10 < ti11+p {
 			ti10 = ti11 + p
