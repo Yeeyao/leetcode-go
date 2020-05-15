@@ -13,6 +13,15 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run("59. Spiral Matrix II2", func(t *testing.T) {
+		input := 3
+		want := [][]int{{1, 2, 3}, {8, 9, 4}, {7, 6, 5}}
+		got := solution2(input)
+		if !IntSliceEqual(got, want) {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
 }
 
 /*
@@ -73,6 +82,39 @@ func solution(n int) [][]int {
 			k++
 		}
 		i++
+	}
+	return retArr
+}
+
+/*
+	跟上面思路一样，但是循环简单一些
+*/
+func solution2(n int) [][]int {
+	retArr := make([][]int, n)
+	for i, _ := range retArr {
+		retArr[i] = make([]int, n)
+	}
+	i, j, di, dj := 0, 0, 0, 1
+	k := 1
+	for k <= n*n {
+		// 初始是 0 这里就 + 1
+		retArr[i][j] = k
+		// 注意，这里负数取余，需要得到正数，因为是作为数组的索引
+		cx := (i + di) % n
+		if cx < 0 {
+			cx = -cx
+		}
+		cy := (j + dj) % n
+		if cy < 0 {
+			cy = -cy
+		}
+		// 遇到需要变换行或者列的情况
+		if retArr[cx][cy] != 0 {
+			di, dj = dj, -di
+		}
+		i += di
+		j += dj
+		k++
 	}
 	return retArr
 }
