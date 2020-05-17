@@ -37,13 +37,16 @@ func TestPro(t *testing.T) {
 	找到最短连续的未排序的子数组，该数组有序则整体数组有序
 	从左到右遍历，找到比当前 max 小的最近一个元素
 	从右到做遍历，找到比当前 min 大的最近一个元素
+	其实是右边需要找到最小的数值，左边找最大的数值，它们组成的子数组排序就行
+	[参考](https://leetcode.com/problems/shortest-unsorted-continuous-subarray/discuss/103057/Java-O(n)-Time-O(1)-Space)
 */
 func solution(input []int) int {
 	inputLen := len(input)
 	// subarray index
 	left, right := -1, -2
-	// 递增
+	// 一开始是设置成边界的两个元素值
 	min, max := input[inputLen-1], input[0]
+	// 注意这里的遍历顺序，左右两个指针会交叉
 	for i := 1; i < inputLen; i++ {
 		rightIndex := inputLen - i - 1
 		// 先更新最大最小值
