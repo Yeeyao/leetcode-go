@@ -269,6 +269,28 @@
 
 - 119
 
+## stack 栈
+
+### 单调栈，元素具有单调性。元素入栈前会在栈顶把破坏单调性的元素全部删除
+
+- O(n) 复杂度，所有元素只会入栈一次，一旦出栈就不会再进来
+
+- 核心在于数字破坏了单调性，触发处理栈顶的操作
+
+- 注意，保存的栈元素不一定就是数字，可以是坐标等
+
+- 对于数组的题目，如果元素值相互间关联很大，就可以考虑是否用单调栈
+
+### [单调递增栈作用](https://leetcode.com/problems/sum-of-subarray-minimums/discuss/178876/stack-solution-with-very-detailed-explanation-step-by-step)
+
+- 在 O(n) 时间找到 vector 中每个元素小于它的上一个元素，空的判断，栈顶元素大于当前元素就出栈，结果是 stack.top() PLE(previous less element)
+
+- 在 O(n) 时间找到 vector 中每个元素小于它的下一个元素，反过来，遇到栈顶元素大于 A[i]，则栈顶的元素小于它的下个元素的索引就是 i NLE(next less element)
+
+- 当有重复元素的时候，对应 PLE 应该是 strict less，对于 NLE 是 non-strict less，相对的，其中一个是 strict less 另一个是 non-strict les  s 就行
+
+### 907 计算所有子数组最小值总和
+
 ## 计算元素距离
 
 ### 顺时针以及逆时针的距离计算，直接求总距离，然后计算一个反向就得到另一个方向的距离，最后比较
