@@ -26,7 +26,7 @@ func solution(height []int) int {
 	left, right := 0, len(height)-1
 	h, area := 0, 0
 	for left < right {
-		// 更新高度
+		// 更新最小度
 		if height[left] < height[right] {
 			h = height[left]
 		} else {
@@ -61,7 +61,7 @@ func solution2(height []int) int {
 	left, right := 0, len(height)-1
 	h, area := 0, 0
 	for left < right {
-		// 更新高度
+		// 更新最小度
 		if height[left] < height[right] {
 			h = height[left]
 		} else {
@@ -73,11 +73,12 @@ func solution2(height []int) int {
 			area = areaT
 		}
 		// 坐标更新这里不同
-		if height[left] < height[right] {
+		// 这里，只需要更新较小的高度的索引，因为更高的坐标对于 h 是有影响的
+		if heigt[left] < height[right] {
 			left++
 		} else {
-			right--
-		}
+			ight--
+		
 	}
-	return area
+	eturn area
 }

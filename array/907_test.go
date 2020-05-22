@@ -6,9 +6,9 @@ import (
 
 func TestPro(t *testing.T) {
 	t.Run(" 907. Sum of Subarray Minimums ", func(t *testing.T) {
-		A := []int{3, 1, 2, 4}
+		A := []int{3, 1, 4, 2}
 		want := 17
-		got := solution4(A)
+		got := solution20(A)
 		if got != want {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -17,7 +17,7 @@ func TestPro(t *testing.T) {
 	t.Run(" 907. Sum of Subarray Minimums2 ", func(t *testing.T) {
 		A := []int{3, 1, 2, 4}
 		want := 17
-		got := solution(A)
+		got := solution20(A)
 		if got != want {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -35,42 +35,43 @@ func TestPro(t *testing.T) {
 	right[i] + 1 表示以 A[i] 为开头的右边子数组数量，其中 A[i] 为第一个最小值
 	f(i) = (left[i] + 1) * (right[i] + 1)
 	使用两个 stack 来计算 left[i], right[i] 单调递增栈
+	注意这里要求子数组需要连续
 
 	[3, 1, 2, 4] 例子
 */
-func solution10(A[]int) int {
-	res, n, modNum := 0, len(A), 1000000007
-	// 这里记录 元素数值，当前小于该元素数值的前面的元素数量
-	// 两个都是单调递增栈
-	s1, s2 := Stack{}, Stack{}
-	left, right := make([]int, ALen), make([]int, ALen)
-	// left array 0 到 n 
-	for i := 0; i < n; i++ {
-		// 栈中的元素大于当前元素的数量计数
-		count := 1
-		for !s1.empty() && s1.top().first > A[i] {
-			count += s1.top().second
-			s1.pop()
-		}
-		s1.push({A[i], count})
-		left[i] = count
-	}
-	// right array n - 1 到 0 这边直接反序处理
-	for i := n - 1; i >= 0; i-- {
-		count := 1
-		for !s2.empty() && s2.top().first > A[i] {
-			count += s2.top().second
-			s2.pop()
-		}
-		s1.push({A[i], count})
-		right[i] = count
-	}
+// func solution10(A[]int) int {
+// 	res, n, modNum := 0, len(A), 1000000007
+// 	// 这里记录 元素数值，当前小于该元素数值的前面的元素数量
+// 	// 两个都是单调递增栈
+// 	s1, s2 := Stack{}, Stack{}
+// 	left, right := make([]int, ALen), make([]int, ALen)
+// 	// left array 0 到 n 
+// 	for i := 0; i < n; i++ {
+// 		// 栈中的元素大于当前元素的数量计数
+// 		count := 1
+// 		for !s1.empty() && s1.top().first > A[i] {
+// 			count += s1.top().second
+// 			s1.pop()
+// 		}
+// 		s1.push({A[i], count})
+// 		left[i] = count
+// 	}
+// 	// right array n - 1 到 0 这边直接反序处理
+// 	for i := n - 1; i >= 0; i-- {
+// 		count := 1
+// 		for !s2.empty() && s2.top().first > A[i] {
+// 			count += s2.top().second
+// 			s2.pop()
+// 		}
+// 		s1.push({A[i], count})
+// 		right[i] = count
+// 	}
 	
-	for i := 0; i < n; i++ {
-		res = (res + A[i] * left[i] * right[i]) % modNum
-	}
-	return res
-}
+// 	for i := 0; i < n; i++ {
+// 		res = (res + A[i] * left[i] * right[i]) % modNum
+// 	}
+// 	return res
+// }
 
 
 /*
@@ -131,6 +132,7 @@ func solution10(A[]int) int {
 // }
 
 /*
+	使用数组来模拟栈 计算参考 solution40
 */
 func solution20(A []int) int {
 	ln := len(A)
@@ -142,14 +144,19 @@ func solution20(A []int) int {
 	if ln == 1 {
 		return A[0]
 	}
+	// 模拟栈
 	st := make([]int, ln)
+	// 保存 A[i] 为结尾的当前最小元素的和
 	sums := make([]int, ln)
 	stLn := 0
 	for i := 0; i < ln; i++ {
-		for stLn > 0 && A[i] <= A[st[stLn-1]] {
+		// 非空找到第一个小于 A[i] 的位置
+		for stLn > 0 &&  A[i] <= A[st[stLn-1]] {
 			stLn--
 		}
+		// 当前元素的索引入栈
 		st[stLn] = i
+		// 当前元素小于全部的栈元素 注意这里是 sums[stLn]
 		if stLn == 0 {
 			sums[stLn] = (i + 1) * A[i]
 		} else {
@@ -157,6 +164,7 @@ func solution20(A []int) int {
 		}
 		sum += sums[stLn]
 		sum %= mod
+		// 注意这里的自增，每次遍历完，栈顶的元素位置
 		stLn++
 	}
 	return sum
@@ -216,7 +224,7 @@ func solution40(A []int) int {
 		if A[i] >= A[i-1] {
 			dp[i] = dp[i-1] + A[i]
 		} else {
-			// 这里 j 从 i - 1 开始
+			// 这里 j 从 i - 1 开始 向前找第一个小于 A[i] 的位置索引
 			j := i - 1
 			for ; j >= 0 && A[j] > A[i]; j-- {
 			}
@@ -242,24 +250,24 @@ func solution40(A []int) int {
 	索引以及栈的元素数量变化代替了上面的向前遍历查找
 	注意这里的 stack 只是
 */
-func solution50(A []int) int {
-	sum, modNum := 0, 1000000007
-	ALen := len(A)
-	dp := make([]int, ALen+1)
-	stack := Stack{}
-	stack.push(-1)
-	// 从 0 开始
-	for i := 0; i < ALen; i++ {
-		// 先将所有的小于等于 A[i] 的出栈 这里 -1 用来方便计算
-		for stack.top != -1 && A[i] <= A[stack.top] {
-			stack.pop
-		}
-		dp[i+1] = (dp[stack.top+1] + (i-stack.top)*A[i]) % modNum
-		stack.push(A[i])
-		sum = (sum + dp[i+1]) % modNum
-	}
-	return sum
-}
+// func solution50(A []int) int {
+// 	sum, modNum := 0, 1000000007
+// 	ALen := len(A)
+// 	dp := make([]int, ALen+1)
+// 	stack := Stack{}
+// 	stack.push(-1)
+// 	// 从 0 开始
+// 	for i := 0; i < ALen; i++ {
+// 		// 先将所有的小于等于 A[i] 的出栈 这里 -1 用来方便计算
+// 		for stack.top != -1 && A[i] <= A[stack.top] {
+// 			stack.pop
+// 		}
+// 		dp[i+1] = (dp[stack.top+1] + (i-stack.top)*A[i]) % modNum
+// 		stack.push(A[i])
+// 		sum = (sum + dp[i+1]) % modNum
+// 	}
+// 	return sum
+// }
 
 /*
 	含有 n 个元素的集合，非空子集数量是 2^n - 1 加入一个新的元素 i，
@@ -276,71 +284,71 @@ func solution50(A []int) int {
 		这里的意思是，出栈的元素的 right[i] 更新
 	最后，每个的 sum 是 left[i] * A[i] * right[i]
 */
-func solution60(A []int) int {
-	sum, modNum := 0, 1000000007
-	ALen := len(A)
-	left, right := make([]int, ALen), make([]int, ALen)
-	// 这里的栈保存的是序对 {value,index}
-	st_pre, st_next := Stack{}, Stack{}
-	// 从 0 开始
-	for i := 0; i < ALen; i++ {
-		// 非空，将大于 A[i] 的元素出栈
-		for !st_pre.empty() && st_pre.top().first > A[i] {
-			st_pre.pop()
-		}
-		// A[i] 左边的元素数值都大于 A[i]
-		if st_pre.empty() {
-			// A[i] 左边有 i + 1 个子数组的最小值是 A[i]
-			left[i] = (i + 1)
-	 	} else {
-			 left[i] = i - st_pre.top().second
-		}
-		// 将 A[i] 入栈
-		st_pre.push({A[i], i})
-		// 先初始化
-		right[i] = ALen - i
-		// 非空，将大于 A[i] 的元素出栈
-		for !st_next.empty() && st_next.top().first > A[i] {
-			t := st_next.top()
-			st_next.pop()
-			// 更新栈顶的数值
-			right[t.second] = i - t.second
-		}
-		// 将 A[i] 入栈
-		st_next.push({A[i], i})
-	}
-	// 遍历处理
-	for i := 0; i < ALen; i++ {
-		sum = (sum + A[i] * left[i] * right[i]) % modNum
-	}
-	return sum
-}
+// func solution60(A []int) int {
+// 	sum, modNum := 0, 1000000007
+// 	ALen := len(A)
+// 	left, right := make([]int, ALen), make([]int, ALen)
+// 	// 这里的栈保存的是序对 {value,index}
+// 	st_pre, st_next := Stack{}, Stack{}
+// 	// 从 0 开始
+// 	for i := 0; i < ALen; i++ {
+// 		// 非空，将大于 A[i] 的元素出栈
+// 		for !st_pre.empty() && st_pre.top().first > A[i] {
+// 			st_pre.pop()
+// 		}
+// 		// A[i] 左边的元素数值都大于 A[i]
+// 		if st_pre.empty() {
+// 			// A[i] 左边有 i + 1 个子数组的最小值是 A[i]
+// 			left[i] = (i + 1)
+// 	 	} else {
+// 			 left[i] = i - st_pre.top().second
+// 		}
+// 		// 将 A[i] 入栈
+// 		st_pre.push({A[i], i})
+// 		// 先初始化
+// 		right[i] = ALen - i
+// 		// 非空，将大于 A[i] 的元素出栈
+// 		for !st_next.empty() && st_next.top().first > A[i] {
+// 			t := st_next.top()
+// 			st_next.pop()
+// 			// 更新栈顶的数值
+// 			right[t.second] = i - t.second
+// 		}
+// 		// 将 A[i] 入栈
+// 		st_next.push({A[i], i})
+// 	}
+// 	// 遍历处理
+// 	for i := 0; i < ALen; i++ {
+// 		sum = (sum + A[i] * left[i] * right[i]) % modNum
+// 	}
+// 	return sum
+// }
 
-/*
-	solution6 优化 只使用一个单调栈，记录当前数字之前的第一个小于它的数字的位置
+// /*
+// 	solution6 优化 只使用一个单调栈，记录当前数字之前的第一个小于它的数字的位置
 
-*/
-func solution70(A[]int) int {
-	sum, modNum := 0, 1000000007
-	ALen := len(A)
-	stack := Stack{}
-	for i := 0; i < ALen + 1; i++ {
-		cur := 0
-		if i == ALen {
-			cur = A[i]
-		}
-		// 非空且栈顶大于 0
-		for !stack.empty() && cur < A[stack.top()] {
-			index := stack.top()
-			stack.pop()
-			left := st.top()
-			if stack.empty() {
-				left = -1
-			}
-			right := i - index
-			sum = (sum + A[index] * left * right) % modNum
-		}
-		stack.push(i)
-	}
-	return sum
-}
+// */
+// func solution70(A[]int) int {
+// 	sum, modNum := 0, 1000000007
+// 	ALen := len(A)
+// 	stack := Stack{}
+// 	for i := 0; i < ALen + 1; i++ {
+// 		cur := 0
+// 		if i == ALen {
+// 			cur = A[i]
+// 		}
+// 		// 非空且栈顶大于 0
+// 		for !stack.empty() && cur < A[stack.top()] {
+// 			index := stack.top()
+// 			stack.pop()
+// 			left := st.top()
+// 			if stack.empty() {
+// 				left = -1
+// 			}
+// 			right := i - index
+// 			sum = (sum + A[index] * left * right) % modNum
+// 		}
+// 		stack.push(i)
+// 	}
+// 	return sum
+// }
