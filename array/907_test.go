@@ -8,7 +8,7 @@ func TestPro(t *testing.T) {
 	t.Run(" 907. Sum of Subarray Minimums ", func(t *testing.T) {
 		A := []int{3, 1, 4, 2}
 		want := 17
-		got := solution20(A)
+		got := solution(A)
 		if got != want {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -17,7 +17,7 @@ func TestPro(t *testing.T) {
 	t.Run(" 907. Sum of Subarray Minimums2 ", func(t *testing.T) {
 		A := []int{3, 1, 2, 4}
 		want := 17
-		got := solution20(A)
+		got := solution(A)
 		if got != want {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -45,7 +45,7 @@ func TestPro(t *testing.T) {
 // 	// 两个都是单调递增栈
 // 	s1, s2 := Stack{}, Stack{}
 // 	left, right := make([]int, ALen), make([]int, ALen)
-// 	// left array 0 到 n 
+// 	// left array 0 到 n
 // 	for i := 0; i < n; i++ {
 // 		// 栈中的元素大于当前元素的数量计数
 // 		count := 1
@@ -66,13 +66,12 @@ func TestPro(t *testing.T) {
 // 		s1.push({A[i], count})
 // 		right[i] = count
 // 	}
-	
+
 // 	for i := 0; i < n; i++ {
 // 		res = (res + A[i] * left[i] * right[i]) % modNum
 // 	}
 // 	return res
 // }
-
 
 /*
 	找所有子数组的最小值的和
@@ -132,6 +131,49 @@ func TestPro(t *testing.T) {
 // }
 
 /*
+	模拟栈 这里利用栈
+	如果当前元素A[i]比前面的元素都要小，那以当前元素为结尾的子数组的最小元素和 (i + 1) * A[i]
+	如果当前元素只是比前面的部分小，那就每次需要向前找到第一个比它小的元素位置，该位置前的元素原来的和是不变的
+	该位置之后的子数组都是以 A[i] 为最小值的
+	使用单调递减栈省去了当前元素不断向前面寻找第一个比它小的元素
+	注意这里保留的 posSum[i] 栈中的当前最小元素之前的都是不需要保留的
+	因为如果遍历的元素小于栈底的元素，则直接可以计算了，如果大于栈底的元素，则是从栈底向上找
+	第一个小于当前元素的 posSum[k]，那小于栈底元素的 posSum[k] 也是不需要保留的
+*/
+func solution(A []int) int {
+	ALen := len(A)
+	if ALen == 0 {
+		return 0
+	}
+	if ALen == 1 {
+		return A[0]
+	}
+	// 和，模拟栈，保存每个位置的当前和
+	sum, modNum := 0, 1000000007
+	st := make([]int, ALen)
+	posSum := make([]int, ALen)
+	stTop := 0
+	for i := 0; i < ALen; i++ {
+		// 找第一个比当前元素小的元素 等于的也需要出栈
+		for stTop > 0 && A[i] <= A[st[stTop-1]] {
+			stTop--
+		}
+		// 当前元素索引入栈
+		st[stTop] = i
+		// 这个元素是最小的元素 注意这里是保存 popSum[stTop]
+		if stTop == 0 {
+			posSum[stTop] = (i + 1) * A[i]
+		} else {
+			// 上一个小于的元素的和加上后面的部分
+			posSum[stTop] = posSum[stTop-1] + (i-st[stTop-1])*A[i]
+		}
+		sum = (sum + posSum[stTop]) % modNum
+		stTop++
+	}
+	return sum
+}
+
+/*
 	使用数组来模拟栈 计算参考 solution40
 */
 func solution20(A []int) int {
@@ -151,7 +193,7 @@ func solution20(A []int) int {
 	stLn := 0
 	for i := 0; i < ln; i++ {
 		// 非空找到第一个小于 A[i] 的位置
-		for stLn > 0 &&  A[i] <= A[st[stLn-1]] {
+		for stLn > 0 && A[i] <= A[st[stLn-1]] {
 			stLn--
 		}
 		// 当前元素的索引入栈
@@ -280,7 +322,7 @@ func solution40(A []int) int {
 	right[i] 表示以 A[i] 开始且 A[i] 是最小值的子数组数量
 	st_pre 就是小于当前 A[i] 的索引位置
 	right[i] 先初始化为 n - i，st_next 非空且栈顶元素 t > A[i]
-	可以将 right[t.second] 更新为 i - t.second 
+	可以将 right[t.second] 更新为 i - t.second
 		这里的意思是，出栈的元素的 right[i] 更新
 	最后，每个的 sum 是 left[i] * A[i] * right[i]
 */
@@ -334,6 +376,24 @@ func solution40(A []int) int {
 // 	stack := Stack{}
 // 	for i := 0; i < ALen + 1; i++ {
 // 		cur := 0
+// 		if i == ALen {
+// 			cur = A[i]
+// 		}
+// 		// 非空且栈顶大于 0
+// 		for !stack.empty() && cur < A[stack.top()] {
+// 			index := stack.top()
+// 			stack.pop()
+// 			left := st.top()
+// 			if stack.empty() {
+// 				left = -1
+// 			}
+// 			right := i - index
+// 			sum = (sum + A[index] * left * right) % modNum
+// 		}
+// 		stack.push(i)
+// 	}
+// 	return sum
+// }
 // 		if i == ALen {
 // 			cur = A[i]
 // 		}
