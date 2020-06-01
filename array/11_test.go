@@ -77,8 +77,8 @@ func solution2(height []int) int {
 		if heigt[left] < height[right] {
 			left++
 		} else {
-			ight--
+			right--
 		
 	}
-	eturn area
+	return area
 }

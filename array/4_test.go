@@ -6,7 +6,7 @@ import (
 
 func TestPro(t *testing.T) {
 
-	t.Run("leetcode 238  Product of Array Except Self1", func(t *testing.T) {
+	t.Run("4. Median of Two Sorted Arrays", func(t *testing.T) {
 		nums1 := []int{1}
 		nums2 := []int{3}
 		want := 2.0
@@ -16,7 +16,7 @@ func TestPro(t *testing.T) {
 		}
 	})
 
-	t.Run("leetcode 238  Product of Array Except Self2", func(t *testing.T) {
+	t.Run("4. Median of Two Sorted Arrays", func(t *testing.T) {
 		nums1 := []int{1, 5}
 		nums2 := []int{2, 3, 4}
 		want := 3.0
@@ -26,7 +26,7 @@ func TestPro(t *testing.T) {
 		}
 	})
 
-	t.Run("leetcode 238  Product of Array Except Self3", func(t *testing.T) {
+	t.Run("4. Median of Two Sorted Arrays", func(t *testing.T) {
 		nums1 := []int{1, 3, 4}
 		nums2 := []int{2}
 		want := 2.5
@@ -36,7 +36,7 @@ func TestPro(t *testing.T) {
 		}
 	})
 
-	t.Run("leetcode 238  Product of Array Except Self4", func(t *testing.T) {
+	t.Run("4. Median of Two Sorted Arrays", func(t *testing.T) {
 		nums1 := []int{1, 2, 4, 5, 6, 7, 8}
 		nums2 := []int{3}
 		want := 4.5
@@ -46,7 +46,7 @@ func TestPro(t *testing.T) {
 		}
 	})
 
-	t.Run("leetcode 238  Product of Array Except Self5", func(t *testing.T) {
+	t.Run("4. Median of Two Sorted Arrays", func(t *testing.T) {
 		nums1 := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}
 		nums2 := []int{3, 4}
 		want := 6.5
@@ -56,7 +56,7 @@ func TestPro(t *testing.T) {
 		}
 	})
 
-	t.Run("leetcode 238  Product of Array Except Self6", func(t *testing.T) {
+	t.Run("4. Median of Two Sorted Arrays", func(t *testing.T) {
 		nums1 := []int{}
 		nums2 := []int{1}
 		want := 1.0
