@@ -60,8 +60,8 @@ func solution(input []int) int {
 /*
 	如果使用第一个元素初始化，那一开始就要比较，然后再检查负数
 	因为一开始就比较，所以结尾就需要加上当前元素
- */
-func solution(input []int) int {
+*/
+func solution2(input []int) int {
 	inputLen := len(input)
 	// 因为不清楚最小值是多少，直接使用第一个元素来作为初始的和
 	sum := input[0]
@@ -80,3 +80,21 @@ func solution(input []int) int {
 	}
 	return sum
 }
+
+// /*
+// 	先加再判断或者先判断再加都可以，就是初始值不同了
+// */
+// func solution3(input []int) int {
+// 	ret := input[0]
+// 	temp := 0
+// 	for _, a := range input {
+// 		temp += a
+// 		if temp > ret {
+// 			ret = temp
+// 		}
+// 		if temp < 0 {
+// 			temp = 0
+// 		}
+// 	}
+// 	return ret
+// }
