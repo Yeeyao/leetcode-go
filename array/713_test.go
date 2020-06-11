@@ -30,7 +30,7 @@ func solution(nums []int, k int) int {
 	numsLen := len(nums)
 	for i, j := 0, 0; j < numsLen; j++ {
 		tempProduct *= nums[j]
-		// 注意这里的条件
+		// 注意这里的条件 当前的积大于等于 k 就将最前面的除去
 		for i <= j && tempProduct >= k {
 			tempProduct /= nums[i]
 			i++
