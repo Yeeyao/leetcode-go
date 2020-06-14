@@ -5,7 +5,7 @@ import (
 )
 
 func TestPro(t *testing.T) {
-	t.Run("713. Subarray Product Less Than K", func(t *testing.T) {
+	t.Run("81. Search in Rotated Sorted Array II", func(t *testing.T) {
 		input := 8
 		want := 1
 		got := solution(input)
