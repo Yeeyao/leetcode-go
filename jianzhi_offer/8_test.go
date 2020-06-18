@@ -22,11 +22,15 @@ func TestPro(t *testing.T) {
 	最后一步的时候，跳上一级或者二级台阶，一级时，有 f(n - 1) 种，二级时，有 f(n - 2) 种。
 	直接 DP 了，对于第 n 级，设 f(n) 为到第 n 级的不同跳法，则
 	f(n) = f(n - 1) + f(n - 2) f(1) = 1 f(2) = 2
- */
+*/
 func solution(num int) int {
 	a, b := 1, 1
 	for i := 0; i < num; i++ {
-		a, b = b, a + b
+		a, b = b, a+b
 	}
 	return a % 1000000007
 }
+
+/*
+	变种，如果青蛙不能连续跳两次 2级台阶
+*/

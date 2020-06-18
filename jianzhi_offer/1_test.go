@@ -27,7 +27,7 @@ func TestPro(t *testing.T) {
 这里的思路是，先将行数和列数初始为 0，最后一列
 然后循环判断，如果当前元素小于目标值，直接将行数 + 1 遍历下一行，最终会找到一行的最后一个元素大于等于目标值。或者找不到表示元素太大了
 直接针对目标行，如果当前元素太大了，则将列数 - 1
- */
+*/
 func solution(nums [][]int, value int) bool {
 	// 行数
 	row := len(nums)
@@ -38,7 +38,7 @@ func solution(nums [][]int, value int) bool {
 	// 列数
 	col := len(nums[0])
 	// 注意这里的初始值 第一行和最后一列
-	i, j := 0, col - 1
+	i, j := 0, col-1
 	for i < row && j >= 0 {
 		if nums[i][j] == value {
 			return true
@@ -52,3 +52,7 @@ func solution(nums [][]int, value int) bool {
 	}
 	return false
 }
+
+/*
+	变种，查找特定的数 LeetCode
+*/
