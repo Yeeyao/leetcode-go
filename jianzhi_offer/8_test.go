@@ -33,4 +33,47 @@ func solution(num int) int {
 
 /*
 	变种，如果青蛙不能连续跳两次 2级台阶
+	递归
+	上一步跳了一步 f(n) = f(n-1) + f(n-2) 或者 上一步跳了两步 f(n) = f(n-1)
 */
+
+func solution2(num int, lastTwo bool) int {
+	// base
+	if num <= 1 {
+		return num
+	}
+	if num == 2 {
+		if lastTwo {
+			return 1
+		}
+		return 2
+	}
+	if lastTwo {
+		return solution2(num-1, false)
+	}
+	return solution2(num-1, false) + solution2(num-2, true)
+}
+
+/*
+	上文的 DP
+	上一步跳了一步 dp[n] = dp[n-1] + dp[n-2] 或者 上一步跳了两步 dp[n] = dp[n-1]
+	dp[n][0] 表示上一步跳了一步，dp[n][1] 表示上一步跳了两步
+*/
+func solution3(num int) int {
+	// dp array
+	dp := make([][]int, num+1)
+	for _, d := range dp {
+		d = make([]int, 2)
+	}
+	dp[0][0], dp[0][1] = 1, 1
+	if num >= 2 {
+		dp[2][0] = 2
+		dp[2][1] = 1
+	}
+	for i := 3; i <= num; i++ {
+		dp[i][0] = dp[i-1][0] + dp[i-2][1]
+		dp[i][1] = dp[i-1][0]
+	}
+	// 这里需要是 dp[num][0]
+	return dp[num][0]
+}
