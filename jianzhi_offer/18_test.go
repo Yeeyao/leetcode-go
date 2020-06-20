@@ -25,19 +25,38 @@ type TreeNode struct {
 /*
 	二叉树镜像 递归
 */
-func soution(root *TreeNode) *TreeNode {
-	solutionHelper(root.Left)
-	solutionHelper(root.Right)
+func solution(root *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	solution(root.Left)
+	solution(root.Right)
+	root.Left, root.Right = root.Right, root.Left
 	return root
 }
 
-func solutionHelper(root *TreeNode) {
+
+func soution2(root *TreeNode) *TreeNode {
+	solution2Helper(root.Left)
+	solution2Helper(root.Right)
+	return root
+}
+
+func solution2Helper(root *TreeNode) {
 	if root == nil {
 		return
 	}
-	solutionHelper(root.Left)
-	solutionHelper(root.Right)
+	solution2Helper(root.Left)
+	solution2Helper(root.Right)
 	temp := root.Left
 	root.Left = root.Right
 	root.Right = temp
+}
+
+func solution3(root *TreeNode) *TreeNode {
+	if root = nil {
+		return nil
+	}
+	root.Left, root.Right  = solution3(root.Left), solution3(root.Right)
+	return root
 }
