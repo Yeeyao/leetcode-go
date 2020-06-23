@@ -53,7 +53,7 @@ func solution(nums [][]int) []int {
 			res = append(res, nums[top][i])
 		}
 		// 从上到下遍历
-		for i := top; i <= bottom; i++ {
+		for i := top + 1; i <= bottom; i++ {
 			res = append(res, nums[i][right])
 		}
 		// 注意这里的边界情况需要处理好
@@ -63,7 +63,7 @@ func solution(nums [][]int) []int {
 				res = append(res, nums[bottom][i])
 			}
 			// 从下到上遍历
-			for i := bottom - 1; i > top; i-- {
+			for i := bottom; i > top; i-- {
 				res = append(res, nums[i][left])
 			}
 		}
