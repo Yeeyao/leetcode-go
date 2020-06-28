@@ -61,3 +61,32 @@ func solutionHelper(arr []int, i, j int) bool {
 	// 如果第一个条件成立，就表示当前的根节点左右子树的元素都满足
 	return (p == j) && solutionHelper(arr, i, m-1) && solutionHelper(arr, m, j-1)
 }
+
+/*
+				5
+			2		6
+		1		3
+	1 3 2 6 5
+	后序遍历的倒序：根，右，左 设编列列表为 rn, rn-1, ..., r1
+	root 初始化为最大的 int32，然后反向遍历输入的数组，当节点数值大于 root，表示
+	按照根右左顺序，一开始向右则元素越来越大，一旦出现元素小于 root 则表示进入了左子树了
+	使用单调栈，只要栈顶元素大于当前节点，就表示还是右子树，直接入栈。
+*/
+func solution2(arr []int) bool {
+	arrLen := len(arr)
+	var stack []int
+	stTop := 0
+	root := (int)(^uint(0) >> 1)
+	for i := arrLen - 1; i >= 0; i-- {
+		if arr[i] > root {
+			return false
+		}
+		for stTop != 0 && arr[i] < stack[stTop-1] {
+			root = stack[stTop]
+			stTop--
+		}
+		stack[stTop] = arr[i]
+		stTop++
+	}
+	return true
+}
