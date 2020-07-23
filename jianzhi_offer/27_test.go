@@ -20,6 +20,7 @@ func TestPro(t *testing.T) {
 	使用回溯法 重复情况需要剪枝
 	第 0 个位置存放所有的元素一次，然后递归下去第 1 个位置存放剩下的元素。。。
 	这里就是对于每个位置，需要将每个元素都固定到，然后递归直到最后的位置
+	注意这里使用 string 和 []byte 的相互转换
 */
 func solution(s string) []string {
 	var strSlice []string
