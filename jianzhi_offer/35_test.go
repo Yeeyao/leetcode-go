@@ -3,7 +3,7 @@ package jianzhi_offer
 import "testing"
 
 func TestPro(t *testing.T) {
-	t.Run("34  数组中的逆序对", func(t *testing.T) {
+	t.Run("35  数组中的逆序对", func(t *testing.T) {
 		nums := []int{7, 5, 6, 4}
 		get := solution(nums)
 		want := 5
@@ -12,7 +12,7 @@ func TestPro(t *testing.T) {
 		}
 	})
 
-	t.Run("34  数组中的逆序对2", func(t *testing.T) {
+	t.Run("35  数组中的逆序对2", func(t *testing.T) {
 		nums := []int{7, 7, 7, 5, 5, 5, 6, 4}
 		get := solution(nums)
 		want := 19
@@ -21,7 +21,7 @@ func TestPro(t *testing.T) {
 		}
 	})
 
-	t.Run("34  数组中的逆序对3", func(t *testing.T) {
+	t.Run("35  数组中的逆序对3", func(t *testing.T) {
 		nums := []int{2, 2, 2, 2, 2, 1, 2, 2}
 		get := solution(nums)
 		want := 5
