@@ -27,6 +27,7 @@ func TestPro(t *testing.T) {
 			5
 		3		9
 	 1     4  6   10
+5 9 10 6 3 4 1
 p(4)
 p(3) p(3)
 p(2) p(2) p(2) p(2)
