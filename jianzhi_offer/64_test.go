@@ -28,12 +28,42 @@ func TestPro(t *testing.T) {
 
 /*
 	给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。
+	一般最大最小值可以想到使用单调性处理，单调栈或者单调队列
+	同 leetcode 239
+	单调队列，遍历下去，每次取队列的尾部元素并将队列的首部元素出队列
+	单调递减队列，如果超过数量就将队首出队列
+*/
+func solution(nums []int, k int) []int {
+	// 单调队列
+	var queue []int
+	var res []int
+	for i, n := range nums {
+		// 将小于当前元素的队列元素出队列
+		j := len(queue) - 1
+		for j >= 0 && queue[j] < n {
+			j--
+		}
+		// 后面的出队
+		if j < 0 {
+			queue = []int{}
+		} else {
+			queue = queue[0:j]
+		}
+		queue = append(queue, n)
+		if i >= k {
+			res = append(res, queue[0])
+		}
+	}
+	return res
+}
+
+/*
+	给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。
 	同 leetcode 239
 	一开始找最大值，记录下最大值以及位置
 	然后每次增加一个元素判断新的最大值
-	单调队列，遍历下去，每次取队列的尾部元素并将队列的首部元素出队列
 */
-func solution(nums []int, k int) []int {
+func solution3(nums []int, k int) []int {
 	var res []int
 	queue := make([]int, k)
 	for _, n := range nums {
