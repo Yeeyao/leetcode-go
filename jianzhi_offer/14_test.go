@@ -38,7 +38,7 @@ type ListNode struct {
 */
 
 func solution(head *ListNode, k int) *ListNode {
-	former, latter := head
+	former, latter := head, head
 	for i := 0; i < k; i++ {
 		if former.Next != nil {
 			former = former.Next

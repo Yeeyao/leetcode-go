@@ -27,29 +27,30 @@ type TreeNode struct {
 }
 
 /*
-	B 是 A 的子结构，则子结构的根节点可以是 A 的任意节点
-		先序遍历 A 的每个节点 nA
-		判断 A 中以 nA 为根节点的子树是否包含树 B
 
-	最外层函数是用 A 的所有节点作为开始的节点跟 B 来比较
-	里层是对每个节点进行继续遍历判断
+	先序遍历树 AAA 中的每个节点 nAn_AnA​ ；（对应函数 isSubStructure(A, B)）
+	判断树 AAA 中 以 nAn_AnA​ 为根节点的子树 是否包含树 BBB 。（对应函数 recur(A, B)）
 
+isSubStructure(A, B) 函数：
 
-	A 或者 B 是空则直接返回 false 外层循环函数递归调用 A 左右两个子节点
-		这里返回是取或，只需要一边 true 就行
-	内层循环的函数就进行节点的数值判断
-		B 为空，表示完成匹配，返回 true;
-		A 为空表示遍历完了，没有匹配，返回 false
-		A,B的值 不同，返回 false
-		然后递归判断 A，B 的对应左右子树
-	返回值 判断 A B 的左右子树分别是否相等
-
+    特例处理： 当 树 AAA 为空 或 树 BBB 为空 时，直接返回 falsefalsefalse ；
+    返回值： 若树 BBB 是树 AAA 的子结构，则必满足以下三种情况之一，因此用或 || 连接；
+        以 节点 AAA 为根节点的子树 包含树 BBB ，对应 recur(A, B)；
+        树 BBB 是 树 AAA 左子树 的子结构，对应 isSubStructure(A.left, B)；
+        树 BBB 是 树 AAA 右子树 的子结构，对应 isSubStructure(A.right, B)；
+终止条件：
+    当节点 BBB 为空：说明树 BBB 已匹配完成（越过叶子节点），因此返回 true；
+    当节点 AAA 为空：说明已经越过树 AAA 叶子节点，即匹配失败，返回 false；
+    当节点 AAA 和 BBB 的值不同：说明匹配失败，返回 false；
+返回值：
+    判断 AAA 和 BBB 的左子节点是否相等，即 recur(A.left, B.left) ；
+    判断 AAA 和 BBB 的右子节点是否相等，即 recur(A.right, B.right) ；
 */
 func solution(A, B *TreeNode) bool {
 	return !(A == nil || B == nil) &&
 		// 这里类似先序遍历，先根节点作为开始的比较节点，然后左右两个字节点并递归下去
 		// 同时注意这里的或的判断
-		(solutionHelper(A, B) || solutionHelper(A.Left, B) || solutionHelper(A.Right, B))
+		(solutionHelper(A, B) || solution(A.Left, B) || solution(A.Right, B))
 }
 
 func solutionHelper(A, B *TreeNode) bool {

@@ -5,7 +5,7 @@ import (
 )
 
 func TestPro(t *testing.T) {
-	t.Run("7 旋斐波那契数列", func(t *testing.T) {
+	t.Run("7 斐波那契数列", func(t *testing.T) {
 		n := 0
 		want := 0
 		got := solution(n)
@@ -13,7 +13,7 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
-	t.Run("7 旋斐波那契数列2", func(t *testing.T) {
+	t.Run("7 斐波那契数列2", func(t *testing.T) {
 		n := 1
 		want := 1
 		got := solution(n)
@@ -21,7 +21,7 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
-	t.Run("7 旋斐波那契数列3", func(t *testing.T) {
+	t.Run("7 斐波那契数列3", func(t *testing.T) {
 		n := 5
 		want := 5
 		got := solution(n)
@@ -37,7 +37,7 @@ func TestPro(t *testing.T) {
 func solution(n int) int {
 	a, b := 0, 1
 	for i := 0; i < n; i++ {
-		a, b = b, a + b
+		a, b = b, a+b
 	}
 	return a
 }

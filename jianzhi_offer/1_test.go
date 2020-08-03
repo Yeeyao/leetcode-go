@@ -52,7 +52,3 @@ func solution(nums [][]int, value int) bool {
 	}
 	return false
 }
-
-/*
-	变种，查找特定的数 LeetCode
-*/

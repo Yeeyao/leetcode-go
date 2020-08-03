@@ -6,9 +6,17 @@ import (
 
 func TestPro(t *testing.T) {
 	t.Run("11 二进制中1的个数", func(t *testing.T) {
-		n := 3
-		want := 4
+		n := uint32(3)
+		want := 2
 		got := solution(n)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+	t.Run("11 二进制中1的个数2", func(t *testing.T) {
+		n := uint32(3)
+		want := 2
+		got := solution2(n)
 		if got != want {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -28,6 +36,7 @@ func solution(num uint32) int {
 		res += int(num & uint32(1))
 		num >>= 1
 	}
+	return res
 }
 
 /*
