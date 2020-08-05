@@ -5,7 +5,7 @@ import (
 )
 
 func TestPro(t *testing.T) {
-	t.Run("32 丑数", func(t *testing.T) {
+	t.Run("33 丑数", func(t *testing.T) {
 		n := 10
 		get := solution(n)
 		want := 12

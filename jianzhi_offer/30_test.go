@@ -7,7 +7,7 @@ import (
 func TestPro(t *testing.T) {
 	t.Run("30   连续子数组的最大和", func(t *testing.T) {
 		intSlice := []int{-2, 1, -3, 4, -1, 2, 1, -5, 4}
-		get := solution(intSlice)
+		get := solution2(intSlice)
 		want := 6
 		if get != want {
 			t.Errorf("got: %v, want: %v", get, want)
@@ -16,7 +16,7 @@ func TestPro(t *testing.T) {
 
 	t.Run("30   连续子数组的最大和2", func(t *testing.T) {
 		intSlice := []int{-2, -11, -3, -4, -1, -2, -1, -5, -14}
-		get := solution(intSlice)
+		get := solution2(intSlice)
 		want := -1
 		if get != want {
 			t.Errorf("got: %v, want: %v", get, want)
@@ -37,6 +37,22 @@ func solution(nums []int) int {
 	tempSum := 0
 	for _, v := range nums {
 		tempSum += v
+		if tempSum > maxSum {
+			maxSum = tempSum
+		}
+		if tempSum < 0 {
+			tempSum = 0
+		}
+	}
+	return maxSum
+}
+
+func solution2(nums []int) int {
+	maxSum := nums[0]
+	tempSum := nums[0]
+	numsLen := len(nums)
+	for i := 1; i < numsLen; i++ {
+		tempSum += nums[i]
 		if tempSum > maxSum {
 			maxSum = tempSum
 		}

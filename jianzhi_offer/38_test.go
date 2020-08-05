@@ -62,6 +62,7 @@ func solution(root *TreeNode) int {
 /*
 	BFS 使用队列处理，将跟节点入队列，然后每次从队列取一个元素，将左右节点放入队列
 	先将 root 放入队列中，然后判断队列非空，将队列中的所有元素的左右节点入队列
+	注意这里需要使用 tmp 来保存临时的下一层节点
 */
 func solution2(root *TreeNode) int {
 	cnt := 0

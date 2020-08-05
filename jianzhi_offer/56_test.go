@@ -20,24 +20,36 @@ type Node struct {
 
 /*
 	删除链表中的重复节点
-	应该需要记录当前节点和下一个节点
-	当前节点，判断下一个节点是否为空，如果是就直接返回根节点了
-	当前节点和下一个节点非空，判断下一个节点和当前节点是否数值相同
-		是，需要将节点继续移动
-		否，继续遍历
+	添加一个头节点处理第一个和第二个节点相同的情况
+	使用 pre 指向当前确定不重复的节点，last 指向当前处理的节点
 
 	1 2 2 2 3 3 3 4 4 5
 */
-func solution(head *Node) *Node {
-	newHead := head
-	for head != nil && head.Next != nil {
-		temp := head
-		// 过滤相同的节点
-		for temp.Val == temp.Next.Val {
-			temp = temp.Next
-		}
-		head.Next = temp.Next
-		head = head.Next
+func solution(phead *Node) *Node {
+	// 只有一个节点，直接返回
+	if phead == nil || phead.Next == nil {
+		return phead
 	}
-	return newHead
+	// 在开头节点添加一个节点
+	head := &Node{0, nil}
+	head.Next = phead
+	pre, last := head, head.Next
+	for last != nil {
+		// 非最后节点然后和后面的值相同
+		if last.Next != nil && last.Val == last.Next.Val {
+			// 继续向后找到最后一个相同的节点
+			for last.Next != nil && last.Val == last.Next.Val {
+				last = last.Next
+			}
+			// 注意这里是 pre.Next，所以 pre 还是在 last 前面
+			pre.Next = last.Next
+			last = last.Next
+		} else {
+			// 没有相等的，两个指针正常向后移动
+			pre = pre.Next
+			last = last.Next
+		}
+		// 这里起那面加了一个
+		return head.Next
+	}
 }

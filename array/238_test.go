@@ -65,8 +65,6 @@ func solution(input []int) []int {
 		leftProduct[i] = 1
 		rightProduct[i] = 1
 	}
-	leftProduct[0] = 1
-	rightProduct[inputLen-1] = 1
 	for i := 1; i < inputLen; i++ {
 		leftProduct[i] = leftProduct[i-1] * input[i-1]
 		rightProduct[inputLen-i-1] = rightProduct[inputLen-i] * input[inputLen-i]

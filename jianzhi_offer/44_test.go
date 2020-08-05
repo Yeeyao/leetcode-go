@@ -1,6 +1,8 @@
 package jianzhi_offer
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestPro(t *testing.T) {
 	t.Run("44 翻转单词顺序", func(t *testing.T) {
@@ -25,6 +27,86 @@ func TestPro(t *testing.T) {
 		s := "hello world!"
 		get := solution(s)
 		want := "world! hello"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+
+	t.Run("44 翻转单词顺序4", func(t *testing.T) {
+		s := "the sky is blue"
+		get := solution3(s)
+		want := "blue is sky the"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+
+	t.Run("44 翻转单词顺序5", func(t *testing.T) {
+		s := "  hello world!  "
+		get := solution3(s)
+		want := "world! hello"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+
+	t.Run("44 翻转单词顺序6", func(t *testing.T) {
+		s := "hello world!"
+		get := solution3(s)
+		want := "world! hello"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+
+	t.Run("44 翻转单词顺序7", func(t *testing.T) {
+		s := "the "
+		get := solution3(s)
+		want := "the"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+
+	t.Run("44 翻转单词顺序8", func(t *testing.T) {
+		s := " the "
+		get := solution3(s)
+		want := "the"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+	t.Run("44 翻转单词顺序9", func(t *testing.T) {
+		s := " the "
+		get := solution3(s)
+		want := "the"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+
+	t.Run("44 翻转单词顺序10", func(t *testing.T) {
+		s := "e "
+		get := solution3(s)
+		want := "e"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+
+	t.Run("44 翻转单词顺序11", func(t *testing.T) {
+		s := " e"
+		get := solution3(s)
+		want := "e"
+		if get != want {
+			t.Errorf("got: %v, want: %v", get, want)
+		}
+	})
+
+	t.Run("44 翻转单词顺序12", func(t *testing.T) {
+		s := " e "
+		get := solution3(s)
+		want := "e"
 		if get != want {
 			t.Errorf("got: %v, want: %v", get, want)
 		}
@@ -75,7 +157,7 @@ func solution(s string) string {
 	return string(res)
 }
 
-func solution3(s string) string {
+func solution2(s string) string {
 	var res []byte
 	bytes := []byte(s)
 	bsLen := len(bytes)
@@ -102,4 +184,31 @@ func solution3(s string) string {
 	res = res[0 : len(res)-1]
 	return string(res)
 
+}
+
+func solution3(s string) string {
+	var res []byte
+	sByte := []byte(s)
+	right := len(sByte) - 1
+	for right >= 0 {
+		// 过滤结尾开头的空格
+		for right >= 0 && sByte[right] == ' ' {
+			right--
+		}
+		if right < 0 {
+			break
+		}
+		// 遍历单词
+		end := 0
+		for right >= 0 && sByte[right] != ' ' {
+			end++
+			right--
+		}
+		// 保存单词以及添加结尾
+		res = append(res, sByte[right+1:right+end+1]...)
+		res = append(res, ' ')
+	}
+	// 去除尾部空格
+	res = res[0 : len(res)-1]
+	return string(res)
 }

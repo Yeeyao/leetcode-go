@@ -35,5 +35,11 @@ func solution(head *Node) *Node {
 		fast = fast.Next.Next
 		slow = slow.Next
 	}
-	return fast
+	// 相遇之后找入口
+	first, second := fast, head
+	for first != second {
+		first = first.Next
+		second = second.Next
+	}
+	return first
 }
