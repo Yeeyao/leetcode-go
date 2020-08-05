@@ -21,6 +21,7 @@ func TestPro(t *testing.T) {
 	第 0 个位置存放所有的元素一次，然后递归下去第 1 个位置存放剩下的元素。。。
 	这里就是对于每个位置，需要将每个元素都固定到，然后递归直到最后的位置
 	注意这里使用 string 和 []byte 的相互转换
+	当 beginIndex == sLen 终止
 */
 func solution(s string) []string {
 	var strSlice []string
@@ -37,12 +38,12 @@ func solutionHelper(strSlice *[]string, sLen, beginIndex int, s string, temp []b
 	}
 	// 当前的位置需要排除重复的元素
 	// 需要注意，后续遍历从 beginIndex 开始，所以，需要通过交换将前面的元素向后存放才能再次遍历到
-	appearMap := make(map[int]bool)
+	appearMap := make(map[byte]bool)
 	for i := beginIndex; i < sLen; i++ {
-		if _, ok := appearMap[i]; ok {
+		if _, ok := appearMap[temp[i]]; ok {
 			continue
 		}
-		appearMap[i] = true
+		appearMap[temp[i]] = true
 		temp[beginIndex], temp[i] = temp[i], temp[beginIndex]
 		solutionHelper(strSlice, sLen, beginIndex+1, s, temp)
 		temp[i], temp[beginIndex] = temp[beginIndex], temp[i]

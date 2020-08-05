@@ -34,29 +34,26 @@ type TreeNode struct {
 /*
 	需要找到树种和为 sum 的所有节点的路径
 	直接用 DFS 但是这样，如果树很大，就不太行
+	需要注意这里是从根节点开始的，一直到叶子节点结束
 */
 func solution(root *TreeNode, sum int) []int {
 	var res [][]int
-	solutionHelper(root, sum, 0, []int{}, &res)
+	solutionHelper(root, sum, []int{}, &res)
 	return res
 }
 
-func solutionHelper(root *TreeNode, sum, tempSum int, tempPath []int, res *[][]int) {
-	if sum == tempSum {
-		*res = append(*res, append([]int{}, tempPath...))
-	} else if sum > tempSum {
+func solutionHelper(root *TreeNode, sum int, tempPath []int, res *[][]int) {
+	// 遍历完一条路径，后面就不需要额外判断当前 root 的左右子树
+	if root == nil {
 		return
-	} else {
-		tempPath = append(tempPath, root.Val)
-		tempSum += root.Val
-		solutionHelper(root, sum, tempSum, tempPath, res)
-		tempPath = tempPath[:len(tempPath)-1]
-		tempSum -= root.Val
-		if root.Left != nil {
-			solutionHelper(root.Left, sum, tempSum, tempPath, res)
-		}
-		if root.Right != nil {
-			solutionHelper(root.Right, sum, tempSum, tempPath, res)
-		}
 	}
+	val := root.Val
+	tempPath = append(tempPath, val)
+	sum -= val
+	if sum == 0 && root.Left == nil && root.Right == nil {
+		*res = append(*res, tempPath)
+		return
+	}
+	solutionHelper(root.Left, sum, tempPath, res)
+	solutionHelper(root.Right, sum, tempPath, res)
 }

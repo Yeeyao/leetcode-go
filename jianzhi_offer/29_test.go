@@ -40,7 +40,7 @@ func partition(nums []int, l, r int) int {
 	pivot := nums[r]
 	// 因为后面是先加所以这里先 - 1
 	i := l - 1
-	for j := l; j <= r-1; j++ {
+	for j := l; j < r; j++ {
 		// 元素小于 pivot 交换
 		if nums[j] < pivot {
 			i++

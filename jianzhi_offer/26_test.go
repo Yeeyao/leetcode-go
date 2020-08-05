@@ -6,6 +6,13 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+/*
+	二叉树的中序遍历就是一个单调递增的元素序列，因此使用中序遍历
+	相邻节点的关系，pre, cur pre.right = cur, cur.left = pre
+	同时，头尾的 head,tail head.left = tail, tail.right = head
+
+	这里先中序遍历，最后头尾处理
+*/
 func treeToDoublyList(root *TreeNode) *TreeNode {
 	if root == nil {
 		return root
