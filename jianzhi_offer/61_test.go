@@ -70,7 +70,8 @@ func solution2(data []string) *TreeNode {
 	if len(data) == 0 {
 		return nil
 	}
-	root := TreeNode{0, nil, nil}
+	rootVal, _ := strconv.Atoi(data[0])
+	root := TreeNode{rootVal, nil, nil}
 	// 当前访问的数组位置索引
 	i := 1
 	queue := []*TreeNode{&root}
@@ -99,11 +100,4 @@ func solution2(data []string) *TreeNode {
 		i++
 	}
 	return &root
-}
-
-/*
-
- */
-func solution2Helper() {
-
 }
