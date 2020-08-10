@@ -24,6 +24,14 @@ type Node struct {
 	使用 pre 指向当前确定不重复的节点，last 指向当前处理的节点
 
 	1 2 2 2 3 3 3 4 4 5
+	只有一个节点就直接返回
+	开头节点前添加一个节点
+	初始化 pre, last 两个节点分别指向添加的头以及原来的头，这里逐个判断的是 last
+	循环终止条件是 last == nil
+		判断 last.Next != nil 以及 last.Val == last.Next.Val 同时，一直过滤
+			pre.Next = last.Next last = last.Next
+		不满足上述判断
+			pre = pre.Next last = last.Next
 */
 func solution(phead *Node) *Node {
 	// 只有一个节点，直接返回
