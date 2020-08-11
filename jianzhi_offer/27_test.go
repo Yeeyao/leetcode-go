@@ -27,14 +27,15 @@ func solution(s string) []string {
 	var strSlice []string
 	sLen := len(s)
 	temp := []byte(s)
-	solutionHelper(&strSlice, sLen, 0, s, temp)
+	solutionHelper(&strSlice, sLen, 0, temp)
 	return strSlice
 }
 
-func solutionHelper(strSlice *[]string, sLen, beginIndex int, s string, temp []byte) {
+func solutionHelper(strSlice *[]string, sLen, beginIndex int, temp []byte) {
 	// 已经全部位置都确定好了
 	if beginIndex == sLen {
 		*strSlice = append(*strSlice, string(temp))
+		return
 	}
 	// 当前的位置需要排除重复的元素
 	// 需要注意，后续遍历从 beginIndex 开始，所以，需要通过交换将前面的元素向后存放才能再次遍历到
@@ -45,7 +46,7 @@ func solutionHelper(strSlice *[]string, sLen, beginIndex int, s string, temp []b
 		}
 		appearMap[temp[i]] = true
 		temp[beginIndex], temp[i] = temp[i], temp[beginIndex]
-		solutionHelper(strSlice, sLen, beginIndex+1, s, temp)
+		solutionHelper(strSlice, sLen, beginIndex+1, temp)
 		temp[i], temp[beginIndex] = temp[beginIndex], temp[i]
 	}
 }

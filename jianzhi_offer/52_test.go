@@ -67,6 +67,18 @@ func TestPro(t *testing.T) {
 		如果 A[n-1] 是 0 个 c，直接匹配 B[m-3] A[n-1]
 		如果 A[n-1] 为 c 或者 c = '.'，A 向前，A[n-2] 同样和 B[m-1]
 [ref](https://leetcode-cn.com/problems/zheng-ze-biao-da-shi-pi-pei-lcof/solution/zhu-xing-xiang-xi-jiang-jie-you-qian-ru-shen-by-je/)
+
+创建长度是 (n + 1) * (m + 1) 的 dp [][]bool
+遍历 n, m 的每个元素 两层
+	空串默认是 true
+	判断 B 的最后一个字符是 '*'
+		不是
+			如果 i > 0 且最后两个字符相等或者 B 的最后字符是 . dp[i][j] = dp[i=1][j-1]
+		是
+			如果 j >= 2 dp[i][j] = dp[i][j] || dp[i][j-2]
+			如果 i >= 1 且 j >= 2 以及 B 中 * 前的字符和 A 的字符相同或者 A 的字符是 .
+				dp[i][j] = dp[i][j] || dp[i-1][j]
+最后返回 dp[n][m]
 */
 func solution(s, p string) bool {
 	byteS, byteP := []byte(s), []byte(p)
