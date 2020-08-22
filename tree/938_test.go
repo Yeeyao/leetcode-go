@@ -14,7 +14,7 @@ func rangeSumBST(root *TreeNode, L int, R int) int {
 }
 
 func rangeSumBST2(root *TreeNode, L, R, sum int) int {
-	if  root == nil {
+	if root == nil {
 		return sum
 	}
 
@@ -38,7 +38,7 @@ func rangeSumBST2(root *TreeNode, L, R, sum int) int {
 }
 
 func rangeSumBST(root *TreeNode, L int, R int) int {
-	if  root == nil {
+	if root == nil {
 		return 0
 	}
 
