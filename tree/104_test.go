@@ -1,5 +1,7 @@
 package tree
 
+// Maximum Depth of Binary Tree
+
 // TLE
 func maxDepth(root *TreeNode) int {
 	if root == nil {
