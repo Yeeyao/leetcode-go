@@ -41,7 +41,7 @@ func solution(input []int) int {
 	// 因为不清楚最小值是多少，直接使用第一个元素来作为初始的和
 	sum := input[0]
 	tempSum := 0
-	// 第一个元素被先使用了，因此从第二个元素开始遍历
+	// 注意这里从第一个开始遍历
 	for i := 0; i < inputLen; i++ {
 		// 因为每次负数都置 0 先加再比较
 		tempSum += input[i]

@@ -27,8 +27,8 @@ This path may or may not pass through the root.
 		更新 res
 		返回高度
 */
-*/
 var res int
+
 func diameterOfBinaryTree(root *TreeNode) int {
 	res = 1
 	helper(root)
@@ -42,12 +42,12 @@ func helper(root *TreeNode) int {
 	left := helper(root.Left)
 	right := helper(root.Right)
 	// 注意这里先计算了最大值，再计算高度
-	if left + right + 1 > res {
+	if left+right+1 > res {
 		res = left + right + 1
 	}
 	if left > right {
 		return left + 1
 	} else {
-		return  right + 1
+		return right + 1
 	}
 }
