@@ -2,6 +2,8 @@ package array
 
 import (
 	"testing"
+	"sort"
+	"fmt"
 )
 
 func TestPro(t *testing.T) {
@@ -31,6 +33,101 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run("581. Shortest Unsorted Continuous Subarray4", func(t *testing.T) {
+		input := []int{1, 2, 3, 4}
+		want := 0
+		got := findUnsortedSubarray2(input)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+}
+/*
+排序
+	如果复制原数组后进行排序，然后逐个元素判断，如果相等就表示元素已经在排好序的位置了，不需要处理；
+	不相等，则需要更新坐标的最小值和最大值，这两个之间的元素就是需要排序的
+
+	先复制一份 nums 然后排序
+	初始化 start, end 为 数组长度和 0
+	遍历排序后数组，如果原数组和当前数组的相同位置数值不同就更新最大的位置和最小的位置
+	最后如果结束位置大于开始位置，差值大于等于 0 就返回两者差 + 1 否则返回 0
+*/
+func findUnsortedSubarray(nums []int)int {
+	sortedNums := make([]int, len(nums))
+	copy(sortedNums, nums)
+	sort.Ints(sortedNums)
+	begin, end := len(nums), 0
+	for i := 0; i < len(nums); i++{
+		if nums[i] != sortedNums[i]{
+			if i < begin {
+				begin = i
+			}
+			if i > end {
+				end = i
+			}
+		}
+	}
+	if end - begin >= 0 {
+		return end - begin + 1
+	}
+	return 0
+}
+
+
+/*
+不使用额外空间
+	无序子数组中最小元素的正确位置可以决定左边界，最大元素的正确位置可以决定右边界。
+	遍历数组查找，第一次从开头向结尾找，如果元素升序就跳过（因为满足了升序），如果元素开始降序，就直接找到降序后的最小值
+	同理，从结尾向开头遍历，如果元素降序就跳过，开始升序，直接找升序后的最大值
+	再从头开始遍历，找到第一个大于最小元素的位置，同理从尾部向前遍历，找到第一个小于最大元素的位置
+	两个位置之间的元素数量就是所求
+*/
+func findUnsortedSubarray2(nums []int)int {
+	numsLen := len(nums)
+	// 是否改变了排序
+	flag := false
+	const intMax = int(^uint(0) >> 1)
+	const intMin = ^intMax
+	min, max := intMax, intMin
+	for i := 1; i < numsLen; i++{
+		if nums[i - 1] > nums[i] {
+			flag = true
+		}
+		if flag {
+			if nums[i] < min {
+				min = nums[i]
+			}
+		}
+	}
+	flag = false
+	for i := numsLen-2; i >= 0; i--{
+		if nums[i] > nums[i+1] {
+			flag = true
+		} 
+		if flag {
+			if nums[i] > max {
+				max = nums[i]
+			}
+		}
+	}
+	// 这两个初始值需要都是 0
+	var left, right int
+	for left := 0; left < numsLen; left++{
+		if min < nums[left] {
+			break
+		}
+	}
+	for right := numsLen - 1; right >= 0; right-- {
+		if max > nums[right] {
+			break
+		}
+	}
+	// 注意这里如果是 0 就返回 0
+	if right - left <= 0 {
+		return 0
+	}
+	return right - left + 1
 }
 
 /*
@@ -71,7 +168,7 @@ func solution(input []int) int {
 	return right - left + 1
 }
 
-func solution(input []int) int {
+func solution2(input []int) int {
 	inputLen := len(input)
 	if inputLen == 0 || inputLen == 1 {
 		return 0

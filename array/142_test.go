@@ -22,6 +22,12 @@ type ListNode struct {
 
 /*
 	类似 287 题目没有说明一定有循环，所以需要判断
+	先判断头和头的下一个节点是否 nil，是就直接返回 nil
+	这里初始化快慢两个指针，包含循环置 false，循环判断条件是两个指针非 nil
+	其中慢指针直接向后，快指针判断一下 next 后向两步或者返回 nil
+	当快慢指针相遇时退出循环并将包含循环置 true
+	然后一个指针从头部开始向后，一个指针从相遇点开始，两个指针相遇就直接返回
+
 */
 func solution(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {

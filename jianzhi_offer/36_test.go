@@ -34,12 +34,12 @@ func solution(headA, headB *ListNode) *ListNode {
 		if headAP != nil {
 			headAP = headAP.Next
 		} else {
-			headAP = headA
+			headAP = headB
 		}
 		if headBP != nil {
 			headBP = headBP.Next
 		} else {
-			headBP = headB
+			headBP = headA
 		}
 	}
 	return headAP
