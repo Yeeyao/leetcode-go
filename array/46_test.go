@@ -60,7 +60,10 @@ func isInSlice(s []int, e int) bool {
 	当遍历的开始位置已经最后了就保存
 	对于 nums[start ... end]，前面的 nums[0 ... start - 1]是确定好的
 	接下来，就是将所有元素都放到当前的 nums[start] 来得到所有迭代的情况
-	这种思路好棒啊
+
+	先创建结果 slice
+	辅助函数，记录一开始位置，然后判断位置是否等于开始，是就保存结果并返回
+	否则，从开始位置遍历原数组，然后将每个元素都和开始位置交换，递归调用，最后交换回来
 */
 func solution2(nums []int) [][]int {
 	retArr := make([][]int, 0)
@@ -73,6 +76,7 @@ func solutionHelper2(nums []int, retArr *[][]int, numsLen, start int) {
 	// 遍历完了才保存
 	if start == numsLen {
 		*retArr = append(*retArr, append([]int{}, nums...))
+		return
 	}
 	for i := start; i < numsLen; i++ {
 		// 进行一次交换后递归处理

@@ -1,8 +1,6 @@
 package array
 
 import (
-	"fmt"
-	"sort"
 	"testing"
 )
 
@@ -86,20 +84,19 @@ func PowTwo(num int) int {
 
 func solution2(nums []int) [][]int {
 	retArr := make([][]int, 0)
-	sort.Ints(nums)
 	numsLen := len(nums)
-	solution2Helper(nums, &retArr, []int{}, 0, numsLen)
+	solution2Helper(&retArr, nums, []int{}, 0, numsLen)
 	return retArr
 }
 
-func solution2Helper(nums []int, retArr *[][]int, solArr []int, start, numsLen int) {
+func solution2Helper(retArr *[][]int, nums, solArr []int, start, numsLen int) {
 	// 什么时候保存结果 这里每次都直接保存
 	*retArr = append(*retArr, append([]int{}, solArr...))
 	saLen := len(solArr)
 	// 循环递归处理
 	for i := start; i < numsLen; i++ {
 		solArr = append(solArr, nums[i])
-		solution2_helper(nums, retArr, solArr, i+1, numsLen)
+		solution2Helper(retArr, nums, solArr, i+1, numsLen)
 		solArr = solArr[:saLen]
 	}
 }
