@@ -1,9 +1,8 @@
 package array
 
 import (
-	"testing"
 	"sort"
-	"fmt"
+	"testing"
 )
 
 func TestPro(t *testing.T) {
@@ -43,23 +42,25 @@ func TestPro(t *testing.T) {
 		}
 	})
 }
+
 /*
 排序
 	如果复制原数组后进行排序，然后逐个元素判断，如果相等就表示元素已经在排好序的位置了，不需要处理；
 	不相等，则需要更新坐标的最小值和最大值，这两个之间的元素就是需要排序的
+[ref](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/solution/zui-duan-wu-xu-lian-xu-zi-shu-zu-by-leetcode/)
 
 	先复制一份 nums 然后排序
 	初始化 start, end 为 数组长度和 0
 	遍历排序后数组，如果原数组和当前数组的相同位置数值不同就更新最大的位置和最小的位置
 	最后如果结束位置大于开始位置，差值大于等于 0 就返回两者差 + 1 否则返回 0
 */
-func findUnsortedSubarray(nums []int)int {
+func findUnsortedSubarray(nums []int) int {
 	sortedNums := make([]int, len(nums))
 	copy(sortedNums, nums)
 	sort.Ints(sortedNums)
 	begin, end := len(nums), 0
-	for i := 0; i < len(nums); i++{
-		if nums[i] != sortedNums[i]{
+	for i := 0; i < len(nums); i++ {
+		if nums[i] != sortedNums[i] {
 			if i < begin {
 				begin = i
 			}
@@ -68,12 +69,11 @@ func findUnsortedSubarray(nums []int)int {
 			}
 		}
 	}
-	if end - begin >= 0 {
+	if end-begin >= 0 {
 		return end - begin + 1
 	}
 	return 0
 }
-
 
 /*
 不使用额外空间
@@ -83,15 +83,15 @@ func findUnsortedSubarray(nums []int)int {
 	再从头开始遍历，找到第一个大于最小元素的位置，同理从尾部向前遍历，找到第一个小于最大元素的位置
 	两个位置之间的元素数量就是所求
 */
-func findUnsortedSubarray2(nums []int)int {
+func findUnsortedSubarray2(nums []int) int {
 	numsLen := len(nums)
 	// 是否改变了排序
 	flag := false
 	const intMax = int(^uint(0) >> 1)
 	const intMin = ^intMax
 	min, max := intMax, intMin
-	for i := 1; i < numsLen; i++{
-		if nums[i - 1] > nums[i] {
+	for i := 1; i < numsLen; i++ {
+		if nums[i-1] > nums[i] {
 			flag = true
 		}
 		if flag {
@@ -101,10 +101,10 @@ func findUnsortedSubarray2(nums []int)int {
 		}
 	}
 	flag = false
-	for i := numsLen-2; i >= 0; i--{
+	for i := numsLen - 2; i >= 0; i-- {
 		if nums[i] > nums[i+1] {
 			flag = true
-		} 
+		}
 		if flag {
 			if nums[i] > max {
 				max = nums[i]
@@ -113,7 +113,7 @@ func findUnsortedSubarray2(nums []int)int {
 	}
 	// 这两个初始值需要都是 0
 	var left, right int
-	for left := 0; left < numsLen; left++{
+	for left := 0; left < numsLen; left++ {
 		if min < nums[left] {
 			break
 		}
@@ -124,7 +124,7 @@ func findUnsortedSubarray2(nums []int)int {
 		}
 	}
 	// 注意这里如果是 0 就返回 0
-	if right - left <= 0 {
+	if right-left <= 0 {
 		return 0
 	}
 	return right - left + 1

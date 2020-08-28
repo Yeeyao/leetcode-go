@@ -15,6 +15,7 @@ n = 1 () 一个 n = 2 ()() (()) 两个 n = 3 五个
 pos 从 0 开始，然后每次递增一位表示下一个的数值，一次递归将 pos 分别设置为 ( 以及 )
 然后继续递归处理
 当当前的临时结果长度等于 n * 2 以及字符串合法就保存结果并返回
+[ref](https://leetcode-cn.com/problems/generate-parentheses/solution/gua-hao-sheng-cheng-by-leetcode-solution/)
 
 暴力改进，在添加 ( 或者 ) 之前检查合法性，提前剪枝
 初始化 rune slice 以及 open, close 两个符号计数器

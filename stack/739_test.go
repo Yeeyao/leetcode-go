@@ -17,6 +17,8 @@ Note: The length of temperatures will be in the range [1, 30000]. Each temperatu
 从最后的元素向前遍历，最后一个结果是 0，然后倒数第二个判断最后一个是否大于它，
 右边构建单调递增栈，元素是数值加上位置
 
+[ref](https://leetcode-cn.com/problems/daily-temperatures/solution/mei-ri-wen-du-by-leetcode-solution/)
+
 初始化栈，对每个元素，找到栈中第一个大于它的元素并将距离保存
 	如果找不到就保存 0
 之后元素需要判断入栈，栈顶元素如果大于当前元素就直接入栈，否则，将栈顶元素出栈最后入栈

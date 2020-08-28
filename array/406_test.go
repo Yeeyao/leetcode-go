@@ -23,6 +23,8 @@ Write an algorithm to reconstruct the queue.
 按降序取下一个高度，同样按 k 值对该身高的人升序排序，然后逐个插入到输出队列中与 k 值相等的索引位置上。
 直到完成为止
 
+[ref](https://leetcode-cn.com/problems/queue-reconstruction-by-height/solution/gen-ju-shen-gao-zhong-jian-dui-lie-by-leetcode/)
+
 输入:
 [[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
 

@@ -22,6 +22,7 @@ func TestPro(t *testing.T) {
  *     Val int
  *     Next *ListNode
  * }
+[ref](https://leetcode-cn.com/problems/liang-ge-lian-biao-de-di-yi-ge-gong-gong-jie-dian-lcof/solution/shuang-zhi-zhen-fa-lang-man-xiang-yu-by-ml-zimingm/)
 	两个链表的第一个公共节点 值相等，后节点相同
 	brute force O(nm) 一个个比较
 	双指针 两个都分别逐个遍历，到达尾部重新从头部开始遍历 如果相遇就是第一个公共节点

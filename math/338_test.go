@@ -8,6 +8,8 @@ in their binary representation and return them as an array.
 这里数字数连续的
 1 2 4 8 16
 
+[ref](https://leetcode-cn.com/problems/counting-bits/solution/bi-te-wei-ji-shu-by-leetcode/)
+
 brute force 是直接将每个数字调用辅助函数，辅助函数计算每个数字的 1 的位数
 
 动态规划 + 最高有效位/最低有效位/最后设置位 分为三种方法
