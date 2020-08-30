@@ -25,6 +25,15 @@ func TestPro(t *testing.T) {
 	然后就缩小范围到元素较多的区间继续找
 	但是，这不能说明右边就不存在重复的元素了。
 	类似鸽笼原理以及二分搜索
+
+	初始化 low, high 为 0 和最后的坐标
+	循环条件是 low < high
+		计算 mid
+		遍历原数组，然后将小于等于 mid 的元素计数
+		将计数和 mid 比较
+			计数小于等于 mid 表示左边的元素不足，将 Low = mid + 1
+			否则 high = mid
+	最后返回 low
 */
 func solution(nums []int) int {
 	numsLen := len(nums)
@@ -34,7 +43,7 @@ func solution(nums []int) int {
 		mid := low + (high-low)/2
 		for _, v := range nums {
 			// 这里和下面的以及返回值需要一致
-			if v <= mid {
+			if v <= nums[mid] {
 				count++
 			}
 		}

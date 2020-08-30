@@ -28,6 +28,9 @@ func TestPro(t *testing.T) {
 	这个类似 64？使用 DP
 	DP[i][j] = DP[i-1][j] + 1
 	DP[i][j] = DP[i][j-1] + 1
+同样 DP DP[i][j] = DP[i-1][j] + DP[i][j-1]
+初始化 dp slice 遍历每个元素，判断当前元素坐标
+如果 i 或者 j 等于 0 就直接等于非 0 的路径数量
 */
 func solution(m, n int) int {
 	// 保存当前的路径数量
@@ -54,4 +57,21 @@ func solution(m, n int) int {
 		}
 	}
 	return arr[m-1][n-1]
+}
+
+func uniquePaths2(m int, n int) int {
+	dp := make([][]int, m)
+	for _, v := range dp {
+		v = make([]int, n)
+	}
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if i == 0 || j == 0 {
+				dp[i][j] = 1
+			} else {
+				dp[i][j] = dp[i][j-1] + dp[i-1][j]
+			}
+		}
+	}
+	return dp[m-1][n-1]
 }

@@ -21,6 +21,9 @@ DO NOT allocate another 2D matrix and do the rotation.
 
 给定一个 n * n 二维矩阵， 直接将矩阵顺时针旋转 90 度，只能对输入的矩阵进行修改
 两次反转 先水平 180 反转 再左上到右下反转
+第一个循环直接将行数反转
+第一个循环遍历行
+第二个循环遍历列，j := 行数 + 1 开始，然后交换 i,j 和 j,i
 */
 func rotate(matrix [][]int) {
 	row := len(matrix)

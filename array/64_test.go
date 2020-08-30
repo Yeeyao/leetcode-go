@@ -62,6 +62,9 @@ func solutionHelper(grid [][]int, minSum *int, m, n, tempSum, x, y int) {
 /*
 	DP[i][j] = min(DP[i-1][j], DP[i][j-1]) + grid[i][j]
 	DP 了
+循环遍历每个元素
+	当行列都不等于 0 当前 grid 的值等于左上两个的较小值加上当前值
+	其中一个行列等于 0 则 grid 值就等于非 0 的值
 */
 func solution2(grid [][]int) int {
 	m, n := len(grid), len(grid[0])

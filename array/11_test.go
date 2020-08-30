@@ -21,6 +21,12 @@ func TestPro(t *testing.T) {
 	min(a[i], a[j]) * (j - i) 最大 i < j
 	从两边向中间遍历，因为两边的宽度是最大的，
 	所以，中间的高度需要高于最低的才需要重新计算
+
+初始化 left right 两个指针
+循环条件是 left < right
+	比较左右指针的大小取较小的作为高度
+	得到高度乘以左右指针的差值得到面积然后更新最大面积
+	两个循环过滤掉左右两边小于当前高度的元素
 */
 func solution(height []int) int {
 	left, right := 0, len(height)-1
@@ -44,41 +50,6 @@ func solution(height []int) int {
 		for left < right && height[right] <= h {
 			right--
 		}
-	}
-	return area
-}
-
-/*
-	类似上面的，一开始是使用边界两个。
-	中间的高度需要比两边的高。
-	两边中，较低的可以不用管
-	这里只需要更新较低的，因为之前已经利用这个最低的计算过了，
-	后面再进行移动的话，一定是需要较高的才能计算出更大的面积。
-	然后得到更高的情况下，之前较低的已经是不需要了计算了
-	因为向中间移动，宽度是不断减小的
-*/
-func solution2(height []int) int {
-	left, right := 0, len(height)-1
-	h, area := 0, 0
-	for left < right {
-		// 更新最小度
-		if height[left] < height[right] {
-			h = height[left]
-		} else {
-			h = height[right]
-		}
-		// 面积更新
-		areaT := h * (right - left)
-		if areaT > area {
-			area = areaT
-		}
-		// 坐标更新这里不同
-		// 这里，只需要更新较小的高度的索引，因为更高的坐标对于 h 是有影响的
-		if heigt[left] < height[right] {
-			left++
-		} else {
-			right--
-		
 	}
 	return area
 }
