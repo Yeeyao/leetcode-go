@@ -63,21 +63,21 @@ func rob(nums []int) int {
 	sum := 0
 	numsLen := len(nums)
 	// 0, 4
-	for i := 0; i < numsLen; i++{
+	for i := 0; i < numsLen; i++ {
 		helper(nums, i, numsLen, 0, &sum)
 	}
 	return sum
 }
 
-func helper(nums []int, begin, end, temp int, sum *int){
+func helper(nums []int, begin, end, temp int, sum *int) {
 	temp += nums[begin]
-	if begin >= end - 2 {
-		if temp > *sum{
+	if begin >= end-2 {
+		if temp > *sum {
 			*sum = temp
 		}
 		return
 	}
-	for i := begin + 2; i < end; i++{
+	for i := begin + 2; i < end; i++ {
 		helper(nums, i, end, temp, sum)
 	}
 }
@@ -100,16 +100,16 @@ func rob(nums []int) int {
 	if numsLen == 0 {
 		return 0
 	}
-	if numsLen == 1{
+	if numsLen == 1 {
 		return nums[0]
 	}
 	dp := make([]int, numsLen)
 	dp[0] = nums[0]
 	dp[1] = max(nums[0], nums[1])
-	for i := 2; i < numsLen; i++{
+	for i := 2; i < numsLen; i++ {
 		dp[i] = max((dp[i-2] + nums[i]), dp[i-1])
 	}
-	return dp[numsLen - 1]
+	return dp[numsLen-1]
 }
 
 func max(a, b int) int {

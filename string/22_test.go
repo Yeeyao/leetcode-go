@@ -45,10 +45,3 @@ func helper(res *[]string, temp []rune, pos, open, close, n int) {
 		temp = temp[:tempLen]
 	}
 }
-
-/*
-按照括号序列的长度递归
-*/
-func generateParenthesis(n int) []string {
-
-}
