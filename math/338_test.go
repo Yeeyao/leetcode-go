@@ -44,10 +44,10 @@ func countBits(num int) []int {
 	偶数的 1 的个数和偶数 / 2 的 1 的个数相同
 */
 func countBits(num int) []int {
-	res := make([]int, nums+1)
+	res := make([]int, num+1)
 	res[0] = 0
 	// 注意这里从 1 开始同时最后一个数字
-	for i := 1; i < nums+1; i++ {
+	for i := 1; i < num+1; i++ {
 		if i%2 == 0 {
 			res[i] = res[i/2]
 		} else {
