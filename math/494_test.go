@@ -1,6 +1,7 @@
 package math
 
 /*
+494 Target Sum
 [ref](https://leetcode-cn.com/problems/target-sum/solution/mu-biao-he-by-leetcode/)
 You are given a list of non-negative integers, a1, a2, ..., an, and a target, S.
 Now you have 2 symbols + and -. For each integer, you should choose one from + and - as its new symbol.
@@ -46,6 +47,7 @@ func findTargetSumWays(nums []int, S int) int {
 	dpLen := (sum + S) / 2
 	dp := make([]int, dpLen+1)
 	dp[0] = 1
+	// 这里是优化了空间的
 	for _, n := range nums {
 		for i := dpLen; i >= n; i-- {
 			dp[i] += dp[i-n]
@@ -102,5 +104,4 @@ func helper2(nums []int, start, temp, S int, res *int) {
 		helper(nums, start+1, temp+nums[start], S, res)
 		helper(nums, start+1, temp-nums[start], S, res)
 	}
-
 }
