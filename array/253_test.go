@@ -3,6 +3,7 @@ package array
 import "sort"
 
 /*
+253 Meeting Rooms II 类似 56. Merge Intervals
 	Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei),
 	find the minimum number of conference rooms required.
 	给定开始和结束时间对的数组数组，找到需要的最小会议室数量
