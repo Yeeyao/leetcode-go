@@ -1,4 +1,4 @@
-package array
+package link_list
 
 import (
 	"testing"
