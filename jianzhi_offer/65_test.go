@@ -56,7 +56,7 @@ func solution(board [][]byte, word string) bool {
 */
 func dfs(board [][]byte, word string, i, j, k int) bool {
 	// 全部匹配
-	if k == len(word)-1 {
+	if k == len(word) {
 		return true
 	}
 	// 越界检查以及字符检查

@@ -16,6 +16,7 @@ func TestPro(t *testing.T) {
 }
 
 /*
+	[ref](https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/solution/zai-javazhong-ji-bai-liao-100de-yong-hu-by-reedfan/)
 	已排序数组在某个位置进行了旋转，给的一个元素判断数组中是否包含该元素
 	二分查找？同时需要判断当前所在的部分
 	主要是观察元素，什么条件下可以判断
@@ -27,12 +28,12 @@ func TestPro(t *testing.T) {
 		如果是就在左边部分查找，令 right = mid - 1
 	检查是否在	mid + 1 到 right 之间，如果是就在右边部分查找，令 left = mid + 1
 */
-func solution(nums int[], target int) bool {
+func solution(nums []int, target int) bool {
 	numsLen := len(nums)
-	left, right := 0, numsLen - 1
+	left, right := 0, numsLen-1
 	// 注意这里要处理等于
 	for left <= right {
-		mid := left + (right - left) / 2
+		mid := left + (right-left)/2
 		if nums[mid] == target {
 			return true
 		}
