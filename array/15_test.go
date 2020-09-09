@@ -38,6 +38,7 @@ func solution(nums []int) [][]int {
 	// 先排序
 	sort.Ints(nums)
 	numsLen := len(nums)
+	// 数组长度为 0 或者数组最小的都是正数，表示找不到可以组成和为 0 的三个数，直接返回
 	if numsLen == 0 {
 		return [][]int{}
 	}
@@ -45,10 +46,13 @@ func solution(nums []int) [][]int {
 		return [][]int{}
 	}
 	retArr := make([][]int, 0)
+	// i 从 0 到倒数第三个
 	for i := 0; i < numsLen-2; i++ {
 		// 过滤掉相同数值的元素
 		if i == 0 || (i > 0 && nums[i] != nums[i-1]) {
+			// 从开头结尾找元素
 			low, high := i+1, numsLen-1
+			// 二分查找需要找的两个元素和
 			twoSum := 0 - nums[i]
 			// 二叉循环
 			for low < high {

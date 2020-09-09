@@ -28,59 +28,55 @@ func solution(s string) [][]string {
 
 /*
 	从所有的位置都开始一次，然后跟剩下的位置组成的字符串都判断一次
-	s= 0 i = 0, 1, 2
-	s = 1 i = 1, 2
-	s = 2 i = 2
-	s = 3 return
 */
-func soluionHelper(s string, sLen int, solStr []string, retArr *[][]string, start int) {
+func solutionHelper(s string, sLen int, solStr []string, retArr *[][]string, start int) {
 	// 已经遍历到最后的字符
 	if start == sLen {
-		*retArr = append(*retArr, append([]string{}, solSr...))
+		*retArr = append(*retArr, append([]string{}, solStr...))
 	} else {
 		saLen := len(solStr)
 		// 没有超过总和且不超过数组长度访问
-		// 这里，每个元素都最为一个开始，然后对每个元素位置 i，又和所有剩下的元素成的字符串判断回文
+		// 这里，每个元素都最为一个开始，然后对每个元素位置 i，又和所有剩下的元素组成的字符串判断回文
 		for i := start; i < sLen; i++ {
-			// 这里判断从 start 到 i 的字符串是不回文
-			if isPalindrome(s, start i) {
-				olStr = append(solStr, s[start:i+1])
-			solutionHelper(s, sLen, solStr, retArr, i+1)
-			// 把最近加入的字符串丢掉构造剩余的不同的组合
-			solStr = solStr[:saLen]
-		}
+			// 这里判断从 start 到 i 的字符串是不是回文
+			if isPalindrome(s, start, i) {
+				solStr = append(solStr, s[start:i+1])
+				solutionHelper(s, sLen, solStr, retArr, i+1)
+				// 把最近加入的字符串丢掉构造剩余的不同的组合
+				solStr = solStr[:saLen]
+			}
 		}
 	}
 }
 
-fuc isPalindrome(s string, begin, end int) bool {
+func isPalindrome(s string, begin, end int) bool {
 	sLen := len(s)
 	if sLen == 0 {
 		return false
 	}
-	for begi < end {
-		if s[egin] != s[end] {
-		return false
+	for begin < end {
+		if s[begin] != s[end] {
+			return false
 		}
-	begin++
-	end--
+		begin++
+		end--
 	}
 	return true
 }
 
-func StrSliceEqual(a, b [][]sting) bool {
-	if len(a) != en(b) {
-		eturn false
-}
+func StrSliceEqual(a, b [][]string) bool {
+	if len(a) != len(b) {
+		return false
+	}
 	if (a == nil) != (b == nil) {
 		return false
 	}
 
-	fori := 0; i < len(a); i++ {
-		fr j := 0; j < len(a[i]); j++ {
-		if a[i][j] != b[i][j] {
-				return flse
-		}
+	for i := 0; i < len(a); i++ {
+		for j := 0; j < len(a[i]); j++ {
+			if a[i][j] != b[i][j] {
+				return false
+			}
 		}
 	}
 	return true
