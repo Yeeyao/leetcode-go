@@ -5,6 +5,14 @@ import (
 	"testing"
 )
 
+/*
+Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0?
+Find all unique triplets in the array which gives the sum of zero.
+Notice that the solution set must not contain duplicate triplets.
+
+给定整型数组，判断是否存在元素 a, b, c 使得 a + b + c = 0，找到所有唯一的元素组合
+存在重复元素
+*/
 func TestPro(t *testing.T) {
 	t.Run(" 15. 3Sum ", func(t *testing.T) {
 		input := []int{-1, 0, 1, 2, -1, -4}

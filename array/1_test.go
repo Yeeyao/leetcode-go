@@ -2,6 +2,14 @@ package array
 
 import "testing"
 
+/*
+1. Two Sum
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+You can return the answer in any order.
+
+给定整型数组以及 target 整型，返回两个数的下标，要求它们的和是 target
+*/
 func TestPro(t *testing.T) {
 	t.Run("1. Two Sum", func(t *testing.T) {
 		input := []int{2, 7, 11, 15}

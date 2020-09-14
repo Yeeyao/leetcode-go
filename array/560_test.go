@@ -43,6 +43,8 @@ func TestPro(t *testing.T) {
 	遍历元素，先将累加和 pre 加上当前元素，然后判断 m[pre-k] 是否存在(pre - (pre -k) = k)，
 	是则将计数 + 1。然后当前的累加和计数 + 1
 	就类似 two-sum 只不过是累加然后统计累加和的数量，然后找差值的出现数量
+
+	需要理解的是，这里 pre 是从前面到后面累加的，所以，对于当前的 pre，只需要向前找
 */
 func subarraySum(nums []int, k int) int {
 	count, pre := 0, 0

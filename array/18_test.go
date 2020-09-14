@@ -1,9 +1,15 @@
 package array
 
 import (
+	"sort"
 	"testing"
 )
 
+/*
+18. 4Sum
+Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums
+such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
+*/
 func TestPro(t *testing.T) {
 	t.Run("18. 4Sum", func(t *testing.T) {
 		input := 8
@@ -23,17 +29,17 @@ func solution(nums []int, target int) [][]int {
 	// 先进行排序
 	sort.Ints(nums)
 	numsLen := len(nums)
-	for i := 0; i < numsLen - 3; i++ {
-		for j := i + 1; j < numsLen - 2; j++ {
+	for i := 0; i < numsLen-3; i++ {
+		for j := i + 1; j < numsLen-2; j++ {
 			targetSum := target - nums[i] - nums[j]
 			// 二分查找
-			left, right := j + 1, numsLen - 1
+			left, right := j+1, numsLen-1
 			for left < right {
 				// 太小了
-				if nums[left] + nums[right] < targetSum {
+				if nums[left]+nums[right] < targetSum {
 					left++
 					// 太大了
-				} else if nums[left] + nums[right] > targetSum {
+				} else if nums[left]+nums[right] > targetSum {
 					right--
 					// 刚好等于
 				} else {
@@ -52,12 +58,12 @@ func solution(nums []int, target int) [][]int {
 				}
 			}
 			// 内层循环元素去重
-			for j < numsLen - 2 && nums[j] == nums[j + 1] {
+			for j < numsLen-2 && nums[j] == nums[j+1] {
 				j++
 			}
 		}
 		// 最外层循环去重
-		for i < numsLen - 3 && nums[i] == nums[i + 1] {
+		for i < numsLen-3 && nums[i] == nums[i+1] {
 			i++
 		}
 	}
