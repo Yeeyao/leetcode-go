@@ -4,6 +4,14 @@ import (
 	"testing"
 )
 
+/*
+Given n non-negative integers a1, a2, ..., an , where each represents a point at coordinate (i, ai).
+n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines,
+which together with x-axis forms a container, such that the container contains the most water.
+Note: You may not slant the container and n is at least 2.
+
+给定非负整型，每个表示当前坐标的高度，求两个坐标的高度组成的容器使得容器的容量最大
+*/
 func TestPro(t *testing.T) {
 	t.Run(" 11. Container With Most Water ", func(t *testing.T) {
 		input := []int{1, 8, 6, 2, 5, 4, 8, 3, 7}

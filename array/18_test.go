@@ -1,6 +1,7 @@
 package array
 
 import (
+	"reflect"
 	"sort"
 	"testing"
 )
@@ -12,10 +13,11 @@ such that a + b + c + d = target? Find all unique quadruplets in the array which
 */
 func TestPro(t *testing.T) {
 	t.Run("18. 4Sum", func(t *testing.T) {
-		input := 8
-		want := 1
-		got := solution(input)
-		if got != want {
+		nums := []int{1, 2, 3, 4}
+		target := 3
+		want := [][]int{}
+		got := solution(nums, target)
+		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})

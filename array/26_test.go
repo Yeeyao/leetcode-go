@@ -25,6 +25,36 @@ func TestPro(t *testing.T) {
 	})
 }
 
+/*
+	更快一些，比下面的快
+*/
+func removeDuplicates(nums []int) int {
+	numsLen := len(nums)
+	dupCount := 0
+	for i := 0; i < numsLen; i++ {
+		if i > 0 && nums[i] == nums[i-1] {
+			dupCount++
+		} else {
+			nums[i-dupCount] = nums[i]
+		}
+	}
+	return numsLen - dupCount
+}
+
+/*
+	参考 80
+*/
+func removeDuplicates(nums []int) int {
+	i := 0
+	for _, n := range nums {
+		if i < 1 || n > nums[i-1] {
+			nums[i] = n
+			i++
+		}
+	}
+	return i
+}
+
 func solution(input []int) int {
 	inputLen := len(input)
 	if inputLen == 0 {
