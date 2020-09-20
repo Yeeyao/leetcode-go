@@ -1,4 +1,4 @@
-package link_list
+package math
 
 /*
 2. Add Two Numbers
