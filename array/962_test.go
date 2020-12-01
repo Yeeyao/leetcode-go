@@ -60,7 +60,7 @@ func (s *stack) Pop() int {
 	return x
 }
 func (s stack) Empty() bool {
-    return len(s) == 0
+	return len(s) == 0
 }
 
 /*
@@ -74,15 +74,15 @@ func solution2(A []int) int {
 	// 所以如果差值
 	for i := 0; i < ALen; i++ {
 		// 如果当前位置差值已经小于最大的值了，直接跳出循环
-		if ALen - i < res {
+		if ALen-i < res {
 			break
 		}
 		for j := ALen - 1; j > i; j-- {
-			if j - i < res {
+			if j-i < res {
 				break
 			}
 			if A[i] <= A[j] {
-				if j - i > res {
+				if j-i > res {
 					res = j - i
 					break
 				}

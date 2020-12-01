@@ -34,7 +34,7 @@ func TestPro(t *testing.T) {
 	t.Run("977. Squares of a Sorted Array", func(t *testing.T) {
 		input := []int{-4, -1, 0, 3, 10, 20}
 		want := []int{0, 1, 9, 16, 100, 400}
-		got := solution(input)
+		got := solution3(input)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -43,7 +43,7 @@ func TestPro(t *testing.T) {
 	t.Run("977. Squares of a Sorted Array2", func(t *testing.T) {
 		input := []int{0, 1, 2, 3}
 		want := []int{0, 1, 4, 9}
-		got := solution(input)
+		got := solution3(input)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -52,7 +52,7 @@ func TestPro(t *testing.T) {
 	t.Run("977. Squares of a Sorted Array3", func(t *testing.T) {
 		input := []int{2, 3}
 		want := []int{4, 9}
-		got := solution(input)
+		got := solution3(input)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -61,7 +61,7 @@ func TestPro(t *testing.T) {
 	t.Run("977. Squares of a Sorted Array4", func(t *testing.T) {
 		input := []int{-2, -1, 0}
 		want := []int{0, 1, 4}
-		got := solution(input)
+		got := solution3(input)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -70,7 +70,16 @@ func TestPro(t *testing.T) {
 	t.Run("977. Squares of a Sorted Array5", func(t *testing.T) {
 		input := []int{-3, -2, -1}
 		want := []int{1, 4, 9}
-		got := solution(input)
+		got := solution3(input)
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+
+	t.Run("977. Squares of a Sorted Array6", func(t *testing.T) {
+		input := []int{1, 2, 3}
+		want := []int{1, 4, 9}
+		got := solution3(input)
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -257,3 +266,26 @@ func solution2(A []int) []int {
 //
 //	return true
 //}
+
+func solution3(arr []int) []int {
+	left, right := 0, len(arr)-1
+	res := make([]int, 0)
+	for left <= right {
+		leftRes := arr[left] * arr[left]
+		rightRes := arr[right] * arr[right]
+		if leftRes > rightRes {
+			res = append(res, leftRes)
+			left++
+		} else {
+			res = append(res, rightRes)
+			right--
+		}
+	}
+	left, right = 0, len(res)-1
+	for left < right {
+		res[left], res[right] = res[right], res[left]
+		left++
+		right--
+	}
+	return res
+}

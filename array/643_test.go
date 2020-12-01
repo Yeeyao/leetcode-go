@@ -49,4 +49,3 @@ func solution(input []int, k int) float64 {
 	}
 	return sum / float64(k)
 }
-

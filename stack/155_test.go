@@ -1,3 +1,5 @@
+package stack
+
 /*
 	两种思路
 		1.栈保存{ele, min}

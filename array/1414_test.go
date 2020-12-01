@@ -124,7 +124,7 @@ func solution(k int) int {
 	a, b, count := 1, 1, 0
 	// 先递增到 k
 	for b <= k {
-		a, b = b, a + b
+		a, b = b, a+b
 	}
 	// 判断然后递减下去
 	for a > 0 {
@@ -133,7 +133,7 @@ func solution(k int) int {
 			k -= a
 			count++
 		}
-		a, b = b - a, a
+		a, b = b-a, a
 	}
 	return count
 }

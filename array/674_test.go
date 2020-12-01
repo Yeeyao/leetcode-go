@@ -33,7 +33,7 @@ func TestPro(t *testing.T) {
 
 /*
 	类似 830 的思路
- */
+*/
 func solution(input []int) int {
 	inputLen := len(input)
 	if inputLen == 0 {
@@ -52,4 +52,3 @@ func solution(input []int) int {
 	}
 	return maxLen
 }
-

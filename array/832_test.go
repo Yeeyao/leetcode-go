@@ -4,7 +4,8 @@ import (
 	"testing"
 )
 
-func TestPro(t *testing.T) { t.Run("leetcode 832 Flipping an Image", func(t *testing.T) {
+func TestPro(t *testing.T) {
+	t.Run("leetcode 832 Flipping an Image", func(t *testing.T) {
 		input := [][]int{{1, 1, 0}, {1, 0, 1}, {0, 0, 0}}
 		want := [][]int{{1, 0, 0}, {0, 1, 0}, {1, 1, 1}}
 		got := solution(input)

@@ -110,34 +110,6 @@ func newtonSqrt(e float64) float64 {
 /*
 quicksort
 */
-//func quickSortHelper(arr []int, left, right, pivotIndex int) int {
-//	// 交换最后的元素和 pivotIndex 让 pivotIndex 元素不需要参与分割
-//	pivotVal := arr[pivotIndex]
-//	arr[right], arr[pivotIndex] = arr[pivotIndex], arr[right]
-//	// 遍历元素，将小于 pivotVal 的元素向右存放
-//	for i := left; i < right; i++ {
-//		if arr[i] <= pivotVal {
-//			arr[i], arr[pivotIndex] = arr[pivotIndex], arr[i]
-//			pivotIndex++
-//		}
-//	}
-//	// 交换回来
-//	arr[right], arr[pivotIndex] = arr[pivotIndex], arr[right]
-//	return pivotIndex
-//}
-//
-//func quickSort2(arr []int, left, right int) {
-//	if right > left {
-//		pivotIndex := left
-//		pivotIndexN := quickSortHelper(arr, left, right, pivotIndex)
-//		quickSortHelper(arr, left, pivotIndexN-1, pivotIndexN)
-//		quickSortHelper(arr, pivotIndexN+1, right, pivotIndexN)
-//	}
-//}
-//
-//func quickSort(arr []int) {
-//	quickSort2(arr, 0, len(arr)-1)
-//}
 
 func qsort(a []int) []int {
 	if len(a) < 2 {
@@ -170,7 +142,8 @@ func qsort2(nums []int) {
 func quickSort2(nums []int, l, r int) {
 	if r > l {
 		// 初始 pivot index
-		pivotIndex := l
+		//pivotIndex := l
+		pivotIndex := rand.Int()%(r-l+1) + l
 		pivotIndexN := quickSort3(nums, l, r, pivotIndex)
 		quickSort2(nums, l, pivotIndexN-1)
 		quickSort2(nums, pivotIndexN+1, r)

@@ -29,7 +29,7 @@ func TestPro(t *testing.T) {
 		新的数字数奇数，不相加
 
 */
-func solution(array []int, queries [][]int, ) []int {
+func solution(array []int, queries [][]int) []int {
 	arrayLen := len(array)
 	retArr := make([]int, arrayLen)
 	arrayEleSum := 0

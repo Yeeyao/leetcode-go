@@ -75,10 +75,10 @@ func solution2(prices []int, fee int) int {
 	const intMin = ^intMax
 	tik0, tik1 := 0, intMin
 	for _, p := range prices {
-		if tik0 < tik1 + p {
+		if tik0 < tik1+p {
 			tik0 = tik1 + p
 		}
-		if tik1 < tik0 - p - fee{
+		if tik1 < tik0-p-fee {
 			tik1 = tik0 - p - fee
 		}
 	}

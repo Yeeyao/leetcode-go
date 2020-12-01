@@ -56,12 +56,12 @@ func shiftGrid(grid [][]int, k int) [][]int {
 	totalRow := len(grid)
 	totalCol := len(grid[0])
 	res := make([][]int, totalRow)
-	for i, _ := range(res) {
+	for i, _ := range res {
 		res[i] = make([]int, totalCol)
 	}
 
-	for r, row := range(grid) {
-		for c, col := range(row) {
+	for r, row := range grid {
+		for c, col := range row {
 			indx := r*totalCol + c + k
 			newRow := (indx / totalCol) % totalRow
 			newCol := indx % totalCol

@@ -20,7 +20,7 @@ func solution(s string) string {
 
 	for _, v := range s {
 		if v >= 'A' && v <= 'Z' {
-			rets = rets + string(v + diff)
+			rets = rets + string(v+diff)
 		} else {
 			rets = rets + string(v)
 		}

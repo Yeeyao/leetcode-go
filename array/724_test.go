@@ -83,4 +83,3 @@ func solution(input []int) int {
 	}
 	return -1
 }
-

@@ -17,7 +17,7 @@ func TestPro(t *testing.T) {
 
 /*
 
-*/
+ */
 func solution(nums [][]int) []int {
 	var res []int
 	var flags []int
@@ -56,15 +56,15 @@ func solution2(nums [][]int) []int {
 	// 这里直接反序存放，后面就不需要反序遍历
 	for i := len(nums) - 1; i >= 0; i-- {
 		for j := range nums[i] {
-			if _, ok := sumMap[i + j]; ok {
-				sumMap[i + j] = append(sumMap[i + j], nums[i][j])
+			if _, ok := sumMap[i+j]; ok {
+				sumMap[i+j] = append(sumMap[i+j], nums[i][j])
 			} else {
 				sumMap[i+j] = []int{nums[i][j]}
 			}
 		}
 	}
 	sumNum := len(sumMap)
-	for i := 0; i < sumNum; i++{
+	for i := 0; i < sumNum; i++ {
 		for _, v := range sumMap[i] {
 			res = append(res, v)
 		}
@@ -74,7 +74,7 @@ func solution2(nums [][]int) []int {
 
 // /*
 // 	斜向上顺序遍历元素
-// 	首先从第一行向最后一行遍历 
+// 	首先从第一行向最后一行遍历
 // 		当前行往上面的行遍历直到第一行，每次列号 + 1 需要判断结尾
 // 	然后最后一行遍历所有列，同样向上遍历
 // 	不完整版本 同时会 TLE

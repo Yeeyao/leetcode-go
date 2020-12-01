@@ -15,7 +15,7 @@ If that amount of money cannot be made up by any combination of the coins, retur
 /*
 dp 自下而上
 F[i] 是组成金额 i 所需的最少硬币数量，计算 F[i] 前已经计算了 F[0]...F[i-1] 的结果
-F[i] = min(F[i-cj] + 1
+F[i] = min(F[i-cj] + 1, F[i])
 
 初始化 dp 数组，长度是 amount + 1 初始值是 count + 1 dp[0] = 0
 第一个循环从 1 到 amount 包含遍历

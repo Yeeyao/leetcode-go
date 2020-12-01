@@ -32,7 +32,7 @@ func isPalindrome(head *ListNode) bool {
 		return true
 	}
 	head, slow, fast := nil, head, head
-	for fast != nil  && fast.Next != nil {
+	for fast != nil && fast.Next != nil {
 		head, slow.Next, slow, fast = slow, head, slow.Next, fast.Next.Next
 	}
 	if fast != nil {
@@ -41,7 +41,7 @@ func isPalindrome(head *ListNode) bool {
 	for head != nil && head.Val == slow.Val {
 		head, slow = head.Next, slow.Next
 	}
-	return head == nil 
+	return head == nil
 }
 
 /*
@@ -53,7 +53,7 @@ func isPalindrome(head *ListNode) bool {
 	}
 	rev := &ListNode{}
 	slow, fast := head, head
-	for fast != nil  && fast.Next != nil {
+	for fast != nil && fast.Next != nil {
 		fast = fast.Next.Next
 		rev, rev.Next, slow = slow, rev, slow.Next
 	}
@@ -64,5 +64,5 @@ func isPalindrome(head *ListNode) bool {
 		rev = rev.Next
 		slow = slow.Next
 	}
-	return rev == nil 
+	return rev == nil
 }

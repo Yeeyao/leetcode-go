@@ -35,7 +35,6 @@ func solution(root *TreeNode) *TreeNode {
 	return root
 }
 
-
 func soution2(root *TreeNode) *TreeNode {
 	solution2Helper(root.Left)
 	solution2Helper(root.Right)
@@ -54,9 +53,9 @@ func solution2Helper(root *TreeNode) {
 }
 
 func solution3(root *TreeNode) *TreeNode {
-	if root = nil {
+	if root == nil {
 		return nil
 	}
-	root.Left, root.Right  = solution3(root.Left), solution3(root.Right)
+	root.Left, root.Right = solution3(root.Left), solution3(root.Right)
 	return root
 }
