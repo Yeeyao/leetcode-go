@@ -46,6 +46,7 @@ func solution(A, B [][]int) [][]int {
 		if start <= end {
 			res = append(res, []int{start, end})
 		}
+		// 这里移动的是拥有最小末端的区间
 		if A[i][1] < B[j][1] {
 			i++
 		} else {
