@@ -3,7 +3,7 @@ package hash_table
 import "testing"
 
 func TestPro(t *testing.T) {
-	t.Run("leetcode 961 N-Repeated Element in Size 2N Array", func(t *testing.T) {
+	t.Run("36. Valid Sudoku", func(t *testing.T) {
 		input := []int{8, 2, 3, 3}
 		want := 3
 		got := solution(input)
