@@ -35,7 +35,7 @@ Return the intersection of these two interval lists.
 
 	求完一个交集区间，较早结束的子区间，不可能再和其他子区间有重叠，它的指针要移动
 	较长的子区间还可能和别人重叠，它的指针暂时不动
-	时间和空间复杂度 O(M + N)
+	时间和空间复杂度都是 O(M + N)
 */
 func solution(A, B [][]int) [][]int {
 	res := [][]int{}
