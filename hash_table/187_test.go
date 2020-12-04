@@ -33,7 +33,9 @@ Write a function to find all the 10-letter-long sequences (substrings) that occu
 
 Rabin-Karp 算法
 	思想是对字符串进行切片并在滑动窗口中计算序列的哈希值，两者都是在常数时间内进行
-	首先将字符串转换为整数数组，计算序列的哈希值。这里使用多项式滚动计算，后续的哈希值从上一个哈希值中计算出来，所以叫循环哈希
+	首先将字符串转换为整数数组，计算序列的哈希值。这里使用 4 进制计算，后续的哈希值从上一个哈希值中计算出来，所以叫旋转哈希
+	每次计算哈希值将整体左移，然后将上一个的哈希值最高位去掉，最后加上新遍历的数值
+
 */
 
 // Rabin Karp 时间福啊咋读 O(N - L) 空间复杂度 O(N)
@@ -88,9 +90,8 @@ func solution(s string) []string {
 	A -> 0 = 00(2) C -> 1 = 01(2) G -> 2 = 10(2) T -> 3 = 11(2)
 	这里二进制序列中每个数字占用位不超过 2 位，因此可以在循环中计算掩码
 		左移释放最后两位 bitmask <<= 2
-		将当前数字存储到移动后的后两位 bitmask ｜= nums[i[
-
-todo: bitMask 计算问题
+		将当前数字存储到移动后的后两位 bitmask ｜= nums[i]
+	这里 Java 的运算符优先级，3 << 2 * L 先计算乘法，再计算移位
 
 */
 func solution2(s string) []string {
@@ -117,7 +118,7 @@ func solution2(s string) []string {
 			// 向最后两位添加新的两个二进制
 			bitMask |= nums[start+L-1]
 			// 重置最前面的两位
-			bitMask &= ^(3 << 2 * L)
+			bitMask &= ^(3 << (2 * L))
 		} else {
 			for i := 0; i < L; i++ {
 				bitMask <<= 2
