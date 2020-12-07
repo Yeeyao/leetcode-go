@@ -36,6 +36,7 @@ Rabin-Karp 算法
 	首先将字符串转换为整数数组，计算序列的哈希值。这里使用 4 进制计算，后续的哈希值从上一个哈希值中计算出来，所以叫旋转哈希
 	每次计算哈希值将整体左移，然后将上一个的哈希值最高位去掉，最后加上新遍历的数值
 
+[sol](https://leetcode-cn.com/problems/repeated-dna-sequences/solution/zhong-fu-de-dnaxu-lie-by-leetcode/)
 */
 
 // Rabin Karp 时间福啊咋读 O(N - L) 空间复杂度 O(N)
