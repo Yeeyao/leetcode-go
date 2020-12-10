@@ -3,7 +3,7 @@ package stack
 import "testing"
 
 func TestPro(t *testing.T) {
-	t.Run("263. Ugly Number II", func(t *testing.T) {
+	t.Run("264. Ugly Number II", func(t *testing.T) {
 		num := 9
 		want := true
 		got := solution(num)
