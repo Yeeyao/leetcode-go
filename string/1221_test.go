@@ -25,6 +25,7 @@ func solution(s string) int {
 			sum++
 			rnum, jnum = 0, 0
 		}
+
 		if v == 'R' {
 			rnum++
 		} else {
