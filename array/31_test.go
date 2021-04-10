@@ -1,17 +1,17 @@
 package array
 
 import (
+	"reflect"
 	"testing"
 )
 
 func TestPro(t *testing.T) {
 	t.Run("31. Next Permutation", func(t *testing.T) {
-		reservedSeats := [][]int{{1, 2}, {1, 3}, {1, 8}, {2, 6}, {3, 1}, {3, 10}}
-		n := 3
-		want := 4
-		got := solution2(n, reservedSeats)
-		if got != want {
-			t.Errorf("got: %v, want: %v", got, want)
+		nums := []int{1, 2, 3}
+		want := []int{1, 3, 2}
+		solution(nums)
+		if !reflect.DeepEqual(nums, want) {
+			t.Errorf("got: %v, want: %v", nums, want)
 		}
 	})
 }
