@@ -52,9 +52,15 @@ func TestPro(t *testing.T) {
 
 应该是类似二分查找的思路，但是这里需要怎么判断？
 可以类似 33 如果是左边部分就直接向右移动，如果是右边部分就直接向左移动。这里一开始的思路是对的。
-问题是这里什么时候停止，停止的位置有什么特征？这里不清楚。。。
+然后，如果区间长度是 1 就是循环条件不成立了，二分查找就结束了，直接返回 left 或者 right
+
 
 [ref](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/discuss/48493/Compact-and-clean-C%2B%2B-solution)
+[ref](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/solution/er-fen-cha-zhao-wei-shi-yao-zuo-you-bu-dui-cheng-z/)
+需要学习这里的分析方式
+
+用二分法查找，需要始终将目标值（这里是最小值）套住，并不断收缩左边界或右边界。
+分析左中右三个位置数值，然后分为四种情况，其中情况中有最小值出现在左右半边，然后对应收缩左右边界
 */
 func solution(nums []int) int {
 	left, right := 0, len(nums)-1
