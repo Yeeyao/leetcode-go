@@ -15,6 +15,15 @@ func TestPro(t *testing.T) {
 			t.Errorf("got: %v, want: %v", nums, want)
 		}
 	})
+	t.Run("33. Search in Rotated Sorted Array2", func(t *testing.T) {
+		nums := []int{1, 0, 2, 3, 4}
+		target := 3
+		got := solution(nums, target)
+		want := 3
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got: %v, want: %v", nums, want)
+		}
+	})
 }
 
 /*
@@ -36,7 +45,7 @@ func TestPro(t *testing.T) {
 		return left
 
 	我们将数组从中间分开左右两部分的时候，一定有一部分数组是有序的，这里可以用反证法证明
-	使用常规二分查找的时候，查看当前 mid 分割位置分割处理爱的两个部分 [l, mid] [mid + 1, r] 哪个部分是有序的，根据有序的部分确定如何改变二分查找的上下界
+	使用常规二分查找的时候，查看当前 mid 分割位置分割处理两个部分 [l, mid] [mid + 1, r] 哪个部分是有序的，根据有序的部分确定如何改变二分查找的上下界
 	因为我们可以根据有序的部分判断 target 是否存在于这个部分
 		如果 [l, mid - 1] 是有序数组，target 在这个范围内，则需要在这个范围内搜索。否则在 [mid + 1, r] 中搜索
 		如果 [mid, r] 是有序数组，target 在这个范围内，则需要在这个范围内搜索。否则在 [l, mid - 1] 中搜索
@@ -52,9 +61,9 @@ func solution(nums []int, target int) int {
 			return mid
 		}
 		// 左边有序
-		if nums[0] <= nums[mid] {
+		if nums[left] <= nums[mid] {
 			// 如果 target 在左边范围，在左边查找，这里没有等号是因为前面已经判断了
-			if nums[0] <= target && target < nums[mid] {
+			if nums[left] <= target && target < nums[mid] {
 				right = mid
 			} else {
 				// target 在右边范围，在右边查找

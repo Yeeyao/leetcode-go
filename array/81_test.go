@@ -6,13 +6,65 @@ import (
 
 func TestPro(t *testing.T) {
 	t.Run("81. Search in Rotated Sorted Array II", func(t *testing.T) {
-		input := 8
-		want := 1
-		got := solution(input)
+		nums := []int{2, 5, 6, 0, 0, 1, 2}
+		target := 0
+		want := true
+		got := solution(nums, target)
 		if got != want {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
+	t.Run("81. Search in Rotated Sorted Array II2", func(t *testing.T) {
+		nums := []int{1, 0, 1, 1, 1}
+		target := 0
+		want := true
+		got := solution(nums, target)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+}
+
+/*
+	对比 33，这里的元素不是唯一的，因此在判断前进行元素过滤，同时只需要返回是否存在
+*/
+func solution(nums []int, target int) bool {
+	numsLen := len(nums)
+	left, right := 0, numsLen-1
+	for left < right {
+		mid := left + (right-left)/2
+		if nums[mid] == target {
+			return true
+		}
+		// 比 33 多了一步如果有相等的元素，先过滤
+		if nums[left] == nums[mid] && nums[right] == nums[mid] {
+			left++
+			right--
+			// 左边有序 33 的 0 需要修改成 left TODO: 为什么？
+		} else if nums[left] <= nums[mid] {
+			// 如果 target 在左边范围，在左边查找，这里没有等号是因为前面已经判断了
+			if nums[left] <= target && target < nums[mid] {
+				right = mid
+			} else {
+				// target 在右边范围，在右边查找
+				left = mid + 1
+			}
+		} else {
+			// 右边有序
+			// 如果 target 在右边范围，在右边查找
+			if nums[mid] < target && target <= nums[numsLen-1] {
+				left = mid + 1
+			} else {
+				// target 在左边范围，在左边查找
+				right = mid
+			}
+		}
+	}
+	if left == right && nums[left] == target {
+		return true
+	} else {
+		return false
+	}
 }
 
 /*
@@ -28,7 +80,7 @@ func TestPro(t *testing.T) {
 		如果是就在左边部分查找，令 right = mid - 1
 	检查是否在	mid + 1 到 right 之间，如果是就在右边部分查找，令 left = mid + 1
 */
-func solution(nums []int, target int) bool {
+func solution2(nums []int, target int) bool {
 	numsLen := len(nums)
 	left, right := 0, numsLen-1
 	// 注意这里要处理等于
