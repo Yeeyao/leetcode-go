@@ -27,6 +27,45 @@ func TestPro(t *testing.T) {
 
 /*
 	对比 33，这里的元素不是唯一的，因此在判断前进行元素过滤，同时只需要返回是否存在
+为什么这样可以过滤？，为什么不能直接使用 nums[0] 而需要改成 nums[left]
+
+这里在一个位置反转(这里位置是所有的位置都可以)。将原来的单调递增的数组，变成两个单调递增的数组，其中中间的位置是数组元素的最大值
+这里 mid 的计算，同样遵循 left <= mid mid < right
+
+可能出现的情况，中值出现在左边的递增数组还是右边的递增数组判断
+	1. 出现在左边，判断 target 和中值的关系
+		1.1 target > nums[mid] 需要向右边收缩
+		1.2 target < nums[mid] 需要向左边收缩或者向右边收缩
+	2. 出现在右边，判断 target 和中值的关系
+		2.1 target > nums[mid] 需要向右边收缩
+		2.2 target < nums[mid] 需要向左边收缩
+这里 1.2 的情况就不清晰，所以需要思考其他划分方式
+
+可能的情况，直接判断左边和中间的数值关系
+	1.左边数值小于等于中间数值（当前左边和中间数值都在左半递增数组，成立，都在右半递增数组，成立。左边在左半部分，中间在右半部分，不成立，所以可以确定是在一个递增数组的内部）
+		1.1 如果 target > nums[mid] 则需要向右边收缩
+		1.2 如果 target <= nums[mid] 则需要向左边收缩
+	2.左边数值大于中间数值（左边出现在左半的递增数组，右边出现在右半的递增数组），0, mid 中包含了旋转的位置
+		2.1 target <= nums[mid] < nums[left]，需要向左边收缩，target 在旋转点到 mid 之间(右边有序数组前面部分)
+		2.2 nums[mid] < nums[left] <= target，需要向左边收缩，target 在 left 到 旋转点之间（左边有序数组后面部分）
+			其实上面的两种情况，也是需要 target 在一个有序的数组里面才能继续判断，2.1 target 在右边的有序数组前面部分 2.2 target 在左边有序数组的后面部分
+		2.3 其他情况，向右边收缩
+			这里主要的疑问就是剩下的 nums[mid] < target <  nums[left]，那一定是向右收缩呀，
+			因为，nums[left] 的右边到旋转点的数值比 nums[left] 大，所以不可能在左边数组的右半部分；同时，target > nums[mid]，所以也不可能
+			在右边数组的左半部分，因此就只能在右边数组的右半部分寻找了，因此向右收缩
+
+	最终的解法将上述的情况进行汇总，其中，用来判断究竟应该向哪边移动的，最初的方法都是需要 target 在一个递增的数组里面。
+
+[ref](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/solution/sou-suo-xuan-zhuan-pai-xu-shu-zu-by-leetcode-solut/)
+官方的做法是，因为某个位置旋转，会导致数组被分为左右两个单独递增的子数组。
+这里去判断 l, mid 和 mid + 1, r 哪部分是有序的，根据有序的部分确定上下界的变化（因为可以根据有序的部分判断 target 是否在这个部分）
+	如果 l, mid 有序，target 大小在 nums[l] nums[mid] 之间，则我们将收缩右边(但是其实右边是否存在 target 呢？)，target 大小不在这个之间，则收缩左边
+	如果 mid, r 有序，target 大小在 nums[mid] nums[r] 之间，则我们将收缩左边(但是其实左边是否存在 target 呢？)，target 大小不在这个之间，则收缩右边
+单独看，确实是，只有在有序的部分才能进一步判断 target 是否存在于有序的部分，如果大小属于有序的部分，就直接在该部分查找。
+
+[ref](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/solution/ji-jian-solution-by-lukelee/)
+这里分析是
+	1.2 2.1 2.2 都是向左边收缩，其他情况向右边收缩。
 */
 func solution(nums []int, target int) bool {
 	numsLen := len(nums)
@@ -36,7 +75,7 @@ func solution(nums []int, target int) bool {
 		if nums[mid] == target {
 			return true
 		}
-		// 比 33 多了一步如果有相等的元素，先过滤
+		// 比 33 多了一步如果有相等的元素，先过滤 how it works，这里的意思是，三个相等就没法判断哪边是有序
 		if nums[left] == nums[mid] && nums[right] == nums[mid] {
 			left++
 			right--
