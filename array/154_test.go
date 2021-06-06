@@ -69,6 +69,28 @@ func solution(nums []int) int {
 			return nums[left]
 		}
 		mid := left + (right-left)/2
+		// 在左边，向右移动，否则向左移动
+		if nums[mid] > nums[right] {
+			left = mid + 1
+			// 在右边，向左移动
+		} else if nums[mid] < nums[right] {
+			right = mid
+			// 过滤相同的元素，直接将 right 递减，因为这里是使用 mid 和 right 比较
+		} else {
+			right--
+		}
+	}
+	return nums[left]
+}
+
+func solution2(nums []int) int {
+	left, right := 0, len(nums)-1
+	for left < right {
+		// 如果最左边小于最右边，就根本没有反转过
+		if nums[left] < nums[right] {
+			return nums[left]
+		}
+		mid := left + (right-left)/2
 		// 过滤相同的元素
 		if nums[left] == nums[mid] && nums[right] == nums[mid] {
 			left++
