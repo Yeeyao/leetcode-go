@@ -1,3 +1,3 @@
 # leetcode-go
 
-- some leetcode's problems, using Go
+solutions to LeetCode, using Go language
