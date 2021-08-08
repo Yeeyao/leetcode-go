@@ -1,7 +1,6 @@
 package array
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -30,6 +29,9 @@ func TestPro(t *testing.T) {
 	这里最终还是需要 dp
 	暴力的解法需要先想清楚
 
+*/
+
+/*
 	[ref](https://leetcode.com/problems/can-i-win/discuss/95277/Java-solution-using-HashMap-with-detailed-explanation)
 	这里描述使用 top-down DP 来暴力模拟每个可能的状态
 	top-down DP 的关键策略是，我们需要避免重复解决子问题。我们应该使用一些策略来记住子问题的结果，这样再次遇到它们就可以马上知道结果
@@ -38,13 +40,69 @@ func TestPro(t *testing.T) {
 	对这个问题，关键是哪个是游戏的状态，为了任何状态确定一个唯一的结果，我们需要知道
 		1. 没有选择过的数字
 		2. 需要达到的目标和
+
 	其次，1，2 是相关的，因为我们从原始的目标和中通过选择数字来见效，因此，问题就变成了如何使用 1 来描述状态
 
 	这里的解法中，使用了一个布尔数组来记录哪个数字已经被选择了，那我们能够使用一个hashMap 来记住子问题的结果吗？使用 Map<boolean[], Boolean>
-	显然是不能的，因为如果我们使用 boolean[] 作为 key，对 boolean[] 的引用不回显示 boolean[] 的实际内容？TODO: 没看懂
+	显然是不能的，因为如果我们使用 boolean[] 作为 key，对 boolean[] 的引用不会显示 boolean[] 的实际内容？TODO: 没看懂
 
 `	因此在问题的描述提到 maxChoosableInteger 不超过 20，也就是 boolean[] 数组的长度将小于 20 因此是可以使用 Integer 来表示 boolean[] 数组
 	使用整型的饿位数表示数字是否被选择，因此可以使用 Map<Integer, Boolean> 记录子问题的结果
+
+	这里如果 总和 > maxChoosableInteger 的和则先手的一定输，但是这样其实题目也有问题吧。然后如果总和 <= 0 则先手赢
+	使用两个全局变量 记录子问题结果的哈希表 HashMap<Integer, Boolean> map，记录每个数字是否被使用的 used 数组
+	在递归的处理中，used 数组会变化，因此这里就是暴力 dp
 */
+
+var dp map[int]bool
+var used []bool
+
 func solution(maxChoosableInteger, desiredTotal int) bool {
+	// 只需要选择一个就可以赢
+	if maxChoosableInteger >= desiredTotal {
+		return true
+	}
+	// 全部都选择完了
+	if (1+maxChoosableInteger)*maxChoosableInteger/2 < desiredTotal {
+		return false
+	}
+	used = make([]bool, maxChoosableInteger)
+	return helper(desiredTotal)
+
+}
+
+func helper(desiredTotal int) bool {
+	if desiredTotal <= 0 {
+		return false
+	}
+	key := getKey(used)
+	if _, ok := dp[key]; !ok {
+		// 这里暴力解法，将每个其他数字作为下一个
+		for i := 1; i < len(used); i++ {
+			if used[i] == false {
+				used[i] = true
+				// 需要先检查能否赢
+				if !helper(desiredTotal - i) {
+					dp[key] = true
+					return true
+				}
+				// 下一次迭代前需要恢复
+				used[i] = false
+			}
+		}
+		dp[key] = false
+	}
+	return dp[key]
+}
+
+// 这里根据二进制来找到对应的数字，用于找出 map 的 key
+func getKey(used []bool) int {
+	var num int
+	for _, v := range used {
+		num <<= 1
+		if v {
+			num |= 1
+		}
+	}
+	return num
 }
