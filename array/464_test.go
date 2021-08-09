@@ -5,7 +5,7 @@ import (
 )
 
 func TestPro(t *testing.T) {
-	t.Run("486. Predict the Winner", func(t *testing.T) {
+	t.Run("464. Can I Win", func(t *testing.T) {
 		maxChoosableIntegrr := 10
 		desiredTotal := 10
 		want := false
