@@ -72,6 +72,7 @@ func solution(maxChoosableInteger, desiredTotal int) bool {
 }
 
 func helper(desiredTotal int) bool {
+	// 总和已经小于等于 0 表示已经满足赢的条件了
 	if desiredTotal <= 0 {
 		return false
 	}
