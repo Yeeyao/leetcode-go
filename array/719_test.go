@@ -51,6 +51,13 @@ func solution(nums []int, k int) int {
 			high = mid
 		}
 	}
+	/*
+		这里 mid 明明是 low 和 high 计算出来的，为什么 low 一定是序对的距离
+		countPairs(nums, mid) == k 这里没有提前返回
+		因为对于  countPairs(nums, mid) < k 来说，如果 mid + 1 这个距离不存在的话，则
+		countPairs(nums, mid) 和 countPairs(nums, mid + 1) 这两个数值是相等的，导致 low 以及 high 不断变化
+	*/
+
 	return low
 }
 
