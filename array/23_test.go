@@ -1,0 +1,91 @@
+package array
+
+import (
+	"testing"
+)
+
+func TestPro(t *testing.T) {
+	t.Run("23. 合并K个升序链表", func(t *testing.T) {
+		input := []int{1, 1, 2}
+		want := 2
+		got := solution(input)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+}
+
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+/*
+	给定一个链表数组，每个链表都已经按照元素大小升序排列，将所有的链表合并到一个链表上
+
+	方法 1：直接顺序合并，使用一个结果链表保存最终的结果。假设输入的链表平均长度是 n，第一次合并需要的时间是 O(1)，结果链表长度是 n，第二次合并，需要时间 O(2n),
+           结果链表长度是 2n，第 i 次合并后，结果链表长度是 i)n，所需时间 O((i-1)n+n)=O(in)，因此总时间 O(k^2n) k 是输入链表的数量
+	方法 2：分治合并，直接将一对对链表合并，第一次排序，剩余链表数量是 k/2，第二次 k/4 ... 最后是 1。第一次需要时间是 O(kn)，第二次需要 k/2 * O(2kn)
+			总时间 O(kn * logk)，使用递归，空间复杂度 O(logk)
+	方法 3：优先队列，这个方法和前两种方法的思路有所不同，我们需要维护当前每个链表没有被合并的元素的最前面一个，k 个链表就最多有 k 个满足这样条件的元素，
+			每次在这些元素里面选取 val 属性最小的元素合并到答案中。在选取最小元素的时候，我们可以用优先队列来优化这个过程。就是很直观，每次从所有的链表头获取
+		    最小的一个。优先队列中元素不超过 k 个，插入删除时间为 O(logk)，最多 kn 个元素，每个元素被插入和删除一次，总时间 O(kn * logk)，优先队列使用的
+			空间 O(logk)
+*/
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+/*
+	分割函数不断分割，然后合并函数每次将分割的进行合并
+*/
+func solution(lists []*ListNode) *ListNode {
+	return splitFunc(lists, 0, len(lists)-1)
+}
+
+// 切割函数
+func splitFunc(lists []*ListNode, left, right int) *ListNode {
+	if left == right {
+		return lists[left]
+	}
+	if left > right {
+		return nil
+	}
+	mid := left + (right-left)/2
+	return mergeFunc(splitFunc(lists, left, mid), splitFunc(lists, mid+1, right))
+}
+
+/*
+	head 指向结果链表的头部，tail 指向插入位置的前一个位置
+	其实这里 head 只是记录一下头部，实际的移动是 tail 处理的，因此这里 head 初始化后，tail 需要指向 head
+*/
+func mergeFunc(a, b *ListNode) *ListNode {
+	if a == nil {
+		return b
+	}
+	if b == nil {
+		return a
+	}
+	head := &ListNode{}
+	tail := head
+	for a != nil && b != nil {
+		if a.Val < b.Val {
+			tail.Next = a
+			a = a.Next
+		} else {
+			tail.Next = b
+			b = b.Next
+		}
+		tail = tail.Next
+	}
+	if a == nil {
+		tail.Next = b
+	} else {
+		tail.Next = a
+	}
+	return head.Next
+}
