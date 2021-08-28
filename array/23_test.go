@@ -95,7 +95,7 @@ func mergeFunc(a, b *ListNode) *ListNode {
 	return head.Next
 }
 
-// 优先队列方法 需要注意，这里使用 heap 的库函数，则 Pop Push 以及 Init 都需要调用 heap 提供的
+// 优先队列方法 需要注意，这里使用 heap 的库函数，则 Pop Push 以及 Init 都需要调用 heap 提供的，因为 heap 内部将因为调用而执行 heapify 操作
 type ListNodePq struct {
 	val  int
 	node *ListNode
