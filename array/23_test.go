@@ -1,12 +1,13 @@
 package array
 
 import (
+	"container/heap"
 	"testing"
 )
 
 func TestPro(t *testing.T) {
 	t.Run("23. 合并K个升序链表", func(t *testing.T) {
-		input := []int{1, 1, 2}
+		input := []*ListNode{}
 		want := 2
 		got := solution(input)
 		if got != want {
@@ -94,7 +95,7 @@ func mergeFunc(a, b *ListNode) *ListNode {
 	return head.Next
 }
 
-// 优先队列方法
+// 优先队列方法 需要注意，这里使用 heap 的库函数，则 Pop Push 以及 Init 都需要调用 heap 提供的
 type ListNodePq struct {
 	val  int
 	node *ListNode
@@ -106,11 +107,11 @@ func (h ListNodeHeap) Len() int           { return len(h) }
 func (h ListNodeHeap) Less(i, j int) bool { return h[i].val < h[j].val }
 func (h ListNodeHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 
-func (h *ListNodeHeap) Push(node ListNodePq) {
-	*h = append(*h, node)
+func (h *ListNodeHeap) Push(x interface{}) {
+	*h = append(*h, x.(ListNodePq))
 }
 
-func (h *ListNodeHeap) Pop() ListNodePq {
+func (h *ListNodeHeap) Pop() interface{} {
 	old := *h
 	n := len(old)
 	x := old[n-1]
@@ -118,19 +119,22 @@ func (h *ListNodeHeap) Pop() ListNodePq {
 	return x
 }
 
-func solution(lists []*ListNode) *ListNode {
+func mergeKLists(lists []*ListNode) *ListNode {
 	nodeHeap := &ListNodeHeap{}
 	for _, v := range lists {
-		nodeHeap.Push(ListNodePq{val: v.Val, node: v})
+		if v != nil {
+			nodeHeap.Push(ListNodePq{val: v.Val, node: v})
+		}
 	}
+	heap.Init(nodeHeap)
 	head := &ListNode{}
 	tail := head
 	for nodeHeap.Len() > 0 {
-		t := nodeHeap.Pop()
+		t := heap.Pop(nodeHeap).(ListNodePq)
 		tail.Next = t.node
 		tail = tail.Next
 		if t.node.Next != nil {
-			nodeHeap.Push(ListNodePq{
+			heap.Push(nodeHeap, ListNodePq{
 				val:  t.node.Next.Val,
 				node: t.node.Next,
 			})
