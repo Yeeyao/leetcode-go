@@ -33,6 +33,10 @@ func TestPro(t *testing.T) {
 			每次在这些元素里面选取 val 属性最小的元素合并到答案中。在选取最小元素的时候，我们可以用优先队列来优化这个过程。就是很直观，每次从所有的链表头获取
 		    最小的一个。优先队列中元素不超过 k 个，插入删除时间为 O(logk)，最多 kn 个元素，每个元素被插入和删除一次，总时间 O(kn * logk)，优先队列使用的
 			空间 O(logk)
+			实现上，使用一个结构体保存当前的节点的数值以及当前的节点，然后一开始先将所有的链表的头部元素放到优先队列。
+			构造两个指针 head, tail 来保存结果的链表，其中 head 作为结果返回，tail 移动。当优先队列非空的时候进行循环
+				获取队列头部元素并弹出队列，将 tail.Next 指向当前的头部元素，然后 tail 向后移动，接着如果头部元素的下一个元素非空，
+				则将下一个元素加入到优先队列（表示当前的这个输入链表后面还有元素）
 */
 
 type ListNode struct {
@@ -86,6 +90,51 @@ func mergeFunc(a, b *ListNode) *ListNode {
 		tail.Next = b
 	} else {
 		tail.Next = a
+	}
+	return head.Next
+}
+
+// 优先队列方法
+type ListNodePq struct {
+	val  int
+	node *ListNode
+}
+
+type ListNodeHeap []ListNodePq
+
+func (h ListNodeHeap) Len() int           { return len(h) }
+func (h ListNodeHeap) Less(i, j int) bool { return h[i].val < h[j].val }
+func (h ListNodeHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *ListNodeHeap) Push(node ListNodePq) {
+	*h = append(*h, node)
+}
+
+func (h *ListNodeHeap) Pop() ListNodePq {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+func solution(lists []*ListNode) *ListNode {
+	nodeHeap := &ListNodeHeap{}
+	for _, v := range lists {
+		nodeHeap.Push(ListNodePq{val: v.Val, node: v})
+	}
+	head := &ListNode{}
+	tail := head
+	for nodeHeap.Len() > 0 {
+		t := nodeHeap.Pop()
+		tail.Next = t.node
+		tail = tail.Next
+		if t.node.Next != nil {
+			nodeHeap.Push(ListNodePq{
+				val:  t.node.Next.Val,
+				node: t.node.Next,
+			})
+		}
 	}
 	return head.Next
 }
