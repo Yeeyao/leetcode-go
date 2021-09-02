@@ -50,6 +50,7 @@ func check(matrix [][]int, mid, k, n int) bool {
 	i, j := n-1, 0
 	num := 0
 	for i >= 0 && j < n {
+		// 这里为什么需要取等于，外层的二分对重复元素，计算的是最右边的位置，因此这里可以理解为从右边向左边靠近，里层的这个判断和外层的需要一致
 		if matrix[i][j] <= mid {
 			num += i + 1
 			j++
