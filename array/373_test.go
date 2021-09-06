@@ -26,9 +26,14 @@ func TestPro(t *testing.T) {
 	优先队列做法
 		count = 0，count < k，递增，
 		每次将 i + j == count 的元素放入到优先队列中，然后取出头部元素保存到结果，这里队列元素 {sum, i, j} i,j 记录 sum 的索引
-	二叉查找，一般有序的数组都可以使用二叉查找，这里同样计算最小和最大的和，然后和小于等于 mid 的序对的数量和 k 比较
+	二分查找，一般有序的数组都可以使用二叉查找，这里同样计算最小和最大的和，然后和小于等于 mid 的序对的数量和 k 比较
 
 */
+
+// 二分查找
+//func solution(nums1, nums2 []int, k int) [][]int {
+//
+//}
 
 // 优先队列 5% 主要问题是内存访问不友好导致频繁切页
 type ele [][3]int
@@ -50,20 +55,25 @@ func (e *ele) Pop() interface{} {
 }
 
 func solution(nums1, nums2 []int, k int) [][]int {
-	h := &ele{}
-	count := 0
 	n, m := len(nums1), len(nums2)
-	if k > n*m {
-		k = n * m
-	}
 	res := make([][]int, 0)
-	for count < k {
-		for i := 0; i < n && i < k; i++ {
-			dest := count - i
-			if dest >= 0 && dest < m {
-				heap.Push(h, [3]int{nums1[i] + nums2[dest], i, dest})
+	if k >= n*m {
+		for i := 0; i < n; i++ {
+			for j := 0; j < m; j++ {
+				res = append(res, []int{nums1[i], nums2[j]})
 			}
 		}
+		return res
+	}
+	// 优化内存访问
+	h := &ele{}
+	count := 0
+	for i := 0; i < n && i < k; i++ {
+		for j := 0; j < m && i+j <= k; j++ {
+			heap.Push(h, [3]int{nums1[i] + nums2[j], i, j})
+		}
+	}
+	for count < k {
 		topE := heap.Pop(h).([3]int)
 		res = append(res, []int{nums1[topE[1]], nums2[topE[2]]})
 		count++
