@@ -23,10 +23,6 @@ func TestPro(t *testing.T) {
 	返回 pair (u, v) 和最小的 k 对。
 	暴力方法是直接将枚举所有的序对，然后按照总和排序
 
-	优先队列做法
-		count = 0，count < k，递增，
-		每次将 i + j == count 的元素放入到优先队列中，然后取出头部元素保存到结果，这里队列元素 {sum, i, j} i,j 记录 sum 的索引
-
 */
 
 // 优先队列 5% 主要问题是内存访问不友好导致频繁切页
@@ -49,7 +45,11 @@ func (e *ele) Pop() interface{} {
 }
 
 /*
+	类似 378 的做法，总体上还是先一行（列）然后找下一个可能的最小元素
 	[ref](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/discuss/84551/simple-Java-O(KlogK)-solution-with-explanation)
+	这里的思路是，一开始将 nums1[i], i : [0, len(nums1)-1], nums2[j] j 最开始是 0 放入优先队列，然后将顶部元素出队列后，放入元素 nums1[i] nums2[j + 1]
+	因为出队列的元素中，一开始 nums2[j] 都是相同的数值，因此下一个比较小的和应该是出队列的元素中的 nums1 的元素加上 nums2[j + 1] 去和队列中原来的元素比较
+	TODO: 为什么比下面的快，这里是每次都判断下一个需要放入到优先队列的元素对，同时只有一对需要放入，而下面的做法是，将 i + j == k 的都放入了，显然多了不必要的内存访问
 */
 
 func solution(nums1, nums2 []int, k int) [][]int {
@@ -65,16 +65,22 @@ func solution(nums1, nums2 []int, k int) [][]int {
 	}
 	for k > 0 && len(*h) > 0 {
 		topE := heap.Pop(h).([3]int)
+		k--
 		res = append(res, []int{nums1[topE[1]], nums2[topE[2]]})
-		if topE[2] == m {
+		if topE[2] == m-1 {
 			continue
 		}
-		heap.Push(h, [3]int{topE[0] + nums2[topE[2]+1], topE[1], topE[2] + 1})
+		heap.Push(h, [3]int{nums1[topE[1]] + nums2[topE[2]+1], topE[1], topE[2] + 1})
 	}
 	return res
 }
 
-func solution(nums1, nums2 []int, k int) [][]int {
+/*
+	优先队列做法
+		count = 0，count < k，递增，
+		每次将 i + j == count 的元素放入到优先队列中，然后取出头部元素保存到结果，这里队列元素 {sum, i, j} i,j 记录 sum 的索引
+*/
+func solution2(nums1, nums2 []int, k int) [][]int {
 	n, m := len(nums1), len(nums2)
 	res := make([][]int, 0)
 	if k >= n*m {
