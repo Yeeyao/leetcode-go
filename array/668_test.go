@@ -6,7 +6,7 @@ import (
 )
 
 func TestPro(t *testing.T) {
-	t.Run("686. Kth Smallest Number in Multiplication Table", func(t *testing.T) {
+	t.Run("668. Kth Smallest Number in Multiplication Table", func(t *testing.T) {
 		m, n, k := 3, 3, 5
 		got := solution(m, n, k)
 		want := 6
