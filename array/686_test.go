@@ -17,12 +17,50 @@ func TestPro(t *testing.T) {
 }
 
 /*
+	binary search 应该类似 378，左下角开始统计，坐上部分总是小于右下部分
+	这里每次统计一列，因为一列中，
+		当前行的元素如果小于 mid，则它以及该列的上面的元素都小于 mid。
+		当前行的元素如果大于 mid，则它需要将行数递减来向上找更小的元素。
+	同时，下一列的当前行的元素一定大于当前行的元素，因此，当前列中将行数递减，和后面的列的也不冲突
+
+*/
+func solution(m, n, k int) int {
+	low, high := 1, m*n
+	for low < high {
+		mid := low + (high-low)/2
+		if isEnough(m, n, k, mid) {
+			high = mid
+		} else {
+			low = mid + 1
+		}
+	}
+	return low
+}
+
+// 查找当前的数值数量是否足够
+func isEnough(m, n, k, mid int) bool {
+	i, j := m, 1
+	count := 0
+	// 这里以列为主来移动
+	for j < n+1 && i > 0 {
+		// 如果满足就可以直接将当前列的改行以及上面的元素数量统计，然后统计下一列
+		if i*j <= mid {
+			count += i
+			j++
+			// 如果大于，则需要行数递减来判断更小的元素
+		} else {
+			i--
+		}
+	}
+	return count >= k
+}
+
+/*
 	这里应该和 373 类似的，只不过是换成了乘法
 	matrix[i][j] = i * j
 	TLE
 */
-
-func solution(m, n, k int) int {
+func solution2(m, n, k int) int {
 	h := &IHeap{}
 	// 先将第一列保存到 IHeap
 	if m == 1 || n == 1 {
