@@ -2,17 +2,18 @@ package array
 
 import (
 	"container/heap"
+	"reflect"
 	"testing"
 )
 
 func TestPro(t *testing.T) {
 	t.Run("373. Find K Pairs with Smallest Sums", func(t *testing.T) {
-		want := [][]int{}
-		nums1 := []int{1, 2, 3}
-		nums2 := []int{1, 2, 3}
-		k := 1
+		nums1 := []int{1, 2, 4, 5, 6}
+		nums2 := []int{3, 5, 7, 9}
+		k := 3
+		want := [][]int{{1, 3}, {2, 3}, {1, 5}}
 		got := solution(nums1, nums2, k)
-		if got != want {
+		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
 	})
@@ -22,8 +23,69 @@ func TestPro(t *testing.T) {
 	给定两个升序排序的整型数组 nums1, nums2 以及整型数字 k，定义 pair (u, v)，其中一个元素从第一个数组中获取，另一个元素从第二个数组中获取
 	返回 pair (u, v) 和最小的 k 对。
 	暴力方法是直接将枚举所有的序对，然后按照总和排序
-
 */
+
+/*
+	二分查找做法，直接从右上角开始判断，无法通过所有测试用例。。。
+*/
+
+func solution(nums1, nums2 []int, k int) [][]int {
+	m, n := len(nums1), len(nums2)
+	res := make([][]int, 0)
+	if n == 0 || m == 0 || k == 0 {
+		return res
+	}
+	// k 大于总数，直接全部作为结果了
+	if k >= n*m {
+		for i := 0; i < m; i++ {
+			for j := 0; j < n; j++ {
+				res = append(res, []int{nums1[i], nums2[j]})
+			}
+		}
+		return res
+	}
+	low, high := nums1[0]+nums2[0], nums1[m-1]+nums2[n-1]
+	for low < high {
+		mid := low + (high-low)/2
+		res = make([][]int, 0)
+		if isEnough(m, n, k, mid, nums1, nums2, &res) {
+			high = mid
+		} else {
+			low = mid + 1
+		}
+	}
+	// 如果两个相等，则最后一次获取需要在外部获取，因为相等了前面的循环会跳过最后一次
+	if low == high {
+		res = make([][]int, 0)
+		isEnough(m, n, k, low, nums1, nums2, &res)
+	}
+	return res
+}
+
+// 这里从右上角开始
+func isEnough(m, n, k, mid int, nums1, nums2 []int, res *[][]int) bool {
+	i, j := 0, n-1
+	count := 0
+	// 如果结果数组数量足够了，就不需要继续添加了
+	resCount := 0
+	// 这里以行为主来移动，每次加上当前行
+	for i < m && j >= 0 {
+		// 如果满足就可以直接将当前列的该行以及上面的元素数量统计，然后统计下一列
+		if nums1[i]+nums2[j] <= mid {
+			// 将元素添加到结果 slice
+			for re := 0; re <= j && resCount < k; re++ {
+				resCount++
+				*res = append(*res, []int{nums1[i], nums2[re]})
+			}
+			count += j + 1
+			i++
+			// 如果大于，则需要行数递减来判断更小的元素
+		} else {
+			j--
+		}
+	}
+	return count >= k
+}
 
 // 优先队列 5% 主要问题是内存访问不友好导致频繁切页
 type ele [][3]int
@@ -52,7 +114,7 @@ func (e *ele) Pop() interface{} {
 	TODO: 为什么比下面的快，这里是每次都判断下一个需要放入到优先队列的元素对，同时只有一对需要放入，而下面的做法是，将 i + j == k 的都放入了，显然多了不必要的内存访问
 */
 
-func solution(nums1, nums2 []int, k int) [][]int {
+func solution2(nums1, nums2 []int, k int) [][]int {
 	res := make([][]int, 0)
 	n, m := len(nums1), len(nums2)
 	if n == 0 || m == 0 || k == 0 {
@@ -80,7 +142,7 @@ func solution(nums1, nums2 []int, k int) [][]int {
 		count = 0，count < k，递增，
 		每次将 i + j == count 的元素放入到优先队列中，然后取出头部元素保存到结果，这里队列元素 {sum, i, j} i,j 记录 sum 的索引
 */
-func solution2(nums1, nums2 []int, k int) [][]int {
+func solution3(nums1, nums2 []int, k int) [][]int {
 	n, m := len(nums1), len(nums2)
 	res := make([][]int, 0)
 	if k >= n*m {
