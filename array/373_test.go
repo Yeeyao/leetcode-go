@@ -2,7 +2,6 @@ package array
 
 import (
 	"container/heap"
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -30,6 +29,24 @@ func TestPro(t *testing.T) {
 	二分查找做法，直接从右上角开始判断，无法通过所有测试用例。。。
 	这里使用快排 OOM 了
 */
+
+type ele2 [][]int
+
+func (e ele2) Len() int           { return len(e) }
+func (e ele2) Less(i, j int) bool { return e[i][0] < e[j][0] }
+func (e ele2) Swap(i, j int)      { e[i], e[j] = e[j], e[i] }
+
+func (e *ele2) Push(x interface{}) {
+	*e = append(*e, x.([]int))
+}
+
+func (e *ele2) Pop() interface{} {
+	old := *e
+	n := len(old)
+	x := old[n-1]
+	*e = old[0 : n-1]
+	return x
+}
 
 func solution(nums1, nums2 []int, k int) [][]int {
 	m, n := len(nums1), len(nums2)
@@ -62,9 +79,8 @@ func solution(nums1, nums2 []int, k int) [][]int {
 		isEnough(m, n, k, low, nums1, nums2, &res)
 	}
 	// 如果元素数量超过了 k 就需要将较大的剔除，有一个快速排序的变种，划分的时候判断一下左右两边的数量
+	// 这里会 OOM，那就只能使用堆了
 	if len(res) > k {
-		qs(&res, 0, len(res)-1)
-		res = res[:k]
 	}
 	return res
 }
