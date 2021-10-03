@@ -2,15 +2,16 @@ package array
 
 import (
 	"container/heap"
+	"fmt"
 	"reflect"
 	"testing"
 )
 
 func TestPro(t *testing.T) {
 	t.Run("373. Find K Pairs with Smallest Sums", func(t *testing.T) {
-		nums1 := []int{1, 2, 4, 5, 6}
-		nums2 := []int{3, 5, 7, 9}
-		k := 3
+		nums1 := []int{0, 0, 0, 0, 0}
+		nums2 := []int{-3, 22, 35, 56, 76}
+		k := 22
 		want := [][]int{{1, 3}, {2, 3}, {1, 5}}
 		got := solution(nums1, nums2, k)
 		if !reflect.DeepEqual(got, want) {
@@ -27,6 +28,7 @@ func TestPro(t *testing.T) {
 
 /*
 	二分查找做法，直接从右上角开始判断，无法通过所有测试用例。。。
+	这里使用快排 OOM 了
 */
 
 func solution(nums1, nums2 []int, k int) [][]int {
@@ -59,6 +61,11 @@ func solution(nums1, nums2 []int, k int) [][]int {
 		res = make([][]int, 0)
 		isEnough(m, n, k, low, nums1, nums2, &res)
 	}
+	// 如果元素数量超过了 k 就需要将较大的剔除，有一个快速排序的变种，划分的时候判断一下左右两边的数量
+	if len(res) > k {
+		qs(&res, 0, len(res)-1)
+		res = res[:k]
+	}
 	return res
 }
 
@@ -66,15 +73,17 @@ func solution(nums1, nums2 []int, k int) [][]int {
 func isEnough(m, n, k, mid int, nums1, nums2 []int, res *[][]int) bool {
 	i, j := 0, n-1
 	count := 0
-	// 如果结果数组数量足够了，就不需要继续添加了
-	resCount := 0
+	/*
+		如果结果数组数量足够了，就不需要继续添加了，这里是有问题的，因为虽然上面的元素可以保证是小于 mid 的
+		但是下一行的元素也可能是小于 mid 的，同时下面的元素可能更小，这样达到目标数量就终止，就会返回更大的序对，而忽略了下面的序对了
+		因此，这里不能这样计数，需要都加入，然后重新使用优先队列处理排除较大的元素，但是这样感觉不如直接优先队列了？
+	*/
 	// 这里以行为主来移动，每次加上当前行
 	for i < m && j >= 0 {
 		// 如果满足就可以直接将当前列的该行以及上面的元素数量统计，然后统计下一列
 		if nums1[i]+nums2[j] <= mid {
 			// 将元素添加到结果 slice
-			for re := 0; re <= j && resCount < k; re++ {
-				resCount++
+			for re := 0; re <= j; re++ {
 				*res = append(*res, []int{nums1[i], nums2[re]})
 			}
 			count += j + 1
@@ -85,6 +94,33 @@ func isEnough(m, n, k, mid int, nums1, nums2 []int, res *[][]int) bool {
 		}
 	}
 	return count >= k
+}
+
+func qs(pairs *[][]int, left, right int) {
+	if right > left {
+		pivotIndex := left
+		pivotIndexN := exchange(pairs, left, right, pivotIndex)
+		qs(pairs, left, pivotIndexN-1)
+		qs(pairs, pivotIndexN+1, right)
+	}
+}
+
+func exchange(pairs *[][]int, left, right, pivotIndex int) int {
+	pivotVal := (*pairs)[pivotIndex][0] + (*pairs)[pivotIndex][1]
+	(*pairs)[pivotIndex][0], (*pairs)[right][0] = (*pairs)[right][0], (*pairs)[pivotIndex][0]
+	(*pairs)[pivotIndex][1], (*pairs)[right][1] = (*pairs)[right][1], (*pairs)[pivotIndex][1]
+	pCount := left
+	for i := left; i < right; i++ {
+		temp := (*pairs)[i][0] + (*pairs)[i][1]
+		if temp < pivotVal {
+			(*pairs)[i][0], (*pairs)[pCount][0] = (*pairs)[pCount][0], (*pairs)[i][0]
+			(*pairs)[i][1], (*pairs)[pCount][1] = (*pairs)[pCount][1], (*pairs)[i][1]
+			pCount++
+		}
+	}
+	(*pairs)[right][0], (*pairs)[pCount][0] = (*pairs)[pCount][0], (*pairs)[right][0]
+	(*pairs)[right][1], (*pairs)[pCount][1] = (*pairs)[pCount][1], (*pairs)[right][1]
+	return pCount
 }
 
 // 优先队列 5% 主要问题是内存访问不友好导致频繁切页
