@@ -24,13 +24,35 @@ func TestPro(t *testing.T) {
 }
 
 /*
+	应该使用 hashMap
+*/
+
+func solution(nums1, nums2, nums3, nums4 []int) int {
+	count := 0
+	countMap := make(map[int]int, 0)
+	for _, n1 := range nums1 {
+		for _, n2 := range nums2 {
+			countMap[n1+n2]++
+		}
+	}
+	for _, n3 := range nums3 {
+		for _, n4 := range nums4 {
+			if times, ok := countMap[0-n3-n4]; ok {
+				count += times
+			}
+		}
+	}
+	return count
+}
+
+/*
 	给定四个整型数组 nums1, nums2, nums3, nums4 长度都是 n，返回 tuples(i, j, k, l) 的数量
 	其中 0 <= i, j, k, l < n nums1[i] + nums2[j] + nums3[k] + nums4[l] = 0
 	应该也是先排序，然后类似 4-sum 的处理，重复的数值也可以，因为这里是下标组合的数量
 
 	TLE
 */
-func solution(nums1, nums2, nums3, nums4 []int) int {
+func solution2(nums1, nums2, nums3, nums4 []int) int {
 	// 先进行排序
 	sort.Ints(nums1)
 	sort.Ints(nums2)
