@@ -49,6 +49,7 @@ func solution(nums []int) int {
 	n := len(nums)
 	countMap := make(map[int]int)
 	// 这里外部循环有一个，内部有两个 for 循环，确定了最后一个 d，然后前面的确定 c
+	// i 作为第三个位置，向后计算第四个位置的所有的和，然后确定前一个位置作为第二个位置，向前计算第一个位置来求和
 	for i := n - 2; i > 1; i-- {
 		// 这里是先确定了 c，然后计算出 nums[d]-nums[c]
 		for j := i + 1; j < n; j++ {
