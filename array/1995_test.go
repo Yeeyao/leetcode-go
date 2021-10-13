@@ -34,7 +34,6 @@ func TestPro(t *testing.T) {
 	这里是索引组成的元组，因此元素数值是允许重复的
 	还是参考 454 的，直接使用 hashmap 但是这里需要三个元素
 
-TODO: 参考
 https://leetcode.com/problems/count-special-quadruplets/discuss/1451080/JavaPython-O(n2)-solution-with-explanation
 
 a + b + c = d ==> a + b = d - c
