@@ -26,6 +26,40 @@ func TestPro(t *testing.T) {
 }
 
 /*
+	dp[i] 表示前 i 个元素（包含 i）的最长上升子序列长度
+	dp[i] = max(dp[j]) + 1 dp[0] = 1，这里每次计算 dp 都需要向前判断找到最大的然后判断是否需要 + 1
+*/
+
+func solution(nums []int) int {
+
+}
+
+func solution2(nums []int) int {
+	n := len(nums)
+	if n == 0 {
+		return 0
+	}
+	dp := make([]int, n)
+	dp[0] = 1
+	res := 1
+	for i := 1; i < n; i++ {
+		maxDp := 0
+		for j := i; j > 0; j-- {
+			// 只有当前的元素大于判断的元素时，才需要更新
+			if nums[i] > nums[j] && dp[j] > maxDp {
+				maxDp = dp[j]
+			}
+			dp[i] = maxDp + 1
+			if dp[i] > res {
+				res = dp[i]
+			}
+		}
+
+	}
+	return res
+}
+
+/*
 	动态规划
 	dp[i] 为考虑前 i 个元素，包含 i 结尾的最长上升子序列长度
 	从小到大计算 dp[] 的数值
