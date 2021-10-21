@@ -18,7 +18,25 @@ func TestPro(t *testing.T) {
 	t.Run("300. Longest Increasing Subsequence", func(t *testing.T) {
 		input := []int{10, 9, 2, 5, 3, 7, 101, 18}
 		want := 4
-		got := lengthOfLIS(input)
+		got := solution(input)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+
+	t.Run("300. Longest Increasing Subsequence2", func(t *testing.T) {
+		input := []int{1, 2, 3, 4, 5, 6, 7}
+		want := 7
+		got := solution(input)
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	})
+
+	t.Run("300. Longest Increasing Subsequence3", func(t *testing.T) {
+		input := []int{7, 6, 5, 4, 3, 2, 1}
+		want := 1
+		got := solution(input)
 		if got != want {
 			t.Errorf("got: %v, want: %v", got, want)
 		}
@@ -26,12 +44,39 @@ func TestPro(t *testing.T) {
 }
 
 /*
-	dp[i] 表示前 i 个元素（包含 i）的最长上升子序列长度
-	dp[i] = max(dp[j]) + 1 dp[0] = 1，这里每次计算 dp 都需要向前判断找到最大的然后判断是否需要 + 1
+	[ref](https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-by-leetcode-soluti/)
+	d[i] 表示长度为 i 的最长递增子序列的最后一个元素的数值，len 记录当前的最大最长递增子序列长度，初始化时 d[1]=nums[0] len=1
+	可以知道数组 d 是单调递增序列
+	从下标 1 开始遍历 nums，
+		如果 nums[i] > d[len] 则直接 len = len+1 d[len+1]=nums[i]
+		否则，需要更新中间的 dp[i] 需要找到 dp[i-1] < nums[i] < dp[i] 将 dp[i] = nums[i]
+	第二种情况，就可以使用二分查找来找到 dp[i-1] 然后将 dp[i]=nums[i] 来更新 dp[i]
 */
 
 func solution(nums []int) int {
-
+	n := len(nums)
+	d := make([]int, n+1)
+	len := 1
+	d[len] = nums[0]
+	for i := 1; i < n; i++ {
+		if nums[i] > d[len] {
+			len++
+			d[len] = nums[i]
+		}
+		// 这里数组 d 的元素，一开始的时候很多元素都是没有被赋值的，因此只需要查找 1 到 len 的元素
+		// 同时，这里也只需要找到一个 nums[i] 合适插入的位置，即该位置前面位置数值小于 nums[i] 后面大于或者等于 nums[i]
+		left, right := 1, len
+		for left < right {
+			mid := left + (right-left)/2
+			if d[mid] < nums[i] {
+				left = mid + 1
+			} else {
+				right = mid
+			}
+		}
+		d[left] = nums[i]
+	}
+	return len
 }
 
 func solution2(nums []int) int {
@@ -95,18 +140,18 @@ func lengthOfLIS(nums []int) int {
 
 /*
 	贪心 + 二分查找
-	考虑一个简单的贪心，若需要使上升子序列尽可能长，必须让它增长尽可能慢，所以希望
-	每次在上升子序列最后加上那个数尽可能小
+	考虑一个简单的贪心，若需要使上升子序列尽可能长，必须让它增长尽可能慢，所以希望每次在上升子序列最后加上那个数尽可能小
 
-	维护数组 d[i] 表示长度为 i 的最长上升子序列的末尾元素最小值，len 记录当前
-	最长长度，起始值 len = 1, d[1] = num[0]
+	维护数组 d[i] 表示长度为 i 的最长上升子序列的末尾元素最小值，len 记录当前最长长度，起始值 len = 1, d[1] = num[0]
+	可知 d[i+1] >= d[i]
 	依次遍历 nums[] 每个元素，更新 d[] 以及 len 的值
-		如果 nums[i] > d[len] 则 len = len + 1，d[len + 1] = nums[i]
-		否则在 d[1...len] 中找满足 d[i-1] < nums[j] < d[i] 的下标 i 更新 d[i] = nums[j]
+		如果 nums[i] > d[len] 则 len = len + 1，d[len + 1] = nums[i] 这里直接更新最大
+		否则在 d[1...len] 中找满足 d[i-1] < nums[j] < d[i] 的下标 i 更新 d[i] = nums[j] 意思是如果找到了更小的数值，则需要更新 d[i]
 
 	当前最长上升子序列长度为 len，顺序遍历 nums，对 nums[i]
 		若 nums[i] > d[len] 加入 d 数组末尾，更新 len = len + 1
-		否则在 d 中二分查找，找到第一个比 nums[i] 小的 d[k] 更新 d[k + 1] = nums[i]
+		否则在 d 中二分查找，找到第一个比 nums[i] 小的 d[k] 更新 d[k + 1] = nums[i]，这里为何 d[k+1] 和 nums[i] 大小关系不需要判断
+		因为 d[k+1] 一定是大于 nums[i] 的，不然就直接需要更新 d[k+2] 了
 */
 
 func lengthOfLIS2(nums []int) int {
