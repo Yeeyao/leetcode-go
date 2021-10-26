@@ -79,6 +79,18 @@ func solution(nums []int) int {
 	return len
 }
 
+/*
+	dp[i] 为考虑前 i 个元素(包含 i)，i 结尾的最长上升子序列 长度
+	从小到大计算 dp[] 的数值
+	dp[i] = max(do[j]) + 1 0 <= j < i nums[i] > nums[j]
+	输入长度如果是 0 直接返回 0 dp[i] 表示以 i 为结尾的最长连续子数组的序列长度
+
+	这里的意思是，对当前的 i 下标的数值，向前找到当前数值大于前面的最长子序列的最后一个元素的子序列并统计最长的子序列长度 maxDP
+	最后，dp[i] 就等于前面的最长子序列长度 maxDP + 1（加上了 dp[i]），最后，更新全局的最长子序列长度
+	创建 dp 数组，初始化 dp[0] = 1 res = 1
+	从 1 开始遍历每个输入元素，对每个当前元素，向前判断每个当前元素大于前面元素的 dp 值取最大的 dp 值
+	当前元素的 dp 值是找到的最大 dp 值 + 1，然后更新全局最大 dp 值
+*/
 func solution2(nums []int) int {
 	n := len(nums)
 	if n == 0 {
@@ -94,12 +106,11 @@ func solution2(nums []int) int {
 			if nums[i] > nums[j] && dp[j] > maxDp {
 				maxDp = dp[j]
 			}
-			dp[i] = maxDp + 1
-			if dp[i] > res {
-				res = dp[i]
-			}
 		}
-
+		dp[i] = maxDp + 1
+		if dp[i] > res {
+			res = dp[i]
+		}
 	}
 	return res
 }
