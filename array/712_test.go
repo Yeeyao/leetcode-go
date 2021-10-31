@@ -52,6 +52,7 @@ func solution(s1, s2 string) int {
 	for i, _ := range dp {
 		dp[i] = make([]int, m+1)
 	}
+	// 基本情况的初始化，这里计算其中一个字符串为空的时候，另一个字符串的总和
 	for i := 1; i <= n; i++ {
 		dp[i][0] = dp[i-1][0] + int(s1[i-1])
 	}
@@ -60,6 +61,7 @@ func solution(s1, s2 string) int {
 	}
 	for i := 1; i <= n; i++ {
 		for j := 1; j <= m; j++ {
+			// 如果当前的字母相等，就不需要加上和
 			if s1[i-1] == s2[j-1] {
 				dp[i][j] = dp[i-1][j-1]
 			} else {
