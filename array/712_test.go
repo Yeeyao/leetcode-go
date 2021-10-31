@@ -42,7 +42,7 @@ func TestPro(t *testing.T) {
 
 /*
 	bottom-up dp
-	dp[i][j] 表示遍历到 s1 的第 i 个字母，s2 的第 j 个字母的时候，当前删除的 ASCII 总和。最终结果是 dp[len(a)[len(b)]
+	dp[i][j] 表示到 s1[i:] 和 s2[j:] 的字符串删除的 ASCII 总和。最终结果是 dp[len(a)][len(b)]
 	dp[0][0] = 0
 	dp[i][j] = min(dp[i][j-1]+a[j-1], dp[i-1][j]+a[i-1])
 */
@@ -65,6 +65,7 @@ func solution(s1, s2 string) int {
 			if s1[i-1] == s2[j-1] {
 				dp[i][j] = dp[i-1][j-1]
 			} else {
+				// 这里，如果使用 j 则需要删除 i-1，如果使用 i 则需要删除 j - 1
 				dp[i][j] = min(dp[i-1][j]+int(s1[i-1]), dp[i][j-1]+int(s2[j-1]))
 			}
 		}
