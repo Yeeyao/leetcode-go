@@ -4,11 +4,6 @@ import (
 	"testing"
 )
 
-/*
-18. 4Sum
-Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums
-such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
-*/
 func TestPro(t *testing.T) {
 	t.Run("334. Increasing Triplet Subsequence", func(t *testing.T) {
 		nums := []int{35, 15, 38, 1, 10, 26}
@@ -21,9 +16,6 @@ func TestPro(t *testing.T) {
 }
 
 /*
-Given an integer array nums, return true if there exists a triple of indices (i, j, k) such that i < j < k and nums[i] < nums[j] < nums[k].
-If no such indices exists, return false.
-
 给定整型数组 nums，返回是否存在索引的三元组 (i, j, k) 存在 i < j < k 同时 nums[i] < nums[j] < nums[k]
 如果不存在则返回 false
 

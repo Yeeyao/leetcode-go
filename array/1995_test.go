@@ -4,11 +4,6 @@ import (
 	"testing"
 )
 
-/*
-18. 4Sum
-Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums
-such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
-*/
 func TestPro(t *testing.T) {
 	t.Run("1995. Count Special Quadruplets", func(t *testing.T) {
 		nums := []int{35, 15, 38, 1, 10, 26}
@@ -47,13 +42,13 @@ func solution(nums []int) int {
 	count := 0
 	n := len(nums)
 	countMap := make(map[int]int)
-	// 这里外部循环有一个，内部有两个 for 循环，确定了最后一个 d，然后前面的确定 c
-	// i 作为第三个位置，向后计算第四个位置的所有的和，然后确定前一个位置作为第二个位置，向前计算第一个位置来求和
+	// 对每个 i 作为 c 位置，循环内，所有的 d-c 以及 a+b 都计算了，先计算 d-c，然后统计 a+b
 	for i := n - 2; i > 1; i-- {
-		// 这里是先确定了 c，然后计算出 nums[d]-nums[c]
+		// 这里是先确定了 c，然后计算出 nums[d]-nums[c]，每个 i 后面的都需要计算出 d-c
 		for j := i + 1; j < n; j++ {
 			countMap[nums[j]-nums[i]]++
 		}
+		// 这边计算 a+b 因为 c 的位置是 i，因此这里是 i-1 和 i-2，每个 i-1 之前的都计算 a+b，然后计数
 		for j := i - 2; j >= 0; j-- {
 			count += countMap[nums[j]+nums[i-1]]
 		}

@@ -4,11 +4,6 @@ import (
 	"testing"
 )
 
-/*
-18. 4Sum
-Given an array nums of n integers and an integer target, are there elements a, b, c, and d in nums
-such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
-*/
 func TestPro(t *testing.T) {
 	t.Run("1534. Count Good Triplets", func(t *testing.T) {
 		nums := []int{35, 15, 38, 1, 10, 26}
