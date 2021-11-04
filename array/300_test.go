@@ -4,16 +4,6 @@ import (
 	"testing"
 )
 
-/*
-300. Longest Increasing Subsequence
-Given an unsorted array of integers, find the length of longest increasing subsequence.
-There may be more than one LIS combination, it is only necessary for you to return the length.
-Your algorithm should run in O(n^2) complexity.
-[ref](https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-by-leetcode-soluti/)
-求最长递增子序列，这里不要求连续
-brute force 每个作为开头，然后向后
-*/
-
 func TestPro(t *testing.T) {
 	t.Run("300. Longest Increasing Subsequence", func(t *testing.T) {
 		input := []int{10, 9, 2, 5, 3, 7, 101, 18}
