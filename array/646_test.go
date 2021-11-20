@@ -25,6 +25,8 @@ func TestPro(t *testing.T) {
 
 	使用贪心策略，在所有下一个数对中选择第二个数最小的添加到链表
 	这里 cur 理解为当前的坐标，然后不断判断变化， 就是不断跳动
+
+	这里先按照 right 降序排列，然后就不断比较下一个 pair 的 left 和上一个的 right
 */
 
 func solution(pairs [][]int) int {
