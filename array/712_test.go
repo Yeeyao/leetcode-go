@@ -34,6 +34,7 @@ package array
 	bottom-up dp
 	dp[i][j] 表示到 s1[:i] 和 s2[:j] 的字符串删除的 ASCII 总和。最终结果是 dp[len(a)][len(b)]
 	dp[0][0] = 0 dp[i][i] 从 dp[i-1][j] 或者 dp[i][j-1] 而来，然后，回到定义确定两者需要加上的数值
+		dp[i-1][j] 缺少了 a[i-1] 的数值才能变成 dp[i][j] 同理 dp[i][j-1] 缺少了 b[j-1] 的数值
 	dp[i][j] = min(dp[i][j-1]+a[j-1], dp[i-1][j]+a[i-1])
 */
 func solution(s1, s2 string) int {
