@@ -1,21 +1,5 @@
 package array
 
-import (
-	"testing"
-)
-
-func TestPro(t *testing.T) {
-	t.Run("712. Minimum ASCII Delete Sum for Two Strings", func(t *testing.T) {
-		input := []int{10, 9, 2, 5, 3, 7, 101, 18}
-		want := 4
-		got := solution(input)
-		if got != want {
-			t.Errorf("got: %v, want: %v", got, want)
-		}
-	})
-
-}
-
 /*
 	给定两个字符串 s1, s2 返回最小的 ASCII 和，使得将两个字符串通过删除字母变成相同。仅包含小写字母
 	[ref](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/discuss/642422/for-those-who-have-no-clue-%3A-step-by-step)
@@ -33,17 +17,23 @@ func TestPro(t *testing.T) {
 		2.2 获得基本情况并写递归关系
 			基本：如果 A 或者 B 是空的，则总和是非空的那个的所有字母 如果相同，则总和是 0
 			递归关系：
-				如果 string_a[ith] 等于 string_b[jth] 可以让字符串相同，因此跳过 sum = get_sum_for(string_a ith+1, string_b, jth+1)
-				如果不想等，则
+				如果 string_a[ith] 等于 string_b[jth] 可以让字符串相同，因此跳过 sum = get_sum_for(string_a, ith+1, string_b, jth+1)
+				如果不相等，则
 					1. sum = string_a[ith] 的 ASCII + get_sum_for(string_a ith+1, string_b, jth) // 如果 jth 有用
 					2. sum = string_b[jth] 的 ASCII + get_sum_for(string_a ith, string_b, jth+1) // 如果 ith 有用
-				ans = min(option1, option2)
+					ans = min(option1, option2)
 */
 
 /*
+
+	TODO: 需要再理解
+	sum = min({ sub(a,b,i+1,j) + int(a[i]) ,                // option  1
+				sub(a,b,i,j+1) + int(b[j])});              // option 2
+	dp[i][j] = sum;     // we store our answer at each step
+	// 理解上面的动态规划里面的关系就可以得到
 	bottom-up dp
-	dp[i][j] 表示到 s1[i:] 和 s2[j:] 的字符串删除的 ASCII 总和。最终结果是 dp[len(a)][len(b)]
-	dp[0][0] = 0
+	dp[i][j] 表示到 s1[:i] 和 s2[:j] 的字符串删除的 ASCII 总和。最终结果是 dp[len(a)][len(b)]
+	dp[0][0] = 0 dp[i][i] 从 dp[i-1][j] 或者 dp[i][j-1] 而来，然后，回到定义确定两者需要加上的数值
 	dp[i][j] = min(dp[i][j-1]+a[j-1], dp[i-1][j]+a[i-1])
 */
 func solution(s1, s2 string) int {
@@ -59,13 +49,14 @@ func solution(s1, s2 string) int {
 	for j := 1; j <= m; j++ {
 		dp[0][j] = dp[0][j-1] + int(s2[j-1])
 	}
+	// 这里为何需要这样遍历，这里的直接目的就是构建 dp 数组，进行赋值
 	for i := 1; i <= n; i++ {
 		for j := 1; j <= m; j++ {
 			// 如果当前的字母相等，就不需要加上和
 			if s1[i-1] == s2[j-1] {
 				dp[i][j] = dp[i-1][j-1]
 			} else {
-				// 这里，如果使用 j 则需要删除 i-1，如果使用 i 则需要删除 j - 1
+				// 这里，如果使用 j 则需要删除 i - 1，如果使用 i 则需要删除 j - 1
 				dp[i][j] = min(dp[i-1][j]+int(s1[i-1]), dp[i][j-1]+int(s2[j-1]))
 			}
 		}
@@ -76,6 +67,7 @@ func solution(s1, s2 string) int {
 /*
 	下面的方法，计算 sub 的时候，存在重复的计算，因此使用一个数据结构保存已经计算的结果
 	top-down dynamic
+	两个字符串从 0 下标开始，2^n
 */
 func solution2(s1, s2 string) int {
 	n, m := len(s1), len(s2)
