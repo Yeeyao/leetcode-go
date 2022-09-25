@@ -11,6 +11,7 @@ func deleteDuplicates(head *ListNode) *ListNode {
 	if head == nil {
 		return nil
 	}
+	// prev 作为连接结果链表的临时节点
 	prev := head
 	cur := head.Next
 	for cur != nil {
