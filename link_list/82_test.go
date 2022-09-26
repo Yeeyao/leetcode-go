@@ -27,12 +27,13 @@ func deleteDuplicates(head *ListNode) *ListNode {
 	prev := fHead
 	cur := fHead.Next
 	for cur != nil && cur.Next != nil {
+		// 这里不成立，则 cur 和下一个节点是一定数值相同
 		if cur.Val != cur.Next.Val {
 			prev = prev.Next
 			cur = cur.Next
 			continue
 		}
-		// 跳过重复数值的节点，注意当前的数值是 prev.Next.Val 的数值
+		// 跳过重复数值的节点，注意当前的数值是 prev.Next.Val 的数值(这里记录相同数值节点的开头位置)
 		for cur != nil && prev.Next.Val == cur.Val {
 			cur = cur.Next
 		}
@@ -41,7 +42,7 @@ func deleteDuplicates(head *ListNode) *ListNode {
 	return fHead.Next
 }
 
-// 自己的
+// 自己的 需要时间，不够优雅
 func deleteDuplicates(head *ListNode) *ListNode {
 	if head == nil {
 		return nil
