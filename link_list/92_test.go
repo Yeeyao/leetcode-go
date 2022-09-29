@@ -1,5 +1,7 @@
 package link_list
 
+import "fmt"
+
 /*
 给定单向链表头 head 以及 left, right 位置 其中 left <= right 将 left 到 right 之间的部分节点反转然后返回反转后的链表头
 */
@@ -39,5 +41,52 @@ func reverseBetween(head *ListNode, left int, right int) *ListNode {
 		reversePre.Next = midPrev
 	}
 	reverseHead.Next = midCur
+	return retHead.Next
+}
+
+func reverseBetween(head *ListNode, left int, right int) *ListNode {
+	if head == nil {
+		return head
+	}
+	// 需要找到四个位置
+	// 先找到反转部分的开始的位置和前一个位置
+	retHead := &ListNode{}
+	retHead.Next = head
+	reversePre := &ListNode{}
+	reversePre.Next = head
+	tempLeft := left
+	for head != nil && tempLeft > 0 {
+		if tempLeft > 1 {
+			reversePre = head
+		}
+		head = head.Next
+		tempLeft--
+	}
+	fmt.Println("rp: ", reversePre.Val)
+	fmt.Println("head: ", head.Val)
+	// 这里从反转部分的第二个节点开始反转
+	midPrev := reversePre.Next
+	midCur := head
+	fmt.Println("midPrev: ", midPrev.Val)
+	fmt.Println("midCur: ", midCur.Val)
+	for midCur != nil && right > left {
+		temp := midCur.Next
+		midCur.Next = midPrev
+		midPrev = midCur
+		midCur = temp
+		right--
+	}
+	fmt.Println("midPrev: ", midPrev.Val)
+	fmt.Println("midCur: ", midCur.Val)
+	// 重新连接
+	if left == 1 {
+		retHead.Next = midPrev
+		fmt.Println("retHead.Next: ", retHead.Next.Val)
+		reversePre.Next = midCur
+		fmt.Println("reversePre.Next: ", reversePre.Next.Val)
+	} else {
+		reversePre.Next.Next = midCur
+		reversePre.Next = midPrev
+	}
 	return retHead.Next
 }
