@@ -5,6 +5,18 @@ package link_list
 	两个相邻的节点才需要交换，类似反转链表的部分节点
 
 */
+// 最快，使用递归 这个可以学
+func swapPairs(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	ptr := head.Next
+	ptr_Next := ptr.Next
+	ptr.Next = head
+	head.Next = swapPairs(ptr_Next)
+	return ptr
+}
+
 func swapPairs(head *ListNode) *ListNode {
 	if head == nil {
 		return head
@@ -31,6 +43,9 @@ func swapPairs(head *ListNode) *ListNode {
 			if prevSingle != nil {
 				prevSingle.Next = cur
 			}
+			temp := cur.Next
+			prev = cur
+			cur = temp
 			// 只有偶数的时候需要反转
 		} else {
 			// 这里需要先上一对的奇数节点 Next 指向当前节点，然后才更新
@@ -38,6 +53,8 @@ func swapPairs(head *ListNode) *ListNode {
 				prevSingle.Next = cur
 			}
 			prevSingle = prev
+			// 最后一对元素的奇数位置需要断开和下一个的连接
+			prev.Next = nil
 			temp := cur.Next
 			cur.Next = prev
 			prev = cur
