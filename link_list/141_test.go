@@ -11,6 +11,24 @@ type ListNode struct {
 	Next *ListNode
 }
 
+func hasCycle(head *ListNode) bool {
+	slow, fast := head, head
+	if fast != nil && slow != nil {
+		// 先向前
+		slow = slow.Next
+		// 如果快的已经不能前进了
+		if fast.Next == nil {
+			return false
+		}
+		fast = fast.Next.Next
+		// 然后判断
+		if fast == slow {
+			return true
+		}
+	}
+	return false
+}
+
 /*
 	先判断当前 head 或者 head.Next 是否 nil
 	循环判断条件是两个节点都非 nil

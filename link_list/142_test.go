@@ -21,6 +21,35 @@ type ListNode struct {
 }
 
 /*
+	141 方法先判断是否存在环，然后找环开始位置
+	找到链表环开始的位置，需要先判断是否存在环
+*/
+func detectCycle(head *ListNode) *ListNode {
+	// 这里 fast 是 slow 的两倍速度
+	slow, fast := head, head
+	isCycle := false
+	for slow != nil && fast != nil {
+		slow = slow.Next
+		if fast.Next == nil {
+			return nil
+		}
+		fast = fast.Next.Next
+		if slow == fast {
+			isCycle = true
+		}
+	}
+	if isCycle == false {
+		return nil
+	}
+	fast = head
+	for fast != slow {
+		fast = fast.Next
+		slow = slow.Next
+	}
+	return fast
+}
+
+/*
 	类似 287 题目没有说明一定有循环，所以需要判断
 	先判断头和头的下一个节点是否 nil，是就直接返回 nil
 	这里初始化快慢两个指针，包含循环置 false，循环判断条件是两个指针非 nil
