@@ -10,6 +10,53 @@ type ListNode struct {
 	Next *ListNode
 }
 
+// 使用快慢指针找到中间的位置，然后将前面的部分进行反转，最后比较前后两部分
+func isPalindrome(head *ListNode) bool {
+	if head == nil {
+		return false
+	}
+	slow, fast := head, head
+	// 节点数量是奇数，slow 刚好在中间，是偶数，则 slow 在中间的下一个位置
+	reverseHead := &ListNode{}
+	for slow != nil && fast != nil && fast.Next != nil {
+		reverseHead.Next = slow
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	// 前面的部分进行反转
+	var prev *ListNode
+	cur := head
+	for cur != slow {
+		temp := cur.Next
+		cur.Next = prev
+		prev = cur
+		cur = temp
+	}
+	// 节点数量是奇数，则从反转的开头和 slow 节点的下一个节点开始比较
+	// 节点数量是偶数，则从反转的开头和 slow 节点开始比较
+	// fast 非 nil 表示节点数量是奇数
+	if fast != nil {
+		front := reverseHead.Next
+		for front != nil {
+			if front.Val != slow.Next.Val {
+				return false
+			}
+			front = front.Next
+			slow = slow.Next
+		}
+	} else {
+		front := reverseHead.Next
+		for front != nil {
+			if front.Val != slow.Val {
+				return false
+			}
+			front = front.Next
+			slow = slow.Next
+		}
+	}
+	return true
+}
+
 /*
 	直接将前面的部分翻转，然后从中间向后和从开头到中间逐个比较
 	在找到中间部分的同时将前面部分反转，比较前后两个部分
@@ -42,27 +89,4 @@ func isPalindrome(head *ListNode) bool {
 		head, slow = head.Next, slow.Next
 	}
 	return head == nil
-}
-
-/*
-	这个不行是因为
-*/
-func isPalindrome(head *ListNode) bool {
-	if head == nil || head.Next == nil {
-		return true
-	}
-	rev := &ListNode{}
-	slow, fast := head, head
-	for fast != nil && fast.Next != nil {
-		fast = fast.Next.Next
-		rev, rev.Next, slow = slow, rev, slow.Next
-	}
-	if fast != nil {
-		slow = slow.Next
-	}
-	for rev != nil && rev.Val == slow.Val {
-		rev = rev.Next
-		slow = slow.Next
-	}
-	return rev == nil
 }
