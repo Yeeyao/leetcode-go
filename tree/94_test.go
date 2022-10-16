@@ -15,12 +15,10 @@ func inorderTraversal(root *TreeNode) []int {
 	return res
 }
 
+// 最外层已经判断了 root 为 nil 的情况，因此里层函数不需要判断了
 func helper(root *TreeNode, res *[]int) {
 	if root.Left != nil {
 		helper(root.Left, res)
-	}
-	if root == nil {
-		return
 	}
 	*res = append(*res, root.Val)
 	if root.Right != nil {
