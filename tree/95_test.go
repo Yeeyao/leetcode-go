@@ -24,6 +24,11 @@ func generateTrees(n int) []*TreeNode {
 	return regenerateFromNodeList(nodeList)
 }
 
+/*
+	类似 96 的思路试试，先选择一个 root，数值是 i 然后左边的子树从 1,i-1 右边是 i,n。
+	然后递归分别将左边 1,i-1 的子树进行可能的构造，将 i,n 的子树进行构造，之后将两个可能的子树和 i 一起进行笛卡尔积组合
+	这里构造的一个问题就是应该还是不能直接用指针保存子树？因为他们是不同的。怎么感觉很复杂
+*/
 func generateTreesHelper(n int, usedI map[int]struct{}, tempList []*TreeNode, nodeList *[][]*TreeNode) {
 	// head 重新使用新的地址，但是上一个的指向将会丢失
 	//fmt.Printf("fakeHead addr %p, fakeHead next val: %v\n", &fakeHead, fakeHead.Left.Val)
