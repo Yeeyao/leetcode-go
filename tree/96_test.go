@@ -14,7 +14,7 @@ Given n, how many structurally unique BST's (binary search trees) that store val
 	G(n) = 求和(F(i,n)) 其中 i 从 1 到 n
 	G(0) = 1 G(1) = 1
 选择 i 作为根，则根 i 的所有 BFS 集合是左子树的集合和右子树集合的笛卡尔积(因为这里左子树和右子树可以任意匹配)
-	反过来 F(i, n) = G(i-1) * G(n-i)
+	反过来 F(i, n) = G(i-1) * G(n-i) 因为是 BFS 左子树和右子树数值有限制 G(n) 与具体的树无关，只是表示数量
 因此 G(n) = 求和(G(i - 1) * G(n - i)) 其中 i 从 1 到 n
 即 G(n) = G(0) * G(n) + G(1) + G(n-1) + ... + G(n-1) * G(0)
 递归计算所有的数值
