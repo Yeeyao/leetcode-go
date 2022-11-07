@@ -14,76 +14,43 @@ import "fmt"
 	需要怎么确定当前的节点的父节点是哪个呢？
 */
 func generateTrees(n int) []*TreeNode {
-	nodeList := make([][]*TreeNode, 0)
-	for i := 1; i <= 1; i++ {
-		head := &TreeNode{Val: i}
-		usedI := make(map[int]struct{})
-		usedI[i] = struct{}{}
-		generateTreesHelper(n, usedI, []*TreeNode{head}, &nodeList)
+	if n == 0 {
+		return nil
 	}
-	return regenerateFromNodeList(nodeList)
+	return generateTreesHelper(1, n)
 }
 
 /*
-	类似 96 的思路试试，先选择一个 root，数值是 i 然后左边的子树从 1,i-1 右边是 i,n。
-	然后递归分别将左边 1,i-1 的子树进行可能的构造，将 i,n 的子树进行构造，之后将两个可能的子树和 i 一起进行笛卡尔积组合
-	这里构造的一个问题就是应该还是不能直接用指针保存子树？因为他们是不同的。怎么感觉很复杂
+	类似 96 的思路试试，先选择一个 root，数值是 i 然后左边的子树从 1,i-1 右边是 i+1,n。
+	[ref](https://leetcode.cn/problems/unique-binary-search-trees-ii/solution/bu-tong-de-er-cha-sou-suo-shu-ii-by-leetcode-solut/)
 */
-func generateTreesHelper(n int, usedI map[int]struct{}, tempList []*TreeNode, nodeList *[][]*TreeNode) {
-	// head 重新使用新的地址，但是上一个的指向将会丢失
-	//fmt.Printf("fakeHead addr %p, fakeHead next val: %v\n", &fakeHead, fakeHead.Left.Val)
-	//if fakeHead.Left.Left != nil {
-	//	fmt.Printf("fll addr %p, val: %v\n", &fakeHead.Left.Left, fakeHead.Left.Left.Val)
-	//}
-	//if fakeHead.Left.Right != nil {
-	//	fmt.Printf("flr addr %p, val: %v\n", &fakeHead.Left.Right, fakeHead.Left.Right.Val)
-	//}
-	//fmt.Printf("usedI addr %p, usedI: %v\n", &usedI, usedI)
-	//fmt.Printf("head addr %p, head val: %v\n", &head, head.Val)
-	//fmt.Printf("temp list addr: %p, temp list: %v\n", &tempList, tempList)
-
-	// slice 的坑，需要 copy 一份，map 在更新的时候需要重置，其实还是递归的数据重复判断部分不熟悉
-	isAllUsed := true
-	tempListLen := len(tempList)
-	headVal := 0
-	// 判断 BST 上一个父节点是左边还是在右边其实没有影响
-	if tempListLen == 1 {
-		headVal = tempList[0].Val
-	} else {
-		if tempList[tempListLen-1] != nil {
-			headVal = tempList[tempListLen-1].Val
-		} else {
-			headVal = tempList[tempListLen-2].Val
+func generateTreesHelper(start, end int) []*TreeNode {
+	if start > end {
+		return []*TreeNode{nil}
+	}
+	var allTrees []*TreeNode
+	for i := start; i < end+1; i++ {
+		// 分别构造左右子树集合，本来就是使用小于 i 的数值和大于 i 的数值分别构建左右子树，所以左右子树是一定满足 bfs 的
+		// 因此下面直接笛卡尔积就完事了
+		leftTrees := generateTreesHelper(start, i-1)
+		rightTrees := generateTreesHelper(i+1, end)
+		// 最后进行笛卡尔积
+		for _, left := range leftTrees {
+			for _, right := range rightTrees {
+				// 子树已经是满足 bfs 条件了，只需要判断两个子树的 root 和新的 root
+				allTrees = append(allTrees, &TreeNode{
+					Val:   i,
+					Left:  left,
+					Right: right,
+				})
+			}
 		}
 	}
-
-	for i := 1; i <= n; i++ {
-		setNewVal := false
-		if _, ok := usedI[i]; !ok {
-
-			setNewVal = true
-			isAllUsed = false
-			usedILeft := usedI
-			usedILeft[i] = struct{}{}
-			leftNode := &TreeNode{Val: i}
-			leftTempList := append(tempList, []*TreeNode{leftNode, nil}...)
-			generateTreesHelper(n, usedILeft, leftTempList, nodeList)
-			rightTempList := tempList[:tempListLen]
-			rightTempList = append(rightTempList, []*TreeNode{nil, leftNode}...)
-			generateTreesHelper(n, usedILeft, rightTempList, nodeList)
-		}
-		// 本轮使用了某个元素，需要重置成未使用状态
-		if setNewVal {
-			delete(usedI, i)
-		}
-	}
-	if isAllUsed {
-		*nodeList = append(*nodeList, tempList)
-	}
+	return allTrees
 }
 
 /*
-	这个也不是所有可能的版本，因为遗漏了 head 后面的两个节点都非 nil 的情况
+	TODO: 构造所有可能的树呢？思路是什么？
 */
 func generateTreesAll(n int) []*TreeNode {
 	nodeList := make([][]*TreeNode, 0)
