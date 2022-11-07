@@ -37,7 +37,7 @@ func generateTreesHelper(start, end int) []*TreeNode {
 		// 最后进行笛卡尔积
 		for _, left := range leftTrees {
 			for _, right := range rightTrees {
-				// 子树已经是满足 bfs 条件了，只需要判断两个子树的 root 和新的 root
+				// 子树已经是满足 BST 条件了，只需要判断两个子树的 root 和新的 root
 				allTrees = append(allTrees, &TreeNode{
 					Val:   i,
 					Left:  left,
