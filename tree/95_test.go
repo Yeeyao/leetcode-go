@@ -23,8 +23,11 @@ func generateTrees(n int) []*TreeNode {
 /*
 	类似 96 的思路试试，先选择一个 root，数值是 i 然后左边的子树从 1,i-1 右边是 i+1,n。
 	[ref](https://leetcode.cn/problems/unique-binary-search-trees-ii/solution/bu-tong-de-er-cha-sou-suo-shu-ii-by-leetcode-solut/)
+	这里需要加深理解的话，还是要明确递归的开始条件，停止条件，递归关系三要素
+	这里开始条件是所有需要计算的元素。停止条件是 start > end，递归关系就是对每个元素都可以作为树的根，递归找到其所有可能的左右子树组成笛卡尔积
 */
 func generateTreesHelper(start, end int) []*TreeNode {
+	// 这里需要返回含有 nil 的 slice，因为 i 的左右子树可以是 nil
 	if start > end {
 		return []*TreeNode{nil}
 	}

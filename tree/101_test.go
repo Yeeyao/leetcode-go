@@ -16,15 +16,57 @@ func isSymmetric(root *TreeNode) bool {
 	if root == nil {
 		return true
 	}
-	return helper(root.Left, root.Right)
+	return isSymmetricHelper(root.Left, root.Right)
 }
 
-func helper(left, right *TreeNode) bool {
+/*
+这里其实就是从 root 最开始的两个子树开始，判断它们数值，然后继续判断子树的对称的子树。2 个向下递归判断 4 个，最终到叶子节点
+还是要想到这里递归的处理是 2 个目标子树进行分裂递归判断，每一对分裂成对称的两对，最终比较所有
+*/
+func isSymmetricHelper(left, right *TreeNode) bool {
 	if left == nil && right == nil {
 		return true
 	}
 	if left == nil || right == nil || left.Val != right.Val {
 		return false
 	}
-	return helper(left.Right, right.Left) && helper(left.Left, right.Right)
+	return isSymmetricHelper(left.Right, right.Left) && isSymmetricHelper(left.Left, right.Right)
+}
+
+/*
+	迭代的方式，其实就是将递归的需要判断的子树放到一个自定义的栈里面
+*/
+func isSymmetricIt(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	// 最开始的左右子树
+	if root.Left == nil && root.Right != nil || root.Left != nil && root.Right == nil {
+		return false
+	}
+	if root.Left == nil && root.Right == nil {
+		return true
+	}
+	nodeList := []*TreeNode{root.Left, root.Right}
+	for len(nodeList) > 0 {
+		// 先取出当前的两个对称的节点
+		leftNode, rightNode := nodeList[0], nodeList[1]
+		if leftNode.Val != rightNode.Val {
+			return false
+		}
+		nodeList = nodeList[2:]
+		if leftNode.Left != nil && rightNode.Right != nil {
+			nodeList = append(nodeList, leftNode.Left, rightNode.Right)
+		} else if leftNode.Left == nil && rightNode.Right != nil ||
+			leftNode.Left != nil && rightNode.Right == nil {
+			return false
+		}
+		if leftNode.Right != nil && rightNode.Left != nil {
+			nodeList = append(nodeList, leftNode.Right, rightNode.Left)
+		} else if leftNode.Right == nil && rightNode.Left != nil ||
+			leftNode.Right != nil && rightNode.Left == nil {
+			return false
+		}
+	}
+	return true
 }
