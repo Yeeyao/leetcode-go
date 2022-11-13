@@ -6,6 +6,7 @@ package tree
 	先交换，然后递归调用左右子树
 	最后返回 root
 
+	不能直接将左右子树作为参数交换？因为可能其中一个是 nil，因此还是通过 root 来将它们进行交换才行
 */
 func invertTree(root *TreeNode) *TreeNode {
 	if root == nil {
