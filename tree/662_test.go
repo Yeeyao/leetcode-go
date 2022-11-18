@@ -11,6 +11,40 @@ BFS 使用 stack 保存每层的节点，然后判断每一层计算 width 并�
 从本层最左边开始的节点开始计算。所以说最大宽度的层类似完全二叉树的结构
 */
 
+// 这里可以直接利用树保存在数组的特性进行计算
+// [参考](https://leetcode.cn/problems/maximum-width-of-binary-tree/solution/er-cha-shu-zui-da-kuan-du-by-leetcode-so-9zp3/)
+type nodeWithIndex struct {
+	node  *TreeNode
+	index int
+}
+
+func widthOfBinaryTree(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	maxWidth := 1
+	nodeList := []*nodeWithIndex{&nodeWithIndex{root, 1}}
+	for len(nodeList) > 0 {
+		// 这里每次遍历之前直接计算当前保存的最大距离
+		width := nodeList[len(nodeList)-1].index - nodeList[0].index + 1
+		if width > maxWidth {
+			maxWidth = width
+		}
+		oldLen := len(nodeList)
+		// 当前节点的下一层节点的左右子树 index 分别是 2 * index, 2 * index + 1
+		for i := 0; i < oldLen; i++ {
+			if nodeList[i].node.Left != nil {
+				nodeList = append(nodeList, &nodeWithIndex{nodeList[i].node.Left, 2 * nodeList[i].index})
+			}
+			if nodeList[i].node.Right != nil {
+				nodeList = append(nodeList, &nodeWithIndex{nodeList[i].node.Right, 2*nodeList[i].index + 1})
+			}
+		}
+		nodeList = nodeList[oldLen:]
+	}
+	return maxWidth
+}
+
 // 这里出现一层只有一个节点的情况需要处理，本层之后列表都要清空
 // 这种方法 OOM 了
 func widthOfBinaryTree(root *TreeNode) int {
