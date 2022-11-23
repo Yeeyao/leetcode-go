@@ -21,18 +21,37 @@ package tree
 8 [1]
 
 然后从 target 的距离为 1 的节点找，找到下一个节点的时候，从它的距离为 1 的节点中排除掉到达它的节点，比如 5 找到 3 然后将 3 的距离为 1 的节点中的
-5 排除，避免出现环
+5 排除，避免出现环，因此 5，3，1 一直下去
 */
 
 var distOneMap map[int][]int
+var retList []int
 
 func distanceK(root *TreeNode, target *TreeNode, k int) []int {
 	if k == 0 {
 		return []int{target.Val}
 	}
+	retList = make([]int, 0)
 	distOneMap = make(map[int][]int)
 	genDistOneMap(root)
-	return nil
+	getTarget(-1, target.Val, k)
+	return retList
+}
+
+func getTarget(prev, cur, k int) {
+	if k == 0 {
+		retList = append(retList, cur)
+		return
+	}
+	k--
+	nodeList, ok := distOneMap[cur]
+	if ok {
+		for _, v := range nodeList {
+			if v != prev {
+				getTarget(cur, v, k)
+			}
+		}
+	}
 }
 
 func genDistOneMap(root *TreeNode) {
@@ -68,4 +87,74 @@ func genDistOneMap(root *TreeNode) {
 	}
 	genDistOneMap(root.Left)
 	genDistOneMap(root.Right)
+}
+
+// 最快的答案，感觉思路是类似的，但是我感觉自己的容易理解一点
+type Entry struct {
+	Node *TreeNode
+	Dist int
+}
+
+type nodeSet map[int]*TreeNode
+
+func (s nodeSet) add(node *TreeNode) {
+	s[node.Val] = node
+}
+
+func (s nodeSet) remove(node *TreeNode) {
+	delete(s, node.Val)
+}
+
+// 这里找到每个节点的与之连接的节点，这里是 map slice 元素是 map
+func dfs(root *TreeNode, graph map[int]nodeSet) {
+	if _, ok := graph[root.Val]; !ok {
+		graph[root.Val] = make(nodeSet)
+	}
+	if root.Left != nil {
+		graph[root.Val].add(root.Left)
+		if _, ok := graph[root.Left.Val]; !ok {
+			graph[root.Left.Val] = make(nodeSet)
+		}
+		graph[root.Left.Val].add(root)
+		dfs(root.Left, graph)
+	}
+	if root.Right != nil {
+		graph[root.Val].add(root.Right)
+		if _, ok := graph[root.Right.Val]; !ok {
+			graph[root.Right.Val] = make(nodeSet)
+		}
+		graph[root.Right.Val].add(root)
+		dfs(root.Right, graph)
+	}
+}
+
+func distanceK(root *TreeNode, target *TreeNode, k int) []int {
+	// 1. Build a graph by traversing the tree
+	graph := make(map[int]nodeSet)
+	dfs(root, graph)
+
+	// 2. Run DFS w/ disconnecting edges to the parent after adding to the queue
+	ret := make([]int, 0)
+	q := make([]Entry, 0)
+	// 从 target 出发
+	q = append(q, Entry{target, 0})
+	for len(q) > 0 {
+		curr := q[0]
+		q = q[1:]
+		// 当前的节点到 target 距离等于 k 就保存
+		if curr.Dist == k {
+			ret = append(ret, curr.Node.Val)
+		} else if curr.Dist > k {
+			// 如果大于就跳过
+			break
+		} else {
+			// 添加当前节点的相邻的节点，然后 dist 在当前的节点的基础上 + 1
+			for nbrKey, nbrNode := range graph[curr.Node.Val] {
+				q = append(q, Entry{nbrNode, curr.Dist + 1})
+				// Disconnect the edge to the parent 如注释，这里断开和父母节点的连接
+				graph[nbrKey].remove(curr.Node)
+			}
+		}
+	}
+	return ret
 }
