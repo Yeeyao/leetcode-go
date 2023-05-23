@@ -35,7 +35,7 @@ import (
 
 */
 
-// 因为两个都是使用 int slice 因此小顶堆需要将元素取相反数再入堆
+// 因为两个都是使用 int slice(元素按照大小升序排列) 因此小顶堆需要将元素取相反数再入堆
 type MedianFinder struct {
 	MinHeap hp
 	MaxHeap hp
@@ -69,6 +69,7 @@ func (this *MedianFinder) FindMedian() float64 {
 	return float64(-minH.IntSlice[0]+maxH.IntSlice[0]) / 2
 }
 
+// 利用 heap.Push heap.Pop 所需要实现的 interface
 type hp struct {
 	sort.IntSlice
 }
