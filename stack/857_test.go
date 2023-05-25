@@ -27,6 +27,28 @@ class Solution:
                 k -= 1
             ans = min(ans, total)
         return ans
+
+固定堆思路，这里使用 effs[(q/w, q)] 两元组，同样 q/w 按照降序排列。total 保存当前的总工作量，然后 h 保存窗口经过的每个工人的工作量，
+这里负数是方便窗口移动的时候将原来窗口的最左边的工人的工作量直接相加进行移除，因为是按照 q/w 降序排列，因此窗口达到 k 个的时候，只需要取
+窗口最右边的元素的 q/w 就是最小的就直接和总工作量计算得到总工资，窗口移动的时候减去窗口左边的工人的工作量，加上下一个工人的工作量
+可以在一个循环里面完成
+
+class Solution:
+    def mincostToHireWorkers(self, quality: List[int], wage: List[int], K: int) -> float:
+        effs = [(q / w, q) for q, w in zip(quality, wage)]
+        effs.sort(key=lambda a: -a[0])
+        ans = float('inf')
+        h = []
+        total = 0
+        for rate, q in effs:
+            heapq.heappush(h, -q)
+            total += q
+            if len(h) > K:
+                total += heapq.heappop(h)
+            if len(h) == K:
+                ans = min(ans, total / rate)
+        return ans
+
 */
 
 /*
