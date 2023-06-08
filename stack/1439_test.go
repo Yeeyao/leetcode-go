@@ -61,9 +61,9 @@ func kthSmallest(mat [][]int, k int) int {
 		minSpSum := minSp.sum
 		misSpPositionList := minSp.positionList
 		// 这里每一行的列索引都需要移动然后将本行的列索引移动后的结果入堆
-		for row, pos := range misSpPositionList {
+		for row, posColIndex := range misSpPositionList {
 			// 只要没有到最后就每行的指针都移动一个位置
-			if pos < n-1 {
+			if posColIndex < n-1 {
 				misPosListTemp := make([]int, m)
 				copy(misPosListTemp, misSpPositionList)
 				misPosListTemp[row]++
