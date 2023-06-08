@@ -56,10 +56,11 @@ func kthSmallest(mat [][]int, k int) int {
 	// 循环 k 次
 	minSp := &sumAndPositionList{}
 	for i := 0; i < k; i++ {
+		// 每次弹出当前最小的
 		minSp = heap.Pop(sumPos).(*sumAndPositionList)
 		minSpSum := minSp.sum
 		misSpPositionList := minSp.positionList
-		// 当前的总和的行指针列表每个都需要判断移动
+		// 这里每一行的列索引都需要移动然后将本行的列索引移动后的结果入堆
 		for row, pos := range misSpPositionList {
 			// 只要没有到最后就每行的指针都移动一个位置
 			if pos < n-1 {
@@ -94,8 +95,8 @@ type sumPosStruct struct {
 }
 
 type sumAndPositionList struct {
-	sum          int
-	positionList []int
+	sum          int   // 当前的和
+	positionList []int // 当前所有行对应的列的下标
 }
 
 func (sp *sumPosStruct) Less(i, j int) bool {
