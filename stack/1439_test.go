@@ -30,7 +30,8 @@ func TestPro(t *testing.T) {
 
 堆配合元组的多路归并方法
 
-TODO: out of range 和错误
+times: 1
+
 */
 
 func kthSmallest(mat [][]int, k int) int {
