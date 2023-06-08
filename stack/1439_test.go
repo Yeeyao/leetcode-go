@@ -3,7 +3,21 @@ package stack
 import (
 	"container/heap"
 	"fmt"
+	"testing"
 )
+
+func TestPro(t *testing.T) {
+	t.Run("leetcode 1439. Find the Kth Smallest Sum of a Matrix With Sorted Rows", func(t *testing.T) {
+		mat := [][]int{{1, 3, 11}, {2, 4, 6}}
+		k := 9
+		got := kthSmallest(mat, k)
+		want := 17
+		if got != want {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+
+	})
+}
 
 /*
 给你一个 m n 的矩阵 mat，以及一个整数 k ，矩阵中的每一行都以非递减的顺序排列。
@@ -44,18 +58,22 @@ func kthSmallest(mat [][]int, k int) int {
 	for i := 0; i < k; i++ {
 		minSp = heap.Pop(sumPos).(*sumAndPositionList)
 		minSpSum := minSp.sum
+		misSpPositionList := minSp.positionList
 		// 当前的总和的行指针列表每个都需要判断移动
-		for rowCol, v := range minSp.positionList {
+		for row, pos := range misSpPositionList {
 			// 只要没有到最后就每行的指针都移动一个位置
-			if v < n {
-				misPosListTemp := minPosList
-				misPosListTemp[rowCol]++
+			if pos < n-1 {
+				misPosListTemp := make([]int, m)
+				copy(misPosListTemp, misSpPositionList)
+				misPosListTemp[row]++
+				addSum := minSpSum - mat[row][misPosListTemp[row]-1] + mat[row][misPosListTemp[row]]
 				if _, ok := seenMap[getStrFromPositionList(misPosListTemp)]; !ok {
 					seenMap[getStrFromPositionList(misPosListTemp)] = struct{}{}
-					heap.Push(sumPos, &sumAndPositionList{
-						sum:          minSpSum - minPosList[rowCol] + minPosList[rowCol] + 1,
+					addSapl := &sumAndPositionList{
+						sum:          addSum,
 						positionList: misPosListTemp,
-					})
+					}
+					heap.Push(sumPos, addSapl)
 				}
 			}
 		}
@@ -80,10 +98,6 @@ type sumAndPositionList struct {
 	positionList []int
 }
 
-func (sp *sumPosStruct) Len() int {
-	return len(sp.spList)
-}
-
 func (sp *sumPosStruct) Less(i, j int) bool {
 	return sp.spList[i].sum < sp.spList[j].sum
 }
@@ -92,6 +106,10 @@ func (sp *sumPosStruct) Swap(i, j int) {
 	temp := sp.spList[i]
 	sp.spList[i] = sp.spList[j]
 	sp.spList[j] = temp
+}
+
+func (sp *sumPosStruct) Len() int {
+	return len(sp.spList)
 }
 
 func (sp *sumPosStruct) Push(v interface{}) {
