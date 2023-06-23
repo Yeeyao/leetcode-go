@@ -1,6 +1,8 @@
 package stack
 
-import "container/heap"
+import (
+	"container/heap"
+)
 
 /*
 给你一个由 n 个正整数组成的数组 nums 。
@@ -24,7 +26,7 @@ import "container/heap"
 	同时，如果某个目标数值当前的偏移量比当前的最小偏移量的目标数值还大，则可以提前终止，这时记录的是终止的比偏移量小的数值
 
 这里转换一下思路，则数组中每个元素都可以通过操作得到一个它可以转变的数组，因此这里的题目就变成了从 n 个数组每个数组选择一个元素组成新的数组，
-使得新数组的偏移值最小，这个就有点类似 632 了，可以说是一样的
+使得新数组的偏移值最小，这个就有点类似 632 了，这里要求分解的数组元素是非降序排列。可以说是一样的
 */
 
 func minimumDeviation(nums []int) int {
@@ -35,9 +37,15 @@ func minimumDeviation(nums []int) int {
 			eleList[i] = []int{v, v * 2}
 		} else {
 			var ele []int
-			for v%2 == 0 && v/2 > 0 {
+			for v%2 == 0 && v > 0 {
 				ele = append(ele, v)
 				v = v / 2
+			}
+			// 最后的奇数需要加上
+			ele = append(ele, v)
+			// 原来是升序的，需要反转
+			for i, j := 0, len(ele)-1; i < j; i, j = i+1, j-1 {
+				ele[i], ele[j] = ele[j], ele[i]
 			}
 			eleList[i] = ele
 		}
