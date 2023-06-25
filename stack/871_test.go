@@ -67,8 +67,9 @@ type stationInfo struct {
 	gasVolume int
 }
 
+// 这里需要加油量大的在堆顶
 func (sp *gasStation) Less(i, j int) bool {
-	return sp.stationInfoList[i].gasVolume < sp.stationInfoList[j].gasVolume
+	return sp.stationInfoList[i].gasVolume > sp.stationInfoList[j].gasVolume
 }
 
 func (sp *gasStation) Swap(i, j int) {
