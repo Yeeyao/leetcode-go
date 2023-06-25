@@ -1,5 +1,7 @@
 package stack
 
+import "container/heap"
+
 /*
 	最低加油次数
 	汽车从起点出发驶向目的地，该目的地位于出发位置东面 target 英里处。
@@ -11,15 +13,49 @@ package stack
 	为了最少加油次数，则不需要加油就不加，什么时候必须加油则是如果不加油就不能到达下一个目的地的时候
 	这里如果必须加油，在哪里加油呢？就在含有最大汽油的油站加油，这样转换为动态求极值的场景，适合使用堆
 
+	这里判断油量是判断到达下一个加油站的距离使用的油量
 	算法描述
-		每经过一个加油站，将它的油量加到堆里
+		每经过一个加油站，将它的油量加到堆里，经过才会入堆
 		往前开，只要油量大于 0 就继续开
 		如果油量小于 0 从堆中获取最大的油量加到油箱，如果还是小于 0 就继续找下一个
 		如果加完油大于 0 继续开，重复步骤。否则返回 -1 表示无法到达目的地
 */
 
 func minRefuelStops(target int, startFuel int, stations [][]int) int {
-
+	// 这里将目标也放入加油站
+	gs := &gasStation{
+		stationInfoList: []*stationInfo{{target, 0}},
+	}
+	addTimes := 0
+	leftFuel := startFuel
+	// 需要用来判断能否到达加油站
+	runDistance := 0
+	for _, v := range stations {
+		distance, fuel := v[0], v[1]
+		// 本次需要走的距离 = 加油站的距离 - 已经走过的距离
+		leftFuel -= distance - runDistance
+		// 能走到加油站就将当前的加入到 heap
+		if leftFuel >= 0 {
+			heap.Push(gs, &stationInfo{
+				distance:  distance,
+				gasVolume: fuel,
+			})
+		} else {
+			// 不能走到这个加油站则继续加油
+			for leftFuel <= 0 && gs.Len() > 0 {
+				addGs := heap.Pop(gs).(*stationInfo)
+				leftFuel += addGs.gasVolume
+				addTimes++
+			}
+		}
+		// 已经走过的距离等于这个加油站的距离
+		runDistance = distance
+		// 上面加完或者没有加，剩余燃料不够就表示不够了
+		if leftFuel < 0 {
+			return -1
+		}
+	}
+	return addTimes
 }
 
 type gasStation struct {
@@ -27,8 +63,8 @@ type gasStation struct {
 }
 
 type stationInfo struct {
-	gasVolume int
 	distance  int
+	gasVolume int
 }
 
 func (sp *gasStation) Less(i, j int) bool {
