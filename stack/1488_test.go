@@ -23,11 +23,16 @@ i = 0 表示今天湖泊没有下雨，可以选择一个湖泊抽空
 	如果 rains 大于 0 表示有一个湖泊下雨，看它是否已经洪水泛滥（之前是否下雨）。使用 lake 记录每个湖泊情况，0 表示没水 1 表示有水，lake[i] = 1 表示已经下雨
 	如果当前湖泊下雨了，则到 sunny 数组找一个晴天抽干它，只需要保持 lakes[i] = 1 就可以了
 
+	这里的力扣加加题解有问题，0,1,1 例子，第一个晴天不能被后面使用的
 
 */
 
 func avoidFlood(rains []int) []int {
 	ans := make([]int, len(rains))
+	// 因为存在随机选择排空湖泊的情况，所以这里默认都设置为 1
+	for i := 0; i < len(rains); i++ {
+		ans[i] = 1
+	}
 	// 记录湖泊编号的水量情况
 	lakeMap := make(map[int]int)
 	// 记录晴天的天数
@@ -41,9 +46,9 @@ func avoidFlood(rains []int) []int {
 				if len(sunny) == 0 {
 					return []int{}
 				}
-				// 否则将之前的晴天去掉，记录下这天抽水的湖泊
-				emptyDay := sunny[len(sunny)-1]
-				sunny = sunny[:len(sunny)-1]
+				// 否则将之前的晴天去掉，从最早的开始去掉，记录下这天抽水的湖泊
+				emptyDay := sunny[0]
+				sunny = sunny[1:]
 				ans[emptyDay] = lakeNum
 			}
 			// 将湖泊记录为水满
