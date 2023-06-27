@@ -42,38 +42,43 @@ func avoidFlood(rains []int) []int {
 		if lakeNum > 0 {
 			ans[i] = -1
 			// 当前的湖泊已经有水了，找之前的晴天中可以抽水的一天
-			lakeRainDay := lakeMap[lakeNum]
+			lakeRainDay := lakeMap[lakeNum-1]
 			if lakeRainDay > 0 {
-				// 如果之前没有晴天就直接返回
 				if len(sunny) == 0 {
 					return []int{}
 				}
-				// 否则将之前的晴天去掉，这里需要找到上次满的之后的晴天，可以从最后找
-				// 这里选择哪个晴天需要考虑吗？只能选择水满的日期的下一天
-
 				lastSunnyDay := sunny[len(sunny)-1]
 				// 最后的晴天也比湖泊第一次下雨的时候天数小表示湖泊第一次下雨之后没有晴天可以选择
 				if lastSunnyDay <= lakeRainDay {
 					return []int{}
 				}
-				emptyDay := sunny[len(sunny)-1] - 1
-				sunny = sunny[:len(sunny)-1]
-				ans[emptyDay] = lakeNum
+
+				// 返回最后表示找不到
+				j := getNextDay(lakeRainDay, sunny)
+				if j == len(sunny) {
+					return []int{}
+				}
+				sunny = append(sunny[:j], sunny[j+1:]...)
+				ans[sunny[j]] = lakeNum
 			}
-			// 将湖泊记录为水满，这里记录天数，从 1 开始
-			lakeMap[lakeNum] = i + 1
+			// 将湖泊记录为水满，这里记录天数，湖泊编号从 0 开始
+			lakeMap[lakeNum-1] = i
 		} else {
-			sunny = append(sunny, i+1)
+			sunny = append(sunny, i)
 		}
 	}
 	return ans
 }
 
-func getNextDay(day int, sunny []int) []int {
-	for i, v := range sunny {
-		if v > day {
-			return append(sunny[:i], sunny[i+1:]...)
+func getNextDay(day int, sunny []int) int {
+	left, right := 0, len(sunny)-1
+	for left < right {
+		mid := left + (right-left)/2
+		if day > sunny[mid] {
+			left = mid + 1
+		} else {
+			right = mid
 		}
 	}
-	return sunny
+	return left
 }
