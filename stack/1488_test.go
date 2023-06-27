@@ -23,7 +23,8 @@ i = 0 表示今天湖泊没有下雨，可以选择一个湖泊抽空
 	如果 rains 大于 0 表示有一个湖泊下雨，看它是否已经洪水泛滥（之前是否下雨）。使用 lake 记录每个湖泊情况，0 表示没水 1 表示有水，lake[i] = 1 表示已经下雨
 	如果当前湖泊下雨了，则到 sunny 数组找一个晴天抽干它，只需要保持 lakes[i] = 1 就可以了
 
-	这里的力扣加加题解有问题，0,1,1 例子，第一个晴天不能被后面使用的
+	这里的力扣加加题解有问题，0,1,1 例子，第一个晴天不能被后面使用的，本质问题是第二次降水的时候只能用两次之间的晴天来抽干第一次的降水
+	因此这里湖泊记录下上次的降水的日期，然后需要抽空的时候找这个日期之后的晴天才行
 
 */
 
@@ -41,21 +42,38 @@ func avoidFlood(rains []int) []int {
 		if lakeNum > 0 {
 			ans[i] = -1
 			// 当前的湖泊已经有水了，找之前的晴天中可以抽水的一天
-			if lakeMap[lakeNum] == 1 {
+			lakeRainDay := lakeMap[lakeNum]
+			if lakeRainDay > 0 {
 				// 如果之前没有晴天就直接返回
 				if len(sunny) == 0 {
 					return []int{}
 				}
-				// 否则将之前的晴天去掉，从最早的开始去掉，记录下这天抽水的湖泊
-				emptyDay := sunny[0]
-				sunny = sunny[1:]
+				// 否则将之前的晴天去掉，这里需要找到上次满的之后的晴天，可以从最后找
+				// 这里选择哪个晴天需要考虑吗？只能选择水满的日期的下一天
+
+				lastSunnyDay := sunny[len(sunny)-1]
+				// 最后的晴天也比湖泊第一次下雨的时候天数小表示湖泊第一次下雨之后没有晴天可以选择
+				if lastSunnyDay <= lakeRainDay {
+					return []int{}
+				}
+				emptyDay := sunny[len(sunny)-1] - 1
+				sunny = sunny[:len(sunny)-1]
 				ans[emptyDay] = lakeNum
 			}
-			// 将湖泊记录为水满
-			lakeMap[lakeNum] = 1
+			// 将湖泊记录为水满，这里记录天数，从 1 开始
+			lakeMap[lakeNum] = i + 1
 		} else {
-			sunny = append(sunny, i)
+			sunny = append(sunny, i+1)
 		}
 	}
 	return ans
+}
+
+func getNextDay(day int, sunny []int) []int {
+	for i, v := range sunny {
+		if v > day {
+			return append(sunny[:i], sunny[i+1:]...)
+		}
+	}
+	return sunny
 }
