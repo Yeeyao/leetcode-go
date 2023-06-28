@@ -1,5 +1,7 @@
 package stack
 
+import "sort"
+
 /*
 给定下雨的数组 rains, rains[i] 表示今天第 i 个湖泊下雨情况，i 大于 0 表示第 i 个湖泊今天下雨。
 i = 0 表示今天湖泊没有下雨，可以选择一个湖泊抽空
@@ -29,41 +31,33 @@ i = 0 表示今天湖泊没有下雨，可以选择一个湖泊抽空
 */
 
 func avoidFlood(rains []int) []int {
-	ans := make([]int, len(rains))
-	// 因为存在随机选择排空湖泊的情况，所以这里默认都设置为 1
-	for i := 0; i < len(rains); i++ {
-		ans[i] = 1
-	}
-	// 记录湖泊编号的水量情况
-	lakeMap := make(map[int]int)
+	lakeRainMap := make(map[int]int)
 	// 记录晴天的天数
-	var sunny []int
+	var ans, sunny []int
 	for i, lakeNum := range rains {
 		if lakeNum > 0 {
-			ans[i] = -1
+			// 这里可以第 0 天下雨，所以这个判断有问题
+			//lakeRainDay := lakeRainMap[lakeNum]
+			//if lakeRainDay > 0 {
 			// 当前的湖泊已经有水了，找之前的晴天中可以抽水的一天
-			lakeRainDay := lakeMap[lakeNum-1]
-			if lakeRainDay > 0 {
-				if len(sunny) == 0 {
+			if lakeRainDay, ok := lakeRainMap[lakeNum]; ok {
+				sunnyLen := len(sunny)
+				findIndex := sort.SearchInts(sunny, lakeRainDay)
+				// 找不到下一天
+				if findIndex == sunnyLen {
 					return []int{}
 				}
-				lastSunnyDay := sunny[len(sunny)-1]
-				// 最后的晴天也比湖泊第一次下雨的时候天数小表示湖泊第一次下雨之后没有晴天可以选择
-				if lastSunnyDay <= lakeRainDay {
-					return []int{}
-				}
-
-				// 返回最后表示找不到
-				j := getNextDay(lakeRainDay, sunny)
-				if j == len(sunny) {
-					return []int{}
-				}
-				sunny = append(sunny[:j], sunny[j+1:]...)
-				ans[sunny[j]] = lakeNum
+				// 这一个晴天用掉了
+				ans[sunny[findIndex]] = lakeNum
+				copy(sunny[findIndex:sunnyLen-1], sunny[findIndex+1:sunnyLen])
+				sunny = sunny[:sunnyLen-1]
 			}
-			// 将湖泊记录为水满，这里记录天数，湖泊编号从 0 开始
-			lakeMap[lakeNum-1] = i
+			// 将湖泊记录为水满，这里记录天数
+			lakeRainMap[lakeNum] = i
+			ans = append(ans, -1)
 		} else {
+			// 晴天默认使用 1 号
+			ans = append(ans, 1)
 			sunny = append(sunny, i)
 		}
 	}
