@@ -1,6 +1,7 @@
 package array
 
 import (
+	"container/heap"
 	"reflect"
 	"sort"
 	"testing"
@@ -53,4 +54,62 @@ func topKFrequent(nums []int, k int) []int {
 		res = append(res, freqSlice[i][0])
 	}
 	return res
+}
+
+/*
+	使用堆的方法
+*/
+func topKFrequentHeap(nums []int, k int) []int {
+	freqMap := make(map[int]int, 0)
+	for _, v := range nums {
+		freqMap[v]++
+	}
+
+	h := eleWithCountSp{epList: []*eleWithCount{}}
+	for ele, count := range freqMap {
+		heap.Push(&h, &eleWithCount{
+			value: ele,
+			count: count,
+		})
+	}
+	var res []int
+	for ; k > 0; k-- {
+		topEwc := heap.Pop(&h).(*eleWithCount)
+		res = append(res, topEwc.value)
+	}
+	return res
+}
+
+type eleWithCountSp struct {
+	epList []*eleWithCount
+}
+
+type eleWithCount struct {
+	value int
+	count int
+}
+
+// 这里将频率大的放在前面
+func (sp *eleWithCountSp) Less(i, j int) bool {
+	return sp.epList[i].count > sp.epList[j].count
+}
+
+func (sp *eleWithCountSp) Swap(i, j int) {
+	temp := sp.epList[j]
+	sp.epList[j] = sp.epList[i]
+	sp.epList[i] = temp
+}
+
+func (sp *eleWithCountSp) Len() int {
+	return len(sp.epList)
+}
+
+func (sp *eleWithCountSp) Push(v interface{}) {
+	sp.epList = append(sp.epList, v.(*eleWithCount))
+}
+
+func (sp *eleWithCountSp) Pop() interface{} {
+	top := sp.epList[len(sp.epList)-1]
+	sp.epList = sp.epList[:len(sp.epList)-1]
+	return top
 }
