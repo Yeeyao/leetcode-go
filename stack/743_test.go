@@ -6,7 +6,80 @@ import "container/heap"
 	给定网络的 n 个节点，标号从 1 到 n 同时给定次数 times 数组，times[i] = (ui, vi, wi) 表示从 ui 到 vi 节点需要的时间是 wi。
 	我们会从给定节点 k 发送一个信号，返回所有的 n 个节点收到信号的所需的最小时间。如果不可能全都收到就返回 -1
 	这里其实是计算消耗时间最长的最短路径
+	TODO: 需要优化，记录已经计算的路径
 */
+
+func networkDelayTimeOpt(times [][]int, n int, k int) int {
+	// 需要构造 graph
+	graph := make(map[int][]*gn)
+	var to int
+	for _, v := range times {
+		start := v[0]
+		next := v[1]
+		cost := v[2]
+		if _, ok := graph[start]; ok {
+			graph[start] = append(graph[start], &gn{
+				pos:  next,
+				cost: cost,
+			})
+		} else {
+			graph[start] = []*gn{
+				{next, cost},
+			}
+		}
+		to = next
+	}
+
+	dist := dijkstraOpt(graph, k-1, to)
+	// 表示有节点不能访问
+	if len(dist) < n {
+		return -1
+	}
+
+	maxMinWeight := -1
+	for _, v := range dist {
+		if v > maxMinWeight {
+			maxMinWeight = v
+		}
+	}
+	return maxMinWeight
+	// 对应 dijkstra 开始是 k 结束是所有的节点，然后取其中的最大值
+}
+
+// graph[i][j] = c 表示从 i 到 j 需要 cost c
+// 对这题来说，可以记录开始节点到每个节点的最短距离避免重复计算
+func dijkstraOpt(graph map[int][]*gn, start, end int) map[int]int {
+	// 先将开始节点放入
+	h := &graphNodes{gnList: []*gn{}}
+	// 从 start 到 start cost 0
+	h.Push(&gn{
+		pos:  start,
+		cost: 0,
+	})
+	dist := make(map[int]int, 0)
+	// 记录已经访问的节点
+	for h.Len() > 0 {
+		topNodes := heap.Pop(h).(*gn)
+		pos := topNodes.pos
+		cost := topNodes.cost
+		// 已经遍历过就跳过，因为 pop 出来的是最小的
+		if _, ok := dist[pos]; ok {
+			continue
+		}
+		dist[pos] = cost
+		// 如果已经遇到目标的节点了，直接返回
+		for _, next := range graph[pos] {
+			if _, ok := dist[next.pos]; ok {
+				continue
+			}
+			heap.Push(h, &gn{
+				pos:  next.pos,
+				cost: cost + next.cost,
+			})
+		}
+	}
+	return dist
+}
 
 func networkDelayTime(times [][]int, n int, k int) int {
 	// 需要构造 graph
@@ -43,8 +116,6 @@ func networkDelayTime(times [][]int, n int, k int) int {
 	return maxMinWeight
 	// 对应 dijkstra 开始是 k 结束是所有的节点，然后取其中的最大值
 }
-
-// graph[i][j] = c 表示从 i 到 j 需要 cost c
 
 func dijkstra(graph map[int][]*gn, start, end int) int {
 	// 先将开始节点放入
