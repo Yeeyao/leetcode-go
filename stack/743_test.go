@@ -1,18 +1,18 @@
 package stack
 
-import "container/heap"
+import (
+	"container/heap"
+)
 
 /*
 	给定网络的 n 个节点，标号从 1 到 n 同时给定次数 times 数组，times[i] = (ui, vi, wi) 表示从 ui 到 vi 节点需要的时间是 wi。
 	我们会从给定节点 k 发送一个信号，返回所有的 n 个节点收到信号的所需的最小时间。如果不可能全都收到就返回 -1
 	这里其实是计算消耗时间最长的最短路径
-	TODO: 需要优化，记录已经计算的路径
 */
 
 func networkDelayTimeOpt(times [][]int, n int, k int) int {
 	// 需要构造 graph
 	graph := make(map[int][]*gn)
-	var to int
 	for _, v := range times {
 		start := v[0]
 		next := v[1]
@@ -27,10 +27,9 @@ func networkDelayTimeOpt(times [][]int, n int, k int) int {
 				{next, cost},
 			}
 		}
-		to = next
 	}
-
-	dist := dijkstraOpt(graph, k-1, to)
+	// 这里只需要执行一次，遇到不可达的节点这里也会继续执行，所以和原来的算法对比需要看不可达节点的情况
+	dist := dijkstraOpt(graph, k, n)
 	// 表示有节点不能访问
 	if len(dist) < n {
 		return -1
@@ -43,11 +42,9 @@ func networkDelayTimeOpt(times [][]int, n int, k int) int {
 		}
 	}
 	return maxMinWeight
-	// 对应 dijkstra 开始是 k 结束是所有的节点，然后取其中的最大值
 }
 
-// graph[i][j] = c 表示从 i 到 j 需要 cost c
-// 对这题来说，可以记录开始节点到每个节点的最短距离避免重复计算
+// 这里就是直接从开始节点将整个图进行遍历，将所有节点如果能通的就记录下最小 cost
 func dijkstraOpt(graph map[int][]*gn, start, end int) map[int]int {
 	// 先将开始节点放入
 	h := &graphNodes{gnList: []*gn{}}
