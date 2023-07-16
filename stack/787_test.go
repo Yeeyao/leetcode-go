@@ -2,6 +2,7 @@ package stack
 
 import (
 	"container/heap"
+	"fmt"
 )
 
 /*
@@ -50,14 +51,14 @@ func dijkstra(graph map[int][]*gn, start, end, k int) int {
 		step: 0,
 	})
 	// 记录已经访问的节点，这里需要记录 step，因为相同的 to 节点，不同的 step 路径是不同的
-	visitedMap := make(map[*toAndStep]interface{})
+	visitedMap := make(map[string]interface{})
 	for h.Len() > 0 {
 		topNodes := heap.Pop(h).(*gn)
 		pos := topNodes.pos
 		cost := topNodes.cost
 		step := topNodes.step
 		// 已经遍历过就跳过
-		ts := &toAndStep{to: pos, step: step}
+		ts := fmt.Sprintf("%d,%d", pos, step)
 		if _, ok := visitedMap[ts]; ok {
 			continue
 		}
@@ -71,10 +72,7 @@ func dijkstra(graph map[int][]*gn, start, end, k int) int {
 			return cost
 		}
 		for _, next := range graph[pos] {
-			ts = &toAndStep{
-				to:   next.pos,
-				step: step + 1,
-			}
+			ts = fmt.Sprintf("%d,%d", next.pos, step+1)
 			if _, ok := visitedMap[ts]; ok {
 				continue
 			}
