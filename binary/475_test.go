@@ -1,6 +1,8 @@
 package binary
 
-import "sort"
+import (
+	"sort"
+)
 
 /*
 冬天来了，你需要设计一个标准的加热器来加热所有的房子，所有的加热器有相同的加热半径。
@@ -36,19 +38,15 @@ func findRadius(houses []int, heaters []int) int {
 	var prevPos int
 	for _, v := range heaters {
 		if prevPos != 0 {
-			// 怎么加速找到中间的房子呢
-			for _, h := range houses {
-				// 在加热器之间的房子
-				if h <= prevPos {
-					continue
-				}
-				if h >= v {
-					break
-				}
+			// 在加热器之间的房子，这里可以用二分查找快速找到开始的位置和结束的位置，只需要遍历这部分就可以了
+			// 目标位置需要小于等于数值，因此是 寻找最右插入位置 这个等价于寻找**最右满足 <= target 的位置的右邻居**
+			// 找到开始位置之后向后遍历
+			i := bsr(houses, prevPos)
+			for ; i < len(houses) && houses[i] < v; i++ {
 				// 房子到加热器的距离使用的是较小的
-				tempDist := h - prevPos
-				if v-h < tempDist {
-					tempDist = v - h
+				tempDist := houses[i] - prevPos
+				if v-houses[i] < tempDist {
+					tempDist = v - houses[i]
 				}
 				if tempDist > radius {
 					radius = tempDist
@@ -57,11 +55,23 @@ func findRadius(houses []int, heaters []int) int {
 		}
 		prevPos = v
 	}
-
 	// 最右边处理
 	rightMostRadius := houses[len(houses)-1] - heaters[len(heaters)-1]
 	if rightMostRadius > radius {
 		radius = rightMostRadius
 	}
 	return radius
+}
+
+func bsr(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right {
+		mid := left + (right-left)/2
+		if nums[mid] <= target {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+	return left
 }
