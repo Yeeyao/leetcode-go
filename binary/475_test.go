@@ -32,11 +32,28 @@ func findRadius(houses []int, heaters []int) int {
 	if leftMostRadius > radius {
 		radius = leftMostRadius
 	}
-	// 中间部分，两个加热器到
+	// 中间部分，每个房子分别计算到两个加热器的距离然后取较小的就是需要的半径，最后和当前最大半径比较更新
 	var prevPos int
 	for _, v := range heaters {
-		// 找到
 		if prevPos != 0 {
+			// 怎么加速找到中间的房子呢
+			for _, h := range houses {
+				// 在加热器之间的房子
+				if h <= prevPos {
+					continue
+				}
+				if h >= v {
+					break
+				}
+				// 房子到加热器的距离使用的是较小的
+				tempDist := h - prevPos
+				if v-h < tempDist {
+					tempDist = v - h
+				}
+				if tempDist > radius {
+					radius = tempDist
+				}
+			}
 		}
 		prevPos = v
 	}
@@ -46,5 +63,5 @@ func findRadius(houses []int, heaters []int) int {
 	if rightMostRadius > radius {
 		radius = rightMostRadius
 	}
-
+	return radius
 }
