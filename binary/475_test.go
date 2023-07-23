@@ -1,6 +1,7 @@
 package binary
 
 import (
+	"math"
 	"sort"
 )
 
@@ -23,7 +24,37 @@ import (
 - 两个加热器之间是否有房子这个要怎么快速判断呢
 - 房子和加热器的关系最左边和最右边的单独判断一下就好了
 
+为了得到距离每个房屋最近的供暖器，可以将供暖器数组 heaters 排序，然后通过二分查找得到距离最近的供暖器。
+找到最靠近房子左边和右边的加热器，计算房子到加热器的距离，其中的较小者就是房子需要的加热器的最小半径
 
+*/
+
+func findRadius(houses, heaters []int) (ans int) {
+	// 只需要对加热器排序
+	sort.Ints(heaters)
+	for _, house := range houses {
+		// 查找最左插入位置 寻找最左满足 >= target 的位置即房子右边的第一个加热器位置
+		j := sort.SearchInts(heaters, house+1)
+		minDis := math.MaxInt32
+		// 计算房子到右边的第一个加热器的记录
+		if j < len(heaters) {
+			minDis = heaters[j] - house
+		}
+		// 判断房子左边的第一个加热器
+		i := j - 1
+		if i >= 0 && house-heaters[i] < minDis {
+			minDis = house - heaters[i]
+		}
+		// 更新全局的半径
+		if minDis > ans {
+			ans = minDis
+		}
+	}
+	return
+}
+
+/*
+	这个是站在两个加热器的角度找房子，没有上面的简洁
 */
 func findRadius(houses []int, heaters []int) int {
 	sort.Ints(houses)
