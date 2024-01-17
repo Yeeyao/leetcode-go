@@ -83,7 +83,8 @@ func mergeSort(nums []int, l, r int) int {
 	for ; j <= r; j++ {
 		tmp = append(tmp, nums[j])
 	}
-	// 重新赋值
+
+	// 重新赋值，其实就是保存归并排序的结果
 	for i := l; i <= r; i++ {
 		nums[i] = tmp[i-l]
 	}
